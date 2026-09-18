@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>矿端公开核验台 · 铜</title>
+<!-- 国内更稳的 CDN（unpkg/OSM 在大陆常被拦；不需要翻墙） -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* jsDelivr 失败时回退 bootcdn */
+if(typeof L==="undefined"){
+  document.write('<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/leaflet/1.9.4/leaflet.min.css">');
+  document.write('<script src="https://cdn.bootcdn.net/ajax/libs/leaflet/1.9.4/leaflet.min.js"><\/script>');
+}
+</script>
+<style>
+:root{
+  --ink:#1a2332; --muted:#5a6b7c; --line:#e2e8f0; --bg:#f1f5f9; --paper:#fff;
+  --accent:#1d4ed8; --accent-2:#1e3a8a; --ok:#047857; --warn:#b45309; --pend:#64748b; --neg:#b91c1c;
+  --rail:248px; --shadow:0 8px 30px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 "Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+button,input,select{font:inherit}
+a{color:var(--accent);font-weight:600}
+.shell{display:grid;grid-template-columns:var(--rail) 1fr;min-height:100vh}
+.rail{background:#0f172a;color:#e2e8f0;padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.logo{display:flex;gap:10px;align-items:center;padding:2px 6px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(145deg,#3b82f6,#1d4ed8 60%,#1e3a8a);display:grid;place-items:center}
+.logo-mark svg{width:20px;height:20px}
+.logo b{display:block;font-size:14px;letter-spacing:.01em}
+.logo span{display:block;font-size:11px;color:#94a3b8;margin-top:2px}
+.metal-switch{margin-top:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.metal-switch button{border:1px solid rgba(148,163,184,.35);background:rgba(255,255,255,.04);color:#cbd5e1;border-radius:8px;padding:7px 0;font-size:11px;font-weight:700;cursor:pointer}
+.metal-switch button.on{background:#1d4ed8;border-color:#1d4ed8;color:#fff}
+.metal-switch button:disabled{opacity:.35;cursor:not-allowed}
+.rail nav{margin-top:16px;display:flex;flex-direction:column;gap:4px}
+.rail nav a{display:block;color:#cbd5e1;text-decoration:none;padding:9px 11px;border-radius:9px;font-weight:550}
+.rail nav a:hover,.rail nav a.active{background:rgba(59,130,246,.16);color:#fff}
+.rail .note{margin-top:20px;padding:11px;border-radius:10px;background:rgba(255,255,255,.04);font-size:11.5px;color:#94a3b8;line-height:1.55}
+.main{padding:18px 22px 48px;max-width:1320px}
+.top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px}
+.kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 6px}
+h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
+.lead{margin:8px 0 0;color:var(--muted);max-width:56ch}
+.meta-pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-size:11px;padding:5px 10px;border-radius:999px;background:var(--paper);border:1px solid var(--line);color:var(--muted)}
+.pill strong{color:var(--ink)}
+.banner{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:11px 13px;font-size:12.5px;line-height:1.65;color:#1e3a5f;margin-bottom:14px}
+.chip{display:inline-flex;align-items:center;font-size:10.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-weight:700}
+.chip.ok{background:#ecfdf5;border-color:#a7f3d0;color:var(--ok)}
+.chip.warn{background:#fffbeb;border-color:#fde68a;color:var(--warn)}
+.chip.pend{background:#f1f5f9;border-color:#cbd5e1;color:var(--pend)}
+.grid-2{display:grid;grid-template-columns:1.05fr 1fr;gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.card h2{margin:0 0 10px;font-size:15px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.card h2 em{font-style:normal;font-size:11px;font-weight:600;color:var(--muted)}
+.item{width:100%;border:1px solid transparent;background:#f8fafc;border-radius:11px;padding:11px;margin:0 0 8px;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px}
+.item:hover{border-color:#93c5fd;background:#eff6ff}
+.item .when{font-size:11px;color:var(--muted)}
+.item .title{font-weight:700;margin-top:2px}
+.item .desc{font-size:12.5px;color:#475569;margin-top:4px}
+.item .tag{font-weight:800;color:var(--accent-2);font-size:13px;text-align:right}
+.item .hint{font-size:10px;color:var(--accent);margin-top:6px;font-weight:600}
+.inv{display:grid;gap:8px}
+.inv button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px;text-align:left;cursor:pointer}
+.inv button:hover{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.inv .ex{display:flex;justify-content:space-between;font-size:12px;font-weight:700}
+.inv .val{font-size:22px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin:6px 0 2px}
+.inv .val small{font-size:12px;color:var(--muted);font-weight:600}
+.inv .lbl{font-size:11px;color:var(--muted)}
+.bench{margin-top:10px;border:1px dashed #93c5fd;background:#eff6ff;border-radius:11px;padding:12px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.bench strong{font-size:20px;letter-spacing:-.03em}
+.map-wrap{display:grid;grid-template-columns:1.55fr .85fr;gap:14px;margin:14px 0}
+.map-card{padding:0;overflow:hidden;min-height:520px;display:flex;flex-direction:column}
+.map-toolbar{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center;background:#fff;z-index:2}
+.map-toolbar .filters{display:flex;gap:6px;flex-wrap:wrap}
+.map-toolbar button{border:1px solid var(--line);background:#f8fafc;border-radius:999px;padding:6px 10px;font-size:11px;cursor:pointer;font-weight:650}
+.map-toolbar button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.map-hint{font-size:11px;color:var(--muted)}
+#leaflet-map{flex:1;min-height:420px;width:100%;background:#dbeafe}
+.map-foot{padding:10px 14px;border-top:1px solid var(--line);display:flex;gap:14px;flex-wrap:wrap;font-size:12px;align-items:center}
+.rank{max-height:560px;overflow:auto;padding:0}
+.rank-h{position:sticky;top:0;background:#fff;padding:14px 16px;border-bottom:1px solid var(--line);font-weight:800;z-index:2}
+.rank button{width:100%;border:0;border-bottom:1px solid #eef2f6;background:transparent;padding:12px 14px;display:grid;grid-template-columns:28px 1fr auto 14px;gap:8px;text-align:left;cursor:pointer}
+.rank button:hover,.rank button.active{background:#eff6ff}
+.rank .n{color:var(--muted);font-variant-numeric:tabular-nums;font-size:12px}
+.rank .nm{font-weight:750}
+.rank .ct{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.rank .kt{font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
+.rank .kt small{color:var(--muted);font-weight:600;font-size:11px}
+.mine-pop h4{margin:0 0 4px;font-size:14px}
+.mine-pop p{margin:0;font-size:12px;color:#475569;line-height:1.45}
+.mine-pop .pop-actions{margin-top:8px;display:flex;gap:6px}
+.section{margin-top:26px}
+.section h2{margin:0 0 6px;font-size:18px;letter-spacing:-.02em}
+.section p.sub{margin:0 0 12px;color:var(--muted);font-size:13px}
+.kpis{display:grid;grid-template-columns:1.2fr 1fr .7fr;gap:12px;margin-bottom:12px}
+.kpi label{display:block;font-size:11px;color:var(--muted)}
+.kpi strong{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+.toolbar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:8px 0 10px}
+.search{border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-width:220px;background:#fff}
+.seg{display:flex;background:#e2e8f0;border-radius:10px;padding:3px}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:8px;cursor:pointer;color:var(--muted)}
+.seg button.active{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.regions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.regions button{border:0;background:0;cursor:pointer;padding:4px 2px;color:var(--muted);font-size:12.5px}
+.regions button.active{color:var(--accent-2);font-weight:800;border-bottom:2px solid var(--accent)}
+.table-wrap{overflow:auto;border-radius:14px;border:1px solid var(--line);background:#fff}
+table.track{width:100%;border-collapse:separate;border-spacing:0;min-width:1080px}
+table.track th{background:#0f172a;color:#e2e8f0;font-size:11px;font-weight:600;text-align:left;padding:12px;position:sticky;top:0}
+table.track th small{display:block;opacity:.7;font-weight:400;margin-top:2px}
+table.track td{padding:12px;border-bottom:1px solid #eef2f6;vertical-align:top;font-size:12.5px}
+table.track tbody tr{cursor:pointer}
+table.track tbody tr:hover td{background:#f8fafc}
+table.track tbody tr.active td{background:#dbeafe}
+.name{font-weight:800;color:var(--accent-2)}
+.meta{color:var(--muted);font-size:11.5px;margin-top:2px}
+.range{color:#0369a1;font-weight:750;font-variant-numeric:tabular-nums}
+.num{font-variant-numeric:tabular-nums;font-weight:650}
+.badge{display:inline-block;margin-top:4px;font-size:10.5px;background:#f1f5f9;border-radius:6px;padding:2px 6px;color:#475569}
+.delta-neg{color:var(--neg);font-weight:800}
+.actual{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:650}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{color:var(--accent-2);border-color:#bfdbfe;background:#eff6ff}
+.sources{margin-top:26px}
+.sources table{width:100%;border-collapse:collapse;font-size:12.5px}
+.sources th,.sources td{border-bottom:1px solid #eef2f6;padding:10px 8px;text-align:left;vertical-align:top}
+.sources th{color:var(--muted);font-size:11px}
+.sources tbody tr{cursor:pointer}
+.sources tbody tr:hover{background:#f8fafc}
+.sources tbody tr.active{background:#dbeafe}
+footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:5000;opacity:0;pointer-events:none;transition:opacity .18s}
+.backdrop.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(440px,100%);background:#fff;z-index:5001;box-shadow:-12px 0 40px rgba(0,0,0,.18);transform:translateX(100%);transition:transform .2s ease;display:flex;flex-direction:column}
+.drawer.open{transform:translateX(0)}
+.drawer-hd{padding:16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px}
+.drawer-hd h3{margin:0;font-size:17px}
+.drawer-hd .sub{font-size:12px;color:var(--muted);margin-top:4px}
+.drawer-bd{padding:16px;overflow:auto;flex:1}
+.drawer-bd .label{font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px}
+.drawer-bd .value{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.drawer-bd .note{font-size:13px;color:#334;line-height:1.55}
+.drawer-bd .block{margin-bottom:14px}
+.url-box{font-size:11px;word-break:break-all;background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:10px}
+.drawer-ft{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(16px);background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:12.5px;z-index:6000;opacity:0;pointer-events:none;transition:.2s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.leaflet-container{font:inherit}
+@media(max-width:1100px){
+  .shell{grid-template-columns:1fr}
+  .rail{position:relative;height:auto}
+  .grid-2,.map-wrap,.kpis{grid-template-columns:1fr}
+  #leaflet-map{min-height:360px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="logo">
+      <div class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 16l4-8 4 5 3-4 5 7" stroke="#dbeafe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="2" fill="#93c5fd"/></svg>
+      </div>
+      <div>
+        <b>矿端公开核验台</b>
+        <span>多金属 · 公开源</span>
+      </div>
+    </div>
+    <div class="metal-switch" aria-label="金属品种">
+      <a class="on" href="metals-atlas-copper-loggedin.html" style="border:1px solid #1d4ed8;background:#1d4ed8;color:#fff;border-radius:8px;padding:7px 0;font-size:11px;font-weight:700;text-align:center;text-decoration:none;display:block">Cu</a>
+      <a href="metals-atlas-aluminum-loggedin.html" style="border:1px solid rgba(148,163,184,.35);background:rgba(255,255,255,.04);color:#cbd5e1;border-radius:8px;padding:7px 0;font-size:11px;font-weight:700;text-align:center;text-decoration:none;display:block">Al</a>
+      <a href="metals-atlas-pbzn-loggedin.html" style="border:1px solid rgba(148,163,184,.35);background:rgba(255,255,255,.04);color:#cbd5e1;border-radius:8px;padding:7px 0;font-size:11px;font-weight:700;text-align:center;text-decoration:none;display:block">Pb/Zn</a>
+      <a href="metals-atlas-unified.html?metal=Ni" style="border:1px solid rgba(148,163,184,.35);background:rgba(255,255,255,.04);color:#cbd5e1;border-radius:8px;padding:7px 0;font-size:11px;font-weight:700;text-align:center;text-decoration:none;display:block">Ni</a>
+      <button type="button" disabled title="待补充">Sn</button>
+      <button type="button" disabled title="待补充">Li</button>
+      <button type="button" disabled title="待补充">Fe</button>
+      <button type="button" disabled title="待补充">…</button>
+    </div>
+    <nav>
+      <a class="active" href="#top">总览</a>
+      <a href="#map">世界地图</a>
+      <a href="#events">供给事件</a>
+      <a href="#inv">交易所库存</a>
+      <a href="#track">产量追踪</a>
+      <a href="#sources">来源总表</a>
+    </nav>
+    <div class="note">
+      底图：Carto/Esri/高德可切换（Leaflet）<br>
+      数据：USGS / 交易所转引 / 矿企产量报告<br>
+      核验日 2026-09-18 · 当前品种：铜<br>
+      <a href="metals-atlas-unified.html?metal=Cu" style="color:#93c5fd">→ 打开多金属统一页</a>
+    </div>
+  </aside>
+
+  <div class="main" id="top">
+    <div class="top">
+      <div>
+        <p class="kicker">Public mine verification desk</p>
+        <h1>铜 · 全球矿端公开核验</h1>
+        <p class="lead">真实 OSM 底图落点 + 可点开的年报/季报来源。侧栏已预留 Al / PbZn / Ni 等品种位，后续按同一框架扩展。</p>
+      </div>
+      <div class="meta-pills">
+        <span class="pill">品种 <strong>Cu</strong></span>
+        <span class="pill">全球矿端 <strong>23.0 Mt</strong></span>
+        <span class="pill">样本矿点 <strong id="mine-count">—</strong></span>
+        <span class="pill">底图 <strong>OSM</strong></span>
+      </div>
+    </div>
+
+    <div class="banner">
+      <strong>地图：</strong>Leaflet 真实投影 + 国内可访问底图（默认 Carto / Esri / 高德影像回退；OSM.org 在大陆常需代理）。矿点按 lon/lat；可缩放拖拽。圆点=产量，颜色=核验。
+      <span class="chip ok">已核验</span>
+      <span class="chip warn">口径注意</span>
+      <span class="chip pend">待核</span>
+    </div>
+
+    <section class="map-wrap" id="map">
+      <div class="card map-card">
+        <div class="map-toolbar">
+          <div class="filters" id="map-filters">
+            <button type="button" class="on" data-f="all">全部</button>
+            <button type="button" data-f="南美洲">南美</button>
+            <button type="button" data-f="北美洲">北美</button>
+            <button type="button" data-f="非洲">非洲</button>
+            <button type="button" data-f="亚洲">亚洲</button>
+            <button type="button" data-f="ok">仅已核验</button>
+          </div>
+          <div class="map-hint" id="map-base-hint">拖拽缩放 · 点击气泡/榜单 · 底图自动选可访问源</div>
+        </div>
+        <div id="leaflet-map" role="application" aria-label="全球铜矿 OpenStreetMap"></div>
+        <div class="map-foot">
+          <span>可见矿点 <b id="vis-count">0</b></span>
+          <span>可见产量合计 <b id="vis-sum">0</b> kt</span>
+          <span class="chip pend">坐标为矿区近似中心</span>
+          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OSM 版权</a>
+        </div>
+      </div>
+      <div class="card rank" id="rank">
+        <div class="rank-h">样本产量榜 · kt 含铜 <em style="font-weight:500;color:var(--muted);font-size:12px">点击飞到地图</em></div>
+        <div id="rank-list"></div>
+      </div>
+    </section>
+
+    <div class="grid-2" id="events">
+      <section class="card">
+        <h2>供给事件 <em>点条目打开来源</em></h2>
+        <div id="changes"></div>
+      </section>
+      <section class="card" id="inv">
+        <h2>交易所库存 <em>点卡片打开来源</em></h2>
+        <div class="inv" id="inv-list"></div>
+        <div class="bench" id="bench" tabindex="0" role="button">
+          <div>全球矿端含铜 <strong>23.0 Mt</strong> <span style="color:var(--muted);font-size:12px">2025e · USGS MCS 2026</span></div>
+          <span class="chip ok">已核验</span>
+        </div>
+      </section>
+    </div>
+
+    <section class="section" id="track">
+      <h2>产量追踪与指引</h2>
+      <p class="sub">公司 guidance / 年产报告优先；储量未打开 TR 的标「待储量」。点击行打开详情。</p>
+      <div class="kpis">
+        <div class="card">
+          <h2 style="margin-bottom:8px">可比净修订（平台汇总字段）</h2>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+            <div class="kpi"><label>精矿含铜</label><strong>0.00</strong></div>
+            <div class="kpi"><label>矿端含铜</label><strong>0.00</strong></div>
+            <div class="kpi"><label>计价+阴极</label><strong>0.00</strong></div>
+          </div>
+          <div class="meta" style="margin-top:8px"><span class="chip pend">未独立核验</span></div>
+        </div>
+        <div class="card">
+          <h2 style="margin-bottom:8px">本台覆盖</h2>
+          <div class="kpi"><label>有公开产量或指引的行</label><strong id="track-n">9</strong></div>
+        </div>
+        <div class="card">
+          <h2 style="margin-bottom:8px">地图</h2>
+          <div class="meta">Leaflet · OSM 瓦片<br>与上方区域筛选联动</div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <input class="search" id="q" placeholder="搜索项目 / 国家">
+          <div class="seg" id="sort-mode">
+            <button type="button" data-mode="region">按地区</button>
+            <button type="button" class="active" data-mode="project">项目</button>
+          </div>
+          <select class="btn" id="sort-key">
+            <option value="actual">按实际产量</option>
+            <option value="name">按名称</option>
+            <option value="delta">按调整</option>
+          </select>
+        </div>
+        <button type="button" class="btn" id="btn-export">导出 CSV</button>
+      </div>
+      <div class="regions" id="regions">
+        <button type="button" class="active" data-r="全球">全球</button>
+        <button type="button" data-r="南美洲">南美洲</button>
+        <button type="button" data-r="北美洲">北美洲</button>
+        <button type="button" data-r="非洲">非洲</button>
+        <button type="button" data-r="亚洲">亚洲</button>
+      </div>
+      <div class="table-wrap">
+        <table class="track">
+          <thead>
+            <tr>
+              <th>矿山 / 项目<small>点击打开</small></th>
+              <th>储量<small>kt</small></th>
+              <th>初始指引</th>
+              <th>最新指引</th>
+              <th>较年初</th>
+              <th>调整</th>
+              <th>实际</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card sources section" id="sources">
+      <h2>来源总表 <em>点击行复制/打开</em></h2>
+      <p class="sub" style="margin-top:-4px">权威优先级：公司公告 / USGS / 交易所 &gt; 行业媒体。</p>
+      <table>
+        <thead><tr><th>字段</th><th>采用值</th><th>对齐</th><th>状态</th></tr></thead>
+        <tbody id="src-body"></tbody>
+      </table>
+    </section>
+
+    <footer>
+      <span>矿端公开核验台 · 多金属框架 · 当前 Cu</span>
+      <span>地图引擎 Leaflet · 底图可切换 · 非 MGW 商业镜像</span>
+    </footer>
+  </div>
+</div>
+
+<div class="backdrop" id="backdrop" hidden></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-hd">
+    <div><h3 id="d-title">详情</h3><div class="sub" id="d-sub"></div></div>
+    <button type="button" class="btn" id="d-close">关闭</button>
+  </div>
+  <div class="drawer-bd" id="d-body"></div>
+  <div class="drawer-ft" id="d-ft"></div>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const BHP_OR="https://www.bhp.com/-/media/documents/media/reports-and-presentations/2026/260716_bhpoperationalreviewfortheyearended30june2026.pdf";
+const FQM="https://www.first-quantum.com/news/first-quantum-minerals-announces-2025-preliminary-production-and-2026-2028-guidance/";
+const IVAN="https://www.nasdaq.com/press-release/ivanhoe-mines-provides-2025-production-results-2026-production-guidance-2026-01-15";
+const USGS="https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-copper.pdf";
+const MMG_Q4="https://www.mmg.com/investors/reports-and-presentations/strong-fourth-quarter-driven-by-record-and-near-record-production-results/";
+const FCX_8K="https://last10k.com/sec-filings/fcx/0000831259-26-000006.htm";
+const RIO_Q4="https://cdn.financialreports.eu/financialreports/media/filings/4666/2026/RNS/4666_rns_2026-01-21_809a5314-c369-48ee-845d-826e3767ce78.html";
+const ANTO_Q4="https://www.investegate.co.uk/announcement/rns/antofagasta--anto/q4-2025-production-report/9392533";
+const ANGLO_FY="https://www.investegate.co.uk/announcement/rns/anglo-american--aal/anglo-american-full-year-2025-results/9439268";
+const KAZ_Q4="https://www.kazminerals.com/q4-2025-production-report/";
+const CODELCO_REUTERS="https://www.reuters.com/world/americas/chiles-codelco-reports-485-billion-pre-tax-profit-2025-2026-03-27/";
+const ICA_COMEX="https://copper.com.au/news/mining/copper-weekly-brief-week-ending-11-september-2026/";
+const SCCO_10K="https://last10k.com/sec-filings/scco/0001104659-26-021492.htm";
+const GLEN_FY="https://www.investegate.co.uk/announcement/rns/glencore--glen/full-year-2025-production-report-/9392468";
+
+const CHANGES=[
+  {id:"skouries",when:"2026-09-08",title:"Skouries 首产铜金精矿",desc:"Eldorado：首批铜金精矿；商业生产预期 Q4 2026。",tag:"首产",status:"ok",detail:"首产日 2026-09-08；Q4 商业生产预期；临时供电。",links:[{label:"6-K 转述",url:"https://www.stocktitan.net/sec-filings/EGO/6-k-eldorado-gold-corp-fi-current-report-foreign-issuer-a8edd0931524.html"},{label:"CIM",url:"https://magazine.cim.org/en/news/2026/first-copper-gold-concentrate-at-eldorado-gold-s-skouries-project-en/"}]},
+  {id:"makoko",when:"2026-09-08",title:"Western Forelands / Makoko",desc:"Inferred 612 Mt @ 1.80% Cu —— 矿石量，非产量。",tag:"612 Mt",status:"ok",detail:"Ivanhoe 2026-09-08：推断资源，非 Ore Reserve。",links:[{label:"Ivanhoe",url:"https://www.ivanhoemines.com/news-stories/news-release/ivanhoe-mines-increases-the-size-of-massive-western-forelands-copper-discovery-by-30/"}]},
+  {id:"bambas",when:"2026-08-24",title:"Las Bambas 确认恢复运营",desc:"自 2026-08-21 恢复；未等同满产。",tag:"复产",status:"ok",detail:"MMG 相关确认；吨数影响待季报。",links:[{label:"Mining Journal",url:"https://www.mining-journal.com/miners/news-articles/4535995/mmg-resumes-operations-las-bambas"},{label:"MMG 年产",url:MMG_Q4}]}
+];
+
+const INV=[
+  {id:"lme",ex:"LME",val:"234.475",unit:"kt",lbl:"官方开市库存（转载）",foot:"2026-09-11 · 9/15=249.225",extra:"公开转载点；原 OCR 236.475 已替换。",status:"ok",links:[{label:"Worldal 9/11",url:"http://www.worldal.com/market/lme/2026-09-11/178911575175065.shtml"},{label:"Worldal 9/15",url:"http://www.worldal.com/market/lme/2026-09-15/178945956375075.shtml"}]},
+  {id:"shfe",ex:"SHFE",val:"54.78",unit:"kt",lbl:"一周总库存",foot:"一周 −8.22 kt · 2026-09-11",extra:"仓单界面 20.854 kt 待上期所日报。",status:"ok",links:[{label:"中国有色网",url:"https://www.cnmn.com.cn/ShowNews1.aspx?id=474011"}]},
+  {id:"comex",ex:"COMEX",val:"696.259",unit:"kt",lbl:"仓存公吨 · ICA 周报",foot:"纪录 · 周截至 2026-09-11",extra:"ICA Australia：696,259 t。",status:"ok",links:[{label:"ICA Weekly",url:ICA_COMEX}]}
+];
+
+const RANK=[
+  {n:1,name:"Escondida",country:"智利",region:"南美洲",kt:1307.0,status:"warn",note:"日历年量级；BHP FY26 100%=1,261.2 kt",href:BHP_OR,lat:-24.27,lon:-69.07},
+  {n:2,name:"Grasberg district (PTFI)",country:"印尼",region:"亚洲",kt:453.6,status:"ok",note:"FCX：2025 1.0 blb Cu≈453.6 kt",href:FCX_8K,lat:-4.05,lon:137.11},
+  {n:3,name:"Las Bambas",country:"秘鲁",region:"南美洲",kt:410.834,status:"ok",note:"MMG 2025：410,834 t",href:MMG_Q4,lat:-14.08,lon:-72.15},
+  {n:4,name:"Collahuasi",country:"智利",region:"南美洲",kt:404.0,status:"ok",note:"2025≈404 kt",href:"https://electromineria.cl/collahuasi-aporto-us651-millones-impuestos-royalty-produjo-404-mil-toneladas-cobre-2025/",lat:-20.97,lon:-68.71},
+  {n:5,name:"Buenavista del Cobre",country:"墨西哥",region:"北美洲",kt:414.5,status:"pend",approx:true,note:"界面；SCCO 全公司 954.3 kt，矿级待表",href:SCCO_10K,lat:30.5,lon:-109.9},
+  {n:6,name:"Cerro Verde",country:"秘鲁",region:"南美洲",kt:391.5,status:"pend",approx:true,note:"界面；FCX 矿级年产量待 10-K",href:FCX_8K,lat:-16.55,lon:-71.6},
+  {n:7,name:"Kamoa-Kakula",country:"刚果(金)",region:"非洲",kt:385.8,status:"ok",note:"Ivanhoe 2025：385.8–388.8 kt",href:IVAN,lat:-10.7,lon:25.4},
+  {n:8,name:"Antamina",country:"秘鲁",region:"南美洲",kt:380.0,status:"warn",approx:true,note:"管理层 2025e≈380 kt",href:"https://www.mining.com/web/antamina-expects-significant-copper-output-boost-in-2026/",lat:-9.55,lon:-77.1},
+  {n:9,name:"Oyu Tolgoi",country:"蒙古",region:"亚洲",kt:345.0,status:"ok",note:"Rio：OT 345 kt（100%），+61% YoY",href:RIO_Q4,lat:43.0,lon:106.85},
+  {n:10,name:"Morenci",country:"美国",region:"北美洲",kt:313.1,status:"pend",note:"界面；FCX 72% JV",href:FCX_8K,lat:33.05,lon:-109.33},
+  {n:11,name:"Quellaveco",country:"秘鲁",region:"南美洲",kt:310.2,status:"ok",note:"Anglo 2025：310,200 t",href:ANGLO_FY,lat:-17.1,lon:-70.6},
+  {n:12,name:"El Teniente",country:"智利",region:"南美洲",kt:310.0,status:"ok",note:"Codelco≈310 kt（事故年）",href:CODELCO_REUTERS,lat:-34.08,lon:-70.35},
+  {n:13,name:"Los Pelambres",country:"智利",region:"南美洲",kt:295.3,status:"ok",note:"Antofagasta 2025=295.3",href:"https://www.marketscreener.com/news/antofagasta-quarterly-production-report-a-q4-2025-report-ce7e5bdedd80f325",lat:-31.7,lon:-70.5},
+  {n:14,name:"Radomiro Tomic",country:"智利",region:"南美洲",kt:295.0,status:"pend",note:"界面；Codelco 分部",href:CODELCO_REUTERS,lat:-22.15,lon:-68.9},
+  {n:15,name:"Chuquicamata",country:"智利",region:"南美洲",kt:265.8,status:"ok",note:"2025 265.8 kt",href:"https://www.industrialinfo.com/news/article/codelco-records-profits-of-us242-billion--355597",lat:-22.3,lon:-68.9},
+  {n:16,name:"Toquepala",country:"秘鲁",region:"南美洲",kt:248.4,status:"pend",approx:true,note:"界面；SCCO",href:SCCO_10K,lat:-17.3,lon:-70.7},
+  {n:17,name:"Toromocho",country:"秘鲁",region:"南美洲",kt:247.8,status:"pend",note:"界面；Chinalco 待公告",href:null,lat:-11.6,lon:-76.15},
+  {n:18,name:"Centinela",country:"智利",region:"南美洲",kt:240.4,status:"ok",note:"Antofagasta District 240.4 kt",href:ANTO_Q4,lat:-22.1,lon:-69.3},
+  {n:19,name:"Aktogay",country:"哈萨克斯坦",region:"亚洲",kt:225.7,status:"ok",note:"KAZ 2025：225.7 kt",href:KAZ_Q4,lat:46.95,lon:79.7},
+  {n:20,name:"Spence",country:"智利",region:"南美洲",kt:212.6,status:"warn",note:"BHP FY26 212.6 kt",href:BHP_OR,lat:-22.75,lon:-69.3},
+  {n:21,name:"Julong",country:"中国",region:"亚洲",kt:193.8,status:"pend",note:"界面；待公告",href:null,lat:31.7,lon:92.2},
+  {n:22,name:"Kansanshi",country:"赞比亚",region:"非洲",kt:181.0,status:"ok",note:"FQM 2025：181 kt",href:FQM,lat:-12.1,lon:26.0},
+  {n:23,name:"Sentinel",country:"赞比亚",region:"非洲",kt:189.0,status:"ok",note:"FQM 2025：189 kt",href:FQM,lat:-12.3,lon:25.6}
+];
+
+const TRACK=[
+  {name:"Kamoa-Kakula",country:"刚果（金）",region:"非洲",tag:"Ivanhoe",reserve:"13,100.0",reserveDate:"2025-12-31",reserveStatus:"pend",init:"380–420",initDate:"2025-12-03",latest:"290–310",latestNote:"冶炼产出含铜¹",yoyNote:"口径变更",adjKt:-10,adjPct:-3.2,adjDate:"2026-07-29",actual:135.75,actualAsOf:"2026-06-30",progress:45.2,qNote:"H1 界面",trail:"Ivanhoe",href:IVAN,status:"ok"},
+  {name:"Las Bambas",country:"秘鲁",region:"南美洲",tag:"MMG",reserve:"≈4,664",reserveDate:"2026-06-30",reserveStatus:"pend",init:"380–400",initDate:"2026",latest:"380–400",latestNote:"2026 指引维持",yoyKt:0,adjNote:"—",actual:410.834,actualAsOf:"FY2025",qNote:"MMG 410,834 t",trail:"MMG Q4",href:MMG_Q4,status:"ok"},
+  {name:"Kansanshi",country:"赞比亚",region:"非洲",tag:"FQM",reserve:"≈5,224",reserveStatus:"pend",init:"175–205",initDate:"2026",latest:"175–205",latestNote:"矿端含铜",yoyKt:0,adjNote:"—",actual:89.342,actualAsOf:"H1 2026",progress:47,qNote:"FY2025=181 kt",trail:"FQM",href:FQM,status:"ok"},
+  {name:"Sentinel",country:"赞比亚",region:"非洲",tag:"FQM",reserve:"≈2,275",reserveStatus:"pend",init:"190–220",initDate:"2026",latest:"190–220",latestNote:"Trident–Sentinel",yoyKt:0,adjNote:"—",actual:95.587,actualAsOf:"H1 2026",qNote:"FY2025=189 kt",trail:"FQM",href:FQM,status:"ok"},
+  {name:"Escondida",country:"智利",region:"南美洲",tag:"BHP FY",reserve:"—",reserveStatus:"pend",init:"1,000–1,100",initDate:"FY27",latest:"1,000–1,100",latestNote:"精矿+阴极",yoyKt:0,adjNote:"—",actual:1261.2,actualAsOf:"FY26",qNote:"100% 口径",trail:"BHP",href:BHP_OR,status:"ok"},
+  {name:"Spence",country:"智利",region:"南美洲",tag:"BHP FY",reserve:"—",reserveStatus:"pend",init:"210–230",initDate:"FY27",latest:"210–230",latestNote:"阴极+精矿",yoyKt:0,adjNote:"—",actual:212.6,actualAsOf:"FY26",qNote:"",trail:"BHP",href:BHP_OR,status:"ok"},
+  {name:"Oyu Tolgoi",country:"蒙古",region:"亚洲",tag:"Rio 100%",reserve:"—",reserveStatus:"pend",init:"—",latest:"~500 中期",latestNote:"2028–36 年均约 500 kt",actual:345,actualAsOf:"FY2025",qNote:"+61% YoY",trail:"Rio Q4",href:RIO_Q4,status:"ok"},
+  {name:"Quellaveco",country:"秘鲁",region:"南美洲",tag:"Anglo 100%",reserve:"—",reserveStatus:"pend",init:"310–340",latest:"~300/年",latestNote:"中期水平",yoyKt:0,adjNote:"—",actual:310.2,actualAsOf:"FY2025",trail:"Anglo FY",href:ANGLO_FY,status:"ok"},
+  {name:"Centinela",country:"智利",region:"南美洲",tag:"Antofagasta",reserve:"—",reserveStatus:"pend",init:"—",latest:"集团 650–700",latestNote:"2026 集团指引",actual:240.4,actualAsOf:"FY2025",trail:"Antofagasta Q4",href:ANTO_Q4,status:"ok"}
+];
+
+const SOURCES=[
+  {field:"全球矿端 2025e",value:"23.0 Mt",align:"USGS",status:"ok",detail:"MCS 2026 铜章 23,000 千吨。",links:[{label:"USGS PDF",url:USGS}]},
+  {field:"Skouries",value:"2026-09-08 首产",align:"Eldorado",status:"ok",detail:CHANGES[0].detail,links:CHANGES[0].links},
+  {field:"Makoko",value:"Inferred 612 Mt @1.80%",align:"Ivanhoe",status:"ok",detail:CHANGES[1].detail,links:CHANGES[1].links},
+  {field:"Las Bambas 2025",value:"410,834 t",align:"MMG",status:"ok",links:[{label:"MMG",url:MMG_Q4}]},
+  {field:"Grasberg/PTFI",value:"≈453.6 kt",align:"FCX",status:"ok",links:[{label:"FCX 8-K",url:FCX_8K}]},
+  {field:"Oyu Tolgoi",value:"345 kt",align:"Rio",status:"ok",links:[{label:"Rio Q4",url:RIO_Q4}]},
+  {field:"Quellaveco",value:"310.2 kt",align:"Anglo",status:"ok",links:[{label:"Anglo",url:ANGLO_FY}]},
+  {field:"Centinela",value:"240.4 kt",align:"Antofagasta",status:"ok",links:[{label:"ANTO Q4",url:ANTO_Q4}]},
+  {field:"Aktogay",value:"225.7 kt",align:"KAZ",status:"ok",links:[{label:"KAZ",url:KAZ_Q4}]},
+  {field:"LME / SHFE / COMEX",value:"234.475 / 54.78 / 696.259",align:"交易所转引",status:"ok",links:INV[0].links.concat(INV[1].links,INV[2].links)},
+  {field:"Kansanshi/Sentinel",value:"181/189；指引 175–205/190–220",align:"FQM",status:"ok",links:[{label:"FQM",url:FQM}]},
+  {field:"仍待矿级",value:"Buenavista/Cerro Verde/Morenci/Toromocho/储量TR",align:"待 10-K",status:"pend",links:[{label:"SCCO",url:SCCO_10K},{label:"FCX",url:FCX_8K},{label:"Glencore",url:GLEN_FY}]}
+];
+
+let region="全球", mode="project", sortKey="actual", mapFilter="all";
+let map, markerLayer, markersByN={};
+
+function chip(st){return st==="ok"?`<span class="chip ok">已核验</span>`:st==="warn"?`<span class="chip warn">口径注意</span>`:`<span class="chip pend">待核</span>`;}
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove("show"),2200);}
+async function copyText(text){try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(text);else{const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();}toast("已复制链接");}catch(e){toast("复制失败");}}
+function openUrl(url){if(!url){toast("暂无外链");return;}const w=window.open(url,"_blank","noopener,noreferrer");toast(w?"已尝试打开外链":"预览可能拦截弹窗 — 请复制链接");}
+
+function closeDrawer(){
+  document.getElementById("drawer").classList.remove("open");
+  document.getElementById("drawer").setAttribute("aria-hidden","true");
+  const bd=document.getElementById("backdrop");bd.classList.remove("open");
+  setTimeout(()=>{bd.hidden=true;},200);
+  document.querySelectorAll(".rank button.active, table.track tr.active, .sources tr.active").forEach(el=>el.classList.remove("active"));
+}
+function openDrawer({title,sub,status,blocks,links}){
+  document.getElementById("d-title").textContent=title||"详情";
+  document.getElementById("d-sub").innerHTML=`${sub||""} ${status?chip(status):""}`;
+  const body=document.getElementById("d-body");
+  body.innerHTML=(blocks||[]).map(b=>`<div class="block"><div class="label">${b.label}</div><div class="${b.big?"value":"note"}">${b.html||b.text||""}</div></div>`).join("")
+    +(links&&links.length?`<div class="block"><div class="label">来源 URL</div>${links.map(l=>`<div style="margin-bottom:10px"><div style="font-weight:700;font-size:12px;margin-bottom:4px">${l.label||"链接"}</div><div class="url-box">${l.url}</div><div style="display:flex;gap:8px;margin-top:8px"><button type="button" class="btn primary btn-open" data-u="${encodeURIComponent(l.url)}">尝试打开</button><button type="button" class="btn ghost btn-copy" data-u="${encodeURIComponent(l.url)}">复制</button></div></div>`).join("")}</div>`:`<div class="block"><div class="note">暂无公开 URL</div></div>`);
+  const ft=document.getElementById("d-ft");const p=links&&links[0];
+  ft.innerHTML=`${p?`<button type="button" class="btn primary" id="ft-o">打开主来源</button><button type="button" class="btn ghost" id="ft-c">复制主来源</button>`:""}<button type="button" class="btn" id="ft-x">关闭</button>`;
+  if(p){document.getElementById("ft-o").onclick=()=>openUrl(p.url);document.getElementById("ft-c").onclick=()=>copyText(p.url);}
+  document.getElementById("ft-x").onclick=closeDrawer;
+  body.querySelectorAll(".btn-open").forEach(b=>b.onclick=()=>openUrl(decodeURIComponent(b.dataset.u)));
+  body.querySelectorAll(".btn-copy").forEach(b=>b.onclick=()=>copyText(decodeURIComponent(b.dataset.u)));
+  const bd=document.getElementById("backdrop");bd.hidden=false;
+  requestAnimationFrame(()=>{bd.classList.add("open");document.getElementById("drawer").classList.add("open");document.getElementById("drawer").setAttribute("aria-hidden","false");});
+}
+
+function passFilter(r){
+  if(mapFilter==="all") return true;
+  if(mapFilter==="ok") return r.status==="ok";
+  return r.region===mapFilter;
+}
+function rPx(kt){return Math.max(10, Math.min(28, Math.sqrt(kt)*0.7));}
+function colorOf(st){return st==="ok"?"#047857":st==="warn"?"#b45309":"#64748b";}
+
+function mineIcon(r){
+  const s=rPx(r.kt), c=colorOf(r.status);
+  return L.divIcon({
+    className:"",
+    iconSize:[s,s],
+    iconAnchor:[s/2,s/2],
+    html:`<div style="width:${s}px;height:${s}px;border-radius:50%;background:${c};border:2px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.35);opacity:.92"></div>`
+  });
+}
+
+function openMine(r, fromRankEl){
+  document.querySelectorAll(".rank button.active").forEach(x=>x.classList.remove("active"));
+  if(fromRankEl) fromRankEl.classList.add("active");
+  if(map && r.lat!=null){
+    map.flyTo([r.lat,r.lon], Math.max(map.getZoom(),5), {duration:.6});
+    const m=markersByN[r.n];
+    if(m) m.openPopup();
+  }
+  openDrawer({
+    title:r.name, sub:`${r.country} · ${r.region} · #${r.n}`, status:r.status,
+    blocks:[
+      {label:"产量 kt 含铜", big:true, text:`${r.approx?"≈":""}${r.kt}`},
+      {label:"坐标（近似）", text:`${r.lat.toFixed(3)}, ${r.lon.toFixed(3)}`},
+      {label:"说明", text:r.note||""}
+    ],
+    links:r.href?[{label:"主来源",url:r.href}]:[]
+  });
+}
+
+function renderMapMarkers(){
+  if(!markerLayer) return;
+  markerLayer.clearLayers();
+  markersByN={};
+  const list=RANK.filter(passFilter);
+  list.forEach(r=>{
+    const m=L.marker([r.lat,r.lon],{icon:mineIcon(r),title:r.name});
+    const pop=`<div class="mine-pop"><h4>${r.name}</h4><p>${r.country} · ${r.approx?"≈":""}${r.kt} kt</p><p>${r.note||""}</p><div class="pop-actions"><button type="button" class="btn primary" style="padding:4px 8px;font-size:11px" data-n="${r.n}">打开来源</button></div></div>`;
+    m.bindPopup(pop,{maxWidth:260});
+    m.on("popupopen", e=>{
+      const btn=e.popup.getElement().querySelector("button[data-n]");
+      if(btn) btn.onclick=()=>openMine(r, document.querySelector(`#rank-list button[data-n="${r.n}"]`));
+    });
+    m.on("click", ()=>{
+      const b=document.querySelector(`#rank-list button[data-n="${r.n}"]`);
+      if(b) b.scrollIntoView({block:"nearest"});
+    });
+    m.addTo(markerLayer);
+    markersByN[r.n]=m;
+  });
+  document.getElementById("vis-count").textContent=list.length;
+  document.getElementById("vis-sum").textContent=list.reduce((s,r)=>s+r.kt,0).toLocaleString(undefined,{maximumFractionDigits:0});
+  document.getElementById("mine-count").textContent=RANK.length;
+  if(list.length){
+    const g=L.featureGroup(Object.values(markersByN));
+    try{ map.fitBounds(g.getBounds().pad(0.18), {maxZoom:5}); }catch(e){}
+  }
+}
+
+function initMap(){
+  if(typeof L==="undefined"){
+    document.getElementById("leaflet-map").innerHTML=`<div style="padding:24px;color:#b91c1c;line-height:1.6"><strong>Leaflet 未加载</strong><br>请用系统浏览器打开本 HTML；或检查公司网络对 jsDelivr/bootcdn 的限制。</div>`;
+    return;
+  }
+  map=L.map("leaflet-map",{worldCopyJump:true, scrollWheelZoom:true, minZoom:2, maxZoom:12}).setView([5,15],2.2);
+
+  /* 大陆访问：优先 Carto / Esri（多数环境无需翻墙）；OSM.org 官方瓦片在国内常空白 */
+  const bases=[
+{
+      name:"Esri World Street",
+      url:"https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+      opts:{maxZoom:12, attribution:"Tiles &copy; Esri"}
+    },
+{
+      name:"Carto Positron",
+      url:"https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+      opts:{subdomains:"abcd", maxZoom:12, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'}
+    },
+{
+      name:"Esri World Imagery",
+      url:"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      opts:{maxZoom:12, attribution:"Tiles &copy; Esri"}
+    },
+{
+      name:"高德路网（国内）",
+      url:"https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
+      opts:{subdomains:"1234", maxZoom:12, attribution:"&copy; 高德"}
+    },
+{
+      name:"OSM.org（可能需代理）",
+      url:"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      opts:{maxZoom:12, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}
+    }
+  ];
+
+  let activeTile=null;
+  function setBase(i){
+    if(activeTile) map.removeLayer(activeTile);
+    const b=bases[i];
+    activeTile=L.tileLayer(b.url, b.opts).addTo(map);
+    const hint=document.getElementById("map-base-hint");
+    if(hint) hint.textContent="底图："+b.name+" · 拖拽缩放 · 点击气泡/榜单";
+    const sel=document.getElementById("base-sel");
+    if(sel) sel.value=String(i);
+  }
+  setBase(0);
+
+  /* 底图切换 */
+  const foot=document.querySelector(".map-foot");
+  if(foot && !document.getElementById("base-sel")){
+    const wrap=document.createElement("label");
+    wrap.style.cssText="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)";
+    wrap.innerHTML=`底图 <select id="base-sel" style="border:1px solid var(--line);border-radius:8px;padding:4px 8px;background:#fff">${bases.map((b,i)=>`<option value="${i}">${b.name}</option>`).join("")}</select>`;
+    foot.appendChild(wrap);
+    document.getElementById("base-sel").onchange=e=>setBase(+e.target.value);
+  }
+
+  /* 瓦片加载失败提示（常见：仅 OSM 被拦） */
+  let failN=0;
+  map.on("tileerror", ()=>{
+    failN++;
+    if(failN===6){
+      toast("当前底图瓦片加载失败，已尝试切换下一源…");
+      const cur=+(document.getElementById("base-sel")?.value||0);
+      if(cur+1<bases.length) setBase(cur+1);
+      failN=0;
+    }
+  });
+
+  markerLayer=L.layerGroup().addTo(map);
+  renderMapMarkers();
+  setTimeout(()=>map.invalidateSize(), 200);
+  setTimeout(()=>map.invalidateSize(), 600);
+}
+
+document.getElementById("rank-list").innerHTML=RANK.map(r=>`
+  <button type="button" data-n="${r.n}">
+    <div class="n">${String(r.n).padStart(2,"0")}</div>
+    <div><div class="nm">${r.name}</div><div class="ct">${r.country} · ${r.note||""}</div><div style="margin-top:4px">${chip(r.status)}</div></div>
+    <div class="kt">${r.approx?"≈":""}${r.kt.toLocaleString(undefined,{maximumFractionDigits:1})} <small>kt</small></div>
+    <div style="color:var(--accent);font-weight:800">›</div>
+  </button>`).join("");
+document.getElementById("rank-list").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-n]"); if(!b) return;
+  openMine(RANK.find(x=>String(x.n)===b.dataset.n), b);
+});
+
+document.getElementById("map-filters").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-f]"); if(!b) return;
+  document.querySelectorAll("#map-filters button").forEach(x=>x.classList.toggle("on",x===b));
+  mapFilter=b.dataset.f; renderMapMarkers();
+});
+
+document.getElementById("changes").innerHTML=CHANGES.map(c=>`
+  <button type="button" class="item" data-id="${c.id}">
+    <div><div class="when">${c.when}</div><div class="title">${c.title}</div><div class="desc">${c.desc}</div><div class="hint">打开来源 →</div></div>
+    <div class="tag">${c.tag}</div>
+  </button>`).join("");
+document.getElementById("changes").addEventListener("click",e=>{
+  const b=e.target.closest(".item"); if(!b) return;
+  const c=CHANGES.find(x=>x.id===b.dataset.id);
+  openDrawer({title:c.title,sub:c.when,status:c.status,blocks:[{label:"摘要",text:c.desc},{label:"核验",text:c.detail}],links:c.links});
+});
+
+document.getElementById("inv-list").innerHTML=INV.map(x=>`
+  <button type="button" data-id="${x.id}">
+    <div class="ex">${x.ex} <span class="chip ok">Cu</span></div>
+    <div class="val">${x.val} <small>${x.unit}</small></div>
+    <div class="lbl">${x.lbl}</div>
+    <div class="lbl" style="margin-top:4px">${x.foot||""}</div>
+  </button>`).join("");
+document.getElementById("inv-list").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-id]"); if(!b) return;
+  const x=INV.find(i=>i.id===b.dataset.id);
+  openDrawer({title:x.ex+" 库存",sub:x.lbl,status:x.status,blocks:[{label:"数值",big:true,text:x.val+" "+x.unit},{label:"说明",text:x.extra}],links:x.links});
+});
+document.getElementById("bench").onclick=()=>openDrawer({title:"全球矿端 23.0 Mt",sub:"2025e · USGS",status:"ok",blocks:[{label:"数值",big:true,text:"23.0 Mt"},{label:"口径",text:"MCS 2026 Copper · world mine production recoverable."}],links:[{label:"USGS PDF",url:USGS},{label:"DOI",url:"https://doi.org/10.3133/mcs2026"}]});
+
+function filtered(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  let rows=TRACK.filter(r=>region==="全球"||r.region===region);
+  if(q) rows=rows.filter(r=>(r.name+r.country+r.region).toLowerCase().includes(q));
+  rows=[...rows];
+  if(sortKey==="name") rows.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sortKey==="delta") rows.sort((a,b)=>(a.adjKt??0)-(b.adjKt??0));
+  else rows.sort((a,b)=>(b.actual||0)-(a.actual||0));
+  if(mode==="region") rows.sort((a,b)=>a.region.localeCompare(b.region)||a.name.localeCompare(b.name));
+  return rows;
+}
+function yoy(r){if(r.yoyNote==="口径变更")return`<div class="meta">口径变更</div>`;if(r.yoyKt===0)return`<div class="num" style="color:var(--muted)">0</div>`;return`<div class="meta">—</div>`;}
+function adj(r){if(r.adjNote)return`<div class="meta">${r.adjNote}</div>`;if(r.adjKt==null)return`<div class="meta">—</div>`;return`<div class="delta-neg">${r.adjKt} · ${r.adjPct}%</div><div class="meta">${r.adjDate||""}</div>`;}
+function actual(r){if(r.actual==null)return`<div class="meta">—</div>`;return`<div class="actual">${Number(r.actual).toLocaleString(undefined,{maximumFractionDigits:2})}</div><div class="meta">${r.actualAsOf||""}</div>${r.progress!=null?`<div class="meta">${r.progress}%</div>`:""}<div class="meta">${r.qNote||""}</div>`;}
+function openTrack(r,tr){
+  document.querySelectorAll("table.track tr.active").forEach(x=>x.classList.remove("active"));
+  if(tr) tr.classList.add("active");
+  openDrawer({title:r.name,sub:`${r.country} · ${r.region}`,status:r.status,blocks:[
+    {label:"储量",text:`${r.reserve||"—"} ${r.reserveDate||""}`},
+    {label:"指引",text:`${r.init||"—"} → ${r.latest||"—"} · ${r.latestNote||""}`},
+    {label:"实际",text:r.actual==null?"—":`${r.actual} · ${r.actualAsOf||""}`},
+    {label:"轨迹",text:r.trail||"—"}
+  ],links:r.href?[{label:r.trail||"来源",url:r.href}]:[]});
+}
+function render(){
+  const rows=filtered();
+  document.getElementById("track-n").textContent=TRACK.length;
+  document.getElementById("tbody").innerHTML=rows.map((r,i)=>`
+    <tr data-i="${i}" tabindex="0">
+      <td><div class="name">${r.name}</div><div class="meta">${r.country} · ${r.region} · ${r.tag||""}</div><div style="margin-top:4px">${chip(r.status)}</div></td>
+      <td><div class="num">${r.reserve||"—"}</div>${r.reserveStatus==="pend"?`<div style="margin-top:4px"><span class="chip pend">待储量</span></div>`:""}</td>
+      <td><div class="range">${r.init||"—"}</div><div class="meta">${r.initDate||""}</div></td>
+      <td><div class="range">${r.latest||"—"}</div><div class="badge">${r.latestNote||""}</div></td>
+      <td>${yoy(r)}</td><td>${adj(r)}</td><td>${actual(r)}</td>
+      <td style="color:var(--accent);font-weight:800">›</td>
+    </tr>`).join("")||`<tr><td colspan="8" class="meta" style="padding:20px">无匹配</td></tr>`;
+  document.querySelectorAll("#tbody tr[data-i]").forEach(tr=>{
+    const r=rows[+tr.dataset.i];
+    tr.onclick=()=>openTrack(r,tr);
+    tr.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openTrack(r,tr);}};
+  });
+}
+document.getElementById("q").oninput=render;
+document.getElementById("sort-key").onchange=e=>{sortKey=e.target.value;render();};
+document.querySelectorAll("#sort-mode button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#sort-mode button").forEach(x=>x.classList.toggle("active",x===b));mode=b.dataset.mode;render();});
+document.querySelectorAll("#regions button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#regions button").forEach(x=>x.classList.toggle("active",x===b));region=b.dataset.r;render();});
+document.getElementById("btn-export").onclick=()=>{
+  const rows=filtered();
+  const h="name,country,region,reserve,init,latest,actual,source\n";
+  const body=rows.map(r=>[r.name,r.country,r.region,r.reserve,r.init,r.latest,r.actual??"",r.href||""].map(v=>`"${v}"`).join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([h+body],{type:"text/csv"}));a.download="mine-desk-cu-track.csv";a.click();
+};
+
+document.getElementById("src-body").innerHTML=SOURCES.map((s,i)=>`
+  <tr data-i="${i}"><td><strong>${s.field}</strong></td><td>${s.value}</td><td>${s.align}</td><td>${chip(s.status)} <span style="color:var(--accent);font-weight:800">›</span></td></tr>`).join("");
+document.getElementById("src-body").onclick=e=>{
+  const tr=e.target.closest("tr[data-i]"); if(!tr) return;
+  document.querySelectorAll(".sources tr.active").forEach(x=>x.classList.remove("active"));
+  tr.classList.add("active");
+  const s=SOURCES[+tr.dataset.i];
+  openDrawer({title:s.field,sub:s.align,status:s.status,blocks:[{label:"采用值",big:true,text:s.value},{label:"说明",text:s.detail||s.align}],links:s.links||[]});
+};
+
+document.getElementById("d-close").onclick=closeDrawer;
+document.getElementById("backdrop").onclick=closeDrawer;
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDrawer();});
+document.querySelectorAll(".rail nav a").forEach(a=>a.addEventListener("click",()=>{document.querySelectorAll(".rail nav a").forEach(x=>x.classList.remove("active"));a.classList.add("active");}));
+/* Cu/Al 通过侧栏链接互跳；其余品种仍待补充 */
+
+initMap();
+render();
+</script>
+</body>
+</html>
