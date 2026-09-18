@@ -1,0 +1,4377 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>矿端公开核验台 · 多金属</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+if(typeof L==="undefined"){
+  document.write('<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/leaflet/1.9.4/leaflet.min.css">');
+  document.write('<script src="https://cdn.bootcdn.net/ajax/libs/leaflet/1.9.4/leaflet.min.js"><\/script>');
+}
+</script>
+<style>:root{--ink:#1a2332;--muted:#5a6b7c;--line:#e2e8f0;--bg:#f1f5f9;--paper:#fff;--accent:#1d4ed8;--accent-2:#1e3a8a;--ok:#047857;--warn:#b45309;--pend:#64748b;--rail:248px;--shadow:0 8px 30px rgba(15,23,42,.06);--banner-bg:#eff6ff;--banner-bd:#bfdbfe;--banner-fg:#1e3a5f;--map-bg:#dbeafe;--hover:#eff6ff;--active-row:#dbeafe;--logo-grad:linear-gradient(145deg,#3b82f6,#1d4ed8 60%,#1e3a8a)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 "Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+button,input,select{font:inherit}a{color:var(--accent);font-weight:600}
+.shell{display:grid;grid-template-columns:var(--rail) 1fr;min-height:100vh}
+.rail{background:#0f172a;color:#e2e8f0;padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.logo{display:flex;gap:10px;align-items:center;padding:2px 6px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:var(--logo-grad)}
+.logo b{display:block;font-size:14px}.logo span{display:block;font-size:11px;color:#94a3b8;margin-top:2px}
+.metal-switch{margin-top:14px;display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.metal-switch button,.metal-switch a{border:1px solid rgba(148,163,184,.35);background:rgba(255,255,255,.04);color:#cbd5e1;border-radius:8px;padding:7px 0;font-size:11px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;display:block}
+.metal-switch button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.metal-switch button:disabled{opacity:.35;cursor:not-allowed}
+.rail nav{margin-top:16px;display:flex;flex-direction:column;gap:4px}
+.rail nav a{display:block;color:#cbd5e1;text-decoration:none;padding:9px 11px;border-radius:9px}
+.rail nav a:hover,.rail nav a.active{background:rgba(255,255,255,.1);color:#fff}
+.rail .note{margin-top:20px;padding:11px;border-radius:10px;background:rgba(255,255,255,.04);font-size:11.5px;color:#94a3b8;line-height:1.55}
+.main{padding:18px 22px 48px;max-width:1320px}
+.top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 6px}
+h1{margin:0;font-size:clamp(24px,2.8vw,32px)}.lead{margin:8px 0 0;color:var(--muted);max-width:58ch}
+.meta-pills{display:flex;gap:8px;flex-wrap:wrap}.pill{font-size:11px;padding:5px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--muted)}.pill strong{color:var(--ink)}
+.banner{background:var(--banner-bg);border:1px solid var(--banner-bd);border-radius:12px;padding:11px 13px;font-size:12.5px;line-height:1.65;color:var(--banner-fg);margin-bottom:14px}
+.chip{display:inline-flex;font-size:10.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-weight:700}
+.chip.ok{background:#ecfdf5;border-color:#a7f3d0;color:var(--ok)}.chip.warn{background:#fffbeb;border-color:#fde68a;color:var(--warn)}.chip.pend{background:#f1f5f9;border-color:#cbd5e1;color:var(--pend)}
+.grid-2{display:grid;grid-template-columns:1.05fr 1fr;gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.card h2{margin:0 0 10px;font-size:15px;display:flex;justify-content:space-between}.card h2 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:600}
+.item{width:100%;border:1px solid transparent;background:#f8fafc;border-radius:11px;padding:11px;margin:0 0 8px;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px}
+.item:hover{border-color:var(--accent);background:var(--hover)}.item .when{font-size:11px;color:var(--muted)}.item .title{font-weight:700;margin-top:2px}.item .desc{font-size:12.5px;color:#475569;margin-top:4px}.item .tag{font-weight:800;color:var(--accent-2)}.item .hint{font-size:10px;color:var(--accent);margin-top:6px;font-weight:600}
+.inv{display:grid;gap:8px}.inv button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px;text-align:left;cursor:pointer}
+.inv .ex{display:flex;justify-content:space-between;font-size:12px;font-weight:700}.inv .val{font-size:22px;font-weight:800;margin:6px 0 2px}.inv .val small{font-size:12px;color:var(--muted)}.inv .lbl{font-size:11px;color:var(--muted)}
+.bench{margin-top:10px;border:1px dashed var(--banner-bd);background:var(--banner-bg);border-radius:11px;padding:12px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.bench strong{font-size:20px}
+.map-wrap{display:grid;grid-template-columns:1.55fr .85fr;gap:14px;margin:14px 0}
+.map-card{padding:0;overflow:hidden;min-height:520px;display:flex;flex-direction:column}
+.map-toolbar{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;background:#fff;z-index:2}
+.map-toolbar .filters{display:flex;gap:6px;flex-wrap:wrap}
+.map-toolbar button{border:1px solid var(--line);background:#f8fafc;border-radius:999px;padding:6px 10px;font-size:11px;cursor:pointer;font-weight:650}
+.map-toolbar button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.map-hint{font-size:11px;color:var(--muted)}#leaflet-map{flex:1;min-height:420px;width:100%;background:var(--map-bg)}
+.map-foot{padding:10px 14px;border-top:1px solid var(--line);display:flex;gap:14px;flex-wrap:wrap;font-size:12px;align-items:center}
+.rank{max-height:560px;overflow:auto;padding:0}.rank-h{position:sticky;top:0;background:#fff;padding:14px 16px;border-bottom:1px solid var(--line);font-weight:800;z-index:2}
+.rank button{width:100%;border:0;border-bottom:1px solid #eef2f6;background:transparent;padding:12px 14px;display:grid;grid-template-columns:28px 1fr auto 14px;gap:8px;text-align:left;cursor:pointer}
+.rank button:hover,.rank button.active{background:var(--hover)}.rank .n{color:var(--muted);font-size:12px}.rank .nm{font-weight:750}.rank .ct{font-size:11px;color:var(--muted);margin-top:2px}.rank .kt{font-weight:800;text-align:right}.rank .kt small{color:var(--muted);font-size:11px}
+.section{margin-top:26px}.section h2{margin:0 0 6px;font-size:18px}.section p.sub{margin:0 0 12px;color:var(--muted);font-size:13px}
+.kpis{display:grid;grid-template-columns:1.2fr 1fr .7fr;gap:12px;margin-bottom:12px}.kpi label{display:block;font-size:11px;color:var(--muted)}.kpi strong{font-size:18px;font-weight:800}
+.toolbar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:8px 0 10px}
+.search{border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-width:220px;background:#fff}
+.seg{display:flex;background:#e2e8f0;border-radius:10px;padding:3px}.seg button{border:0;background:transparent;padding:6px 12px;border-radius:8px;cursor:pointer;color:var(--muted)}.seg button.active{background:#fff;color:var(--ink);font-weight:700}
+.regions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}.regions button{border:0;background:0;cursor:pointer;padding:4px 2px;color:var(--muted);font-size:12.5px}.regions button.active{color:var(--accent-2);font-weight:800;border-bottom:2px solid var(--accent)}
+.table-wrap{overflow:auto;border-radius:14px;border:1px solid var(--line);background:#fff}
+table.track{width:100%;border-collapse:separate;border-spacing:0;min-width:1080px}
+table.track th{background:#0f172a;color:#e2e8f0;font-size:11px;text-align:left;padding:12px;position:sticky;top:0}
+table.track td{padding:12px;border-bottom:1px solid #eef2f6;vertical-align:top;font-size:12.5px}
+table.track tbody tr{cursor:pointer}table.track tbody tr:hover td{background:#f8fafc}table.track tbody tr.active td{background:var(--active-row)}
+.name{font-weight:800;color:var(--accent-2)}.meta{color:var(--muted);font-size:11.5px;margin-top:2px}.range{color:var(--accent);font-weight:750}.num{font-weight:650}.badge{display:inline-block;margin-top:4px;font-size:10.5px;background:#f1f5f9;border-radius:6px;padding:2px 6px}.actual{font-size:16px;font-weight:800}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:650}.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.btn.ghost{color:var(--accent-2);border-color:var(--banner-bd);background:var(--banner-bg)}
+.sources{margin-top:26px}.sources table{width:100%;border-collapse:collapse;font-size:12.5px}.sources th,.sources td{border-bottom:1px solid #eef2f6;padding:10px 8px;text-align:left;vertical-align:top}.sources th{color:var(--muted);font-size:11px}.sources tbody tr{cursor:pointer}.sources tbody tr:hover{background:#f8fafc}.sources tbody tr.active{background:var(--active-row)}
+footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:5000;opacity:0;pointer-events:none;transition:.18s}.backdrop.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(440px,100%);background:#fff;z-index:5001;box-shadow:-12px 0 40px rgba(0,0,0,.18);transform:translateX(100%);transition:.2s;display:flex;flex-direction:column}.drawer.open{transform:translateX(0)}
+.drawer-hd{padding:16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.drawer-hd h3{margin:0;font-size:17px}.drawer-hd .sub{font-size:12px;color:var(--muted);margin-top:4px}
+.drawer-bd{padding:16px;overflow:auto;flex:1}.drawer-bd .label{font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px}.drawer-bd .value{font-size:16px;font-weight:800}.drawer-bd .note{font-size:13px;color:#334;line-height:1.55}.drawer-bd .block{margin-bottom:14px}
+.url-box{font-size:11px;word-break:break-all;background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:10px}
+.drawer-ft{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(16px);background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:12.5px;z-index:6000;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.legacy{font-size:11px;margin-top:12px;line-height:1.5}.legacy a{color:#93c5fd}
+@media(max-width:1100px){.shell{grid-template-columns:1fr}.rail{position:relative;height:auto}.grid-2,.map-wrap,.kpis{grid-template-columns:1fr}#leaflet-map{min-height:360px}}</style>
+</head>
+<body>
+<div class="shell">
+<aside class="rail">
+  <div class="logo"><div class="logo-mark"></div><div><b>矿端公开核验台</b><span>多金属 · 单页切换</span></div></div>
+  <div class="metal-switch" id="metal-switch">
+    <button type="button" class="on" data-metal="Cu">Cu</button>
+    <button type="button" data-metal="Al">Al</button>
+    <button type="button" data-metal="PbZn">Pb/Zn</button>
+    <button type="button" data-metal="Ni">Ni</button>
+    <button type="button" data-metal="Sn">Sn</button>
+    <button type="button" data-metal="Li">Li</button>
+    <button type="button" data-metal="Fe">Fe</button>
+    <button type="button" disabled>…</button>
+  </div>
+  <nav>
+    <a class="active" href="#top">总览</a><a href="#map">世界地图</a><a href="#events">供给事件</a>
+    <a href="#inv">交易所库存</a><a href="#track">产量追踪</a><a href="#sources">来源总表</a>
+  </nav>
+  <div class="note" id="rail-note">侧栏切换 Cu/Al/Pb·Zn/Ni/Sn/Li/Fe<br>默认 Esri World Street<br>核验日 2026-09-18</div>
+  <div class="legacy">单品种：
+    <a href="metals-atlas-copper-loggedin.html">Cu</a> ·
+    <a href="metals-atlas-aluminum-loggedin.html">Al</a> ·
+    <a href="metals-atlas-pbzn-loggedin.html">Pb/Zn</a>
+  </div>
+</aside>
+<div class="main" id="top">
+  <div class="top">
+    <div>
+      <p class="kicker" id="kicker">Public multi-metal verification desk</p>
+      <h1 id="page-title">多金属 · 公开核验</h1>
+      <p class="lead" id="page-lead">侧栏切换品种，共载 Cu / Al / Pb·Zn / Ni / Sn / Li / Fe。数据内联可核验；默认底图 Esri World Street。</p>
+    </div>
+    <div class="meta-pills" id="meta-pills"></div>
+  </div>
+  <div class="banner"><span id="banner-text"></span>
+    <span class="chip ok">已核验</span><span class="chip warn">口径注意</span><span class="chip pend">待核</span>
+  </div>
+  <div class="grid-2" id="events">
+    <div class="card"><h2>近期供给事件 <em>点击打开来源</em></h2><div id="changes"></div></div>
+    <div class="card" id="inv">
+      <h2>交易所库存 <em>kt</em></h2>
+      <div class="inv" id="inv-list"></div>
+      <div class="bench" id="bench" role="button" tabindex="0">
+        <div>
+          <div style="font-size:11px;color:var(--muted)" id="bench1-lbl">基准</div>
+          <strong id="bench1-val">—</strong>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px" id="bench1-sub"></div>
+        </div>
+        <span class="chip ok">公开</span>
+      </div>
+    </div>
+  </div>
+  <div class="map-wrap" id="map">
+    <div class="card map-card">
+      <div class="map-toolbar">
+        <div class="filters" id="map-filters"></div>
+        <div class="map-hint" id="map-base-hint">默认 Esri World Street</div>
+      </div>
+      <div id="leaflet-map"></div>
+      <div class="map-foot">
+        <span>可见 <strong id="vis-count">0</strong> 点</span>
+        <span>产量示意 <strong id="vis-sum">0</strong></span>
+        <span class="chip warn">单位见图例</span>
+      </div>
+    </div>
+    <div class="card rank">
+      <div class="rank-h" id="rank-h">样本榜</div>
+      <div id="rank-list"></div>
+    </div>
+  </div>
+  <section class="section" id="track">
+    <h2>公司 / 项目产量追踪</h2>
+    <p class="sub">优先公司公告与产量报告。</p>
+    <div class="kpis">
+      <div class="card kpi"><label>追踪行数</label><strong id="track-n">—</strong></div>
+      <div class="card kpi"><label>排序</label>
+        <select id="sort-key" class="search" style="margin-top:6px;width:100%"><option value="actual">按已披露产量</option><option value="name">按名称</option></select>
+      </div>
+      <div class="card kpi"><label>模式</label>
+        <div class="seg" id="sort-mode" style="margin-top:6px">
+          <button type="button" class="active" data-mode="project">项目</button>
+          <button type="button" data-mode="region">区域</button>
+        </div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <input class="search" id="q" placeholder="搜索…">
+      <button type="button" class="btn" id="btn-export">导出 CSV</button>
+    </div>
+    <div class="regions" id="regions"></div>
+    <div class="table-wrap">
+      <table class="track">
+        <thead><tr><th>主体</th><th>储量</th><th>期初指引</th><th>最新</th><th>YoY</th><th>调整</th><th>已披露产量</th><th></th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+  <section class="sources" id="sources">
+    <h2 style="font-size:18px;margin:0 0 8px">来源总表</h2>
+    <table><thead><tr><th>字段</th><th>采用值</th><th>对齐</th><th>状态</th></tr></thead><tbody id="src-body"></tbody></table>
+  </section>
+  <footer><span id="foot-left">矿端公开核验台 · 统一页</span><span>默认 Esri World Street · Leaflet</span></footer>
+</div>
+</div>
+<div class="backdrop" id="backdrop" hidden></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-hd"><div><h3 id="d-title">详情</h3><div class="sub" id="d-sub"></div></div><button type="button" class="btn" id="d-close">关闭</button></div>
+  <div class="drawer-bd" id="d-body"></div>
+  <div class="drawer-ft" id="d-ft"></div>
+</aside>
+<div class="toast" id="toast"></div>
+<script>
+var THEMES = {
+  "Cu": {
+    "accent": "#1d4ed8",
+    "accent2": "#1e3a8a",
+    "grad": "linear-gradient(145deg,#3b82f6,#1d4ed8 60%,#1e3a8a)",
+    "banner_bg": "#eff6ff",
+    "banner_bd": "#bfdbfe",
+    "banner_fg": "#1e3a5f",
+    "map_bg": "#dbeafe",
+    "hover": "#eff6ff",
+    "active_row": "#dbeafe",
+    "title": "铜 · 全球矿端公开核验",
+    "kicker": "Public mine verification desk",
+    "lead": "多金属统一台：侧栏切换 Cu / Al / Pb·Zn / Ni / Sn / Li / Fe。默认底图 Esri World Street。",
+    "pills": "品种 <strong>Cu</strong> · 全球矿端 <strong>23.0 Mt</strong>",
+    "banner": "铜：矿山含铜为主。默认 Esri 街道底图。",
+    "rank_h": "样本产量榜 · kt 含铜",
+    "bench1_lbl": "全球矿端 2025e · USGS",
+    "bench1_val": "23.0 Mt",
+    "bench1_sub": "MCS 2026 Copper",
+    "note": "当前：铜 Cu",
+    "inv_chip": "Cu"
+  },
+  "Al": {
+    "accent": "#0f766e",
+    "accent2": "#115e59",
+    "grad": "linear-gradient(145deg,#2dd4bf,#0f766e 60%,#115e59)",
+    "banner_bg": "#f0fdfa",
+    "banner_bd": "#99f6e4",
+    "banner_fg": "#134e4a",
+    "map_bg": "#ccfbf1",
+    "hover": "#f0fdfa",
+    "active_row": "#ccfbf1",
+    "title": "铝 · 全链公开核验",
+    "kicker": "Public aluminium verification desk",
+    "lead": "铝链三层：铝土矿 → 氧化铝 → 原铝。",
+    "pills": "品种 <strong>Al</strong> · 全球原铝 2025 <strong>73.8 Mt</strong>",
+    "banner": "铝：可筛铝土/冶炼。默认 Esri World Street。",
+    "rank_h": "样本榜 · 铝土 Mt / 原铝 kt",
+    "bench1_lbl": "全球原铝 2025 · IAI",
+    "bench1_val": "73.784 Mt",
+    "bench1_sub": "同比约 +1.1%",
+    "note": "当前：铝 Al",
+    "inv_chip": "Al"
+  },
+  "PbZn": {
+    "accent": "#a16207",
+    "accent2": "#854d0e",
+    "grad": "linear-gradient(145deg,#facc15,#a16207 60%,#854d0e)",
+    "banner_bg": "#fefce8",
+    "banner_bd": "#fde68a",
+    "banner_fg": "#713f12",
+    "map_bg": "#fef9c3",
+    "hover": "#fefce8",
+    "active_row": "#fef9c3",
+    "title": "铅锌 · 矿端与精炼公开核验",
+    "kicker": "Public lead & zinc verification desk",
+    "lead": "精矿含锌与精炼锌分列。",
+    "pills": "品种 <strong>Pb/Zn</strong> · 精炼锌缺口 <strong>33 kt</strong>",
+    "banner": "铅锌：ILZSG 缺口 33 kt。默认 Esri。",
+    "rank_h": "样本榜 · kt Zn",
+    "bench1_lbl": "精炼锌 2025 · ILZSG",
+    "bench1_val": "缺口 33 kt",
+    "bench1_sub": "需求 13.86 Mt",
+    "note": "当前：Pb/Zn",
+    "inv_chip": "Pb/Zn"
+  },
+  "Ni": {
+    "accent": "#4f46e5",
+    "accent2": "#3730a3",
+    "grad": "linear-gradient(145deg,#818cf8,#4f46e5 60%,#3730a3)",
+    "banner_bg": "#eef2ff",
+    "banner_bd": "#c7d2fe",
+    "banner_fg": "#312e81",
+    "map_bg": "#e0e7ff",
+    "hover": "#eef2ff",
+    "active_row": "#e0e7ff",
+    "title": "镍 · 矿端与原生金属公开核验",
+    "kicker": "Public nickel verification desk",
+    "lead": "注意 Class-1 / NPI / 镍锍口径。印尼厂级大量待核。默认 Esri World Street。",
+    "pills": "品种 <strong>Ni</strong> · 2025 过剩 <strong>约 209 kt</strong>",
+    "banner": "镍：INSG 过剩；Vale/Glencore/PT Vale 已核验。Nornickel 与印尼 NPI 厂级待绝对吨。",
+    "rank_h": "样本榜 · kt Ni",
+    "bench1_lbl": "原生镍 2025 · INSG",
+    "bench1_val": "过剩约 209 kt",
+    "bench1_sub": "产量约 3.81 / 需求约 3.60 Mt",
+    "note": "当前：镍 Ni",
+    "inv_chip": "Ni"
+  },
+  "Sn": {
+    "accent": "#b45309",
+    "accent2": "#9a3412",
+    "grad": "linear-gradient(145deg,#f59e0b,#b45309 60%,#9a3412)",
+    "banner_bg": "#fffbeb",
+    "banner_bd": "#fde68a",
+    "banner_fg": "#78350f",
+    "map_bg": "#fef3c7",
+    "hover": "#fffbeb",
+    "active_row": "#fde68a",
+    "title": "锡 · 矿端与精锡公开核验",
+    "kicker": "Public tin verification desk",
+    "lead": "精矿含锡与精锡分列。缅甸佤邦扰动、印尼出口治理与 AI/焊料需求是主线。默认 Esri World Street。",
+    "pills": "品种 <strong>Sn</strong> · 2025 精锡 <strong>缺口约 18 kt</strong>",
+    "banner": "锡：CRU 精锡产 371.4 / 消 389.4 kt；云锡/Timah/Alphamin 已核验。Minsur 全年待拼齐季度。",
+    "rank_h": "样本榜 · kt Sn（含锡/精锡见备注）",
+    "bench1_lbl": "精锡 2025 · CRU（Timah 披露）",
+    "bench1_val": "缺口约 18 kt",
+    "bench1_sub": "产 371.4 / 消 389.4 kt",
+    "note": "当前：锡 Sn",
+    "inv_chip": "Sn"
+  },
+  "Li": {
+    "accent": "#0e7490",
+    "accent2": "#155e75",
+    "grad": "linear-gradient(145deg,#22d3ee,#0e7490 60%,#155e75)",
+    "banner_bg": "#ecfeff",
+    "banner_bd": "#a5f3fc",
+    "banner_fg": "#164e63",
+    "map_bg": "#cffafe",
+    "hover": "#ecfeff",
+    "active_row": "#a5f3fc",
+    "title": "锂 · 矿端与盐端公开核验",
+    "kicker": "Public lithium verification desk",
+    "lead": "注意 LCE / 锂盐 / 锂辉石精矿（SC）口径不可直接加总。盐湖与硬岩分列。默认 Esri World Street。",
+    "pills": "品种 <strong>Li</strong> · SQM 2025 销售 <strong>~258 kt LCE</strong>",
+    "banner": "锂：SQM/赣锋/Greenbushes/PLS 已核验。全球平衡各家口径分歧大，主表并列。库存用中国碳酸锂社库转述。",
+    "rank_h": "样本榜 · 见单位（LCE / SC / 锂盐）",
+    "bench1_lbl": "SQM 锂 2025 销售",
+    "bench1_val": "~258 kt LCE",
+    "bench1_sub": "智利+澳洲业务 · 公司年报",
+    "note": "当前：锂 Li",
+    "inv_chip": "Li"
+  },
+  "Fe": {
+    "accent": "#b91c1c",
+    "accent2": "#7f1d1d",
+    "grad": "linear-gradient(145deg,#f87171,#b91c1c 60%,#7f1d1d)",
+    "banner_bg": "#fef2f2",
+    "banner_bd": "#fecaca",
+    "banner_fg": "#7f1d1d",
+    "map_bg": "#fee2e2",
+    "hover": "#fef2f2",
+    "active_row": "#fecaca",
+    "title": "铁 · 铁矿石公开核验",
+    "kicker": "Public iron ore verification desk",
+    "lead": "可用矿石（usable ore）与湿吨发运分列；球团勿与粉矿直接加总。默认 Esri World Street。",
+    "pills": "品种 <strong>Fe</strong> · 全球可用矿 2025e <strong>~2.55+ Gt</strong>",
+    "banner": "铁：USGS 澳 980 / 巴 420 Mt；Vale 336 / Rio Pilbara 327 / FMG 198 / BHP WAIO 257 Mt。中国港口库存约 1.71 亿吨。",
+    "rank_h": "样本榜 · Mt 可用矿/发运（见备注）",
+    "bench1_lbl": "全球可用矿 2025e · USGS",
+    "bench1_val": "澳+巴+印+中等 ~2.55 Gt",
+    "bench1_sub": "MCS 2026 分国表合计（17 国）",
+    "note": "当前：铁 Fe",
+    "inv_chip": "Fe"
+  }
+};;;;
+var METAL_DATA = {
+  "Cu": {
+    "CHANGES": [
+      {
+        "id": "skouries",
+        "when": "2026-09-08",
+        "title": "Skouries 首产铜金精矿",
+        "desc": "Eldorado：首批铜金精矿；商业生产预期 Q4 2026。",
+        "tag": "首产",
+        "status": "ok",
+        "detail": "首产日 2026-09-08；Q4 商业生产预期；临时供电。",
+        "links": [
+          {
+            "label": "6-K 转述",
+            "url": "https://www.stocktitan.net/sec-filings/EGO/6-k-eldorado-gold-corp-fi-current-report-foreign-issuer-a8edd0931524.html"
+          },
+          {
+            "label": "CIM",
+            "url": "https://magazine.cim.org/en/news/2026/first-copper-gold-concentrate-at-eldorado-gold-s-skouries-project-en/"
+          }
+        ]
+      },
+      {
+        "id": "makoko",
+        "when": "2026-09-08",
+        "title": "Western Forelands / Makoko",
+        "desc": "Inferred 612 Mt @ 1.80% Cu —— 矿石量，非产量。",
+        "tag": "612 Mt",
+        "status": "ok",
+        "detail": "Ivanhoe 2026-09-08：推断资源，非 Ore Reserve。",
+        "links": [
+          {
+            "label": "Ivanhoe",
+            "url": "https://www.ivanhoemines.com/news-stories/news-release/ivanhoe-mines-increases-the-size-of-massive-western-forelands-copper-discovery-by-30/"
+          }
+        ]
+      },
+      {
+        "id": "bambas",
+        "when": "2026-08-24",
+        "title": "Las Bambas 确认恢复运营",
+        "desc": "自 2026-08-21 恢复；未等同满产。",
+        "tag": "复产",
+        "status": "ok",
+        "detail": "MMG 相关确认；吨数影响待季报。",
+        "links": [
+          {
+            "label": "Mining Journal",
+            "url": "https://www.mining-journal.com/miners/news-articles/4535995/mmg-resumes-operations-las-bambas"
+          },
+          {
+            "label": "MMG 年产",
+            "url": "https://www.mmg.com/investors/reports-and-presentations/strong-fourth-quarter-driven-by-record-and-near-record-production-results/"
+          }
+        ]
+      }
+    ],
+    "INV": [
+      {
+        "id": "lme",
+        "ex": "LME",
+        "val": "234.475",
+        "unit": "kt",
+        "lbl": "官方开市库存（转载）",
+        "foot": "2026-09-11 · 9/15=249.225",
+        "extra": "公开转载点；原 OCR 236.475 已替换。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Worldal 9/11",
+            "url": "http://www.worldal.com/market/lme/2026-09-11/178911575175065.shtml"
+          },
+          {
+            "label": "Worldal 9/15",
+            "url": "http://www.worldal.com/market/lme/2026-09-15/178945956375075.shtml"
+          }
+        ]
+      },
+      {
+        "id": "shfe",
+        "ex": "SHFE",
+        "val": "54.78",
+        "unit": "kt",
+        "lbl": "一周总库存",
+        "foot": "一周 −8.22 kt · 2026-09-11",
+        "extra": "仓单界面 20.854 kt 待上期所日报。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "中国有色网",
+            "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474011"
+          }
+        ]
+      },
+      {
+        "id": "comex",
+        "ex": "COMEX",
+        "val": "696.259",
+        "unit": "kt",
+        "lbl": "仓存公吨 · ICA 周报",
+        "foot": "纪录 · 周截至 2026-09-11",
+        "extra": "ICA Australia：696,259 t。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "ICA Weekly",
+            "url": "https://copper.com.au/news/mining/copper-weekly-brief-week-ending-11-september-2026/"
+          }
+        ]
+      }
+    ],
+    "RANK": [
+      {
+        "n": 1,
+        "name": "Escondida",
+        "country": "智利",
+        "region": "南美洲",
+        "kt": 1307,
+        "status": "warn",
+        "note": "日历年量级；BHP FY26 100%=1,261.2 kt",
+        "href": "https://www.bhp.com/-/media/documents/media/reports-and-presentations/2026/260716_bhpoperationalreviewfortheyearended30june2026.pdf",
+        "lat": -24.27,
+        "lon": -69.07
+      },
+      {
+        "n": 2,
+        "name": "Grasberg district (PTFI)",
+        "country": "印尼",
+        "region": "亚洲",
+        "kt": 453.6,
+        "status": "ok",
+        "note": "FCX：2025 1.0 blb Cu≈453.6 kt",
+        "href": "https://last10k.com/sec-filings/fcx/0000831259-26-000006.htm",
+        "lat": -4.05,
+        "lon": 137.11
+      },
+      {
+        "n": 3,
+        "name": "Las Bambas",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "kt": 410.834,
+        "status": "ok",
+        "note": "MMG 2025：410,834 t",
+        "href": "https://www.mmg.com/investors/reports-and-presentations/strong-fourth-quarter-driven-by-record-and-near-record-production-results/",
+        "lat": -14.08,
+        "lon": -72.15
+      },
+      {
+        "n": 4,
+        "name": "Collahuasi",
+        "country": "智利",
+        "region": "南美洲",
+        "kt": 404,
+        "status": "ok",
+        "note": "2025≈404 kt",
+        "href": "https://electromineria.cl/collahuasi-aporto-us651-millones-impuestos-royalty-produjo-404-mil-toneladas-cobre-2025/",
+        "lat": -20.97,
+        "lon": -68.71
+      },
+      {
+        "n": 5,
+        "name": "Buenavista del Cobre",
+        "country": "墨西哥",
+        "region": "北美洲",
+        "kt": 414.5,
+        "status": "pend",
+        "approx": true,
+        "note": "界面；SCCO 全公司 954.3 kt，矿级待表",
+        "href": "https://last10k.com/sec-filings/scco/0001104659-26-021492.htm",
+        "lat": 30.5,
+        "lon": -109.9
+      },
+      {
+        "n": 6,
+        "name": "Cerro Verde",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "kt": 391.5,
+        "status": "pend",
+        "approx": true,
+        "note": "界面；FCX 矿级年产量待 10-K",
+        "href": "https://last10k.com/sec-filings/fcx/0000831259-26-000006.htm",
+        "lat": -16.55,
+        "lon": -71.6
+      },
+      {
+        "n": 7,
+        "name": "Kamoa-Kakula",
+        "country": "刚果(金)",
+        "region": "非洲",
+        "kt": 385.8,
+        "status": "ok",
+        "note": "Ivanhoe 2025：385.8–388.8 kt",
+        "href": "https://www.nasdaq.com/press-release/ivanhoe-mines-provides-2025-production-results-2026-production-guidance-2026-01-15",
+        "lat": -10.7,
+        "lon": 25.4
+      },
+      {
+        "n": 8,
+        "name": "Antamina",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "kt": 380,
+        "status": "warn",
+        "approx": true,
+        "note": "管理层 2025e≈380 kt",
+        "href": "https://www.mining.com/web/antamina-expects-significant-copper-output-boost-in-2026/",
+        "lat": -9.55,
+        "lon": -77.1
+      },
+      {
+        "n": 9,
+        "name": "Oyu Tolgoi",
+        "country": "蒙古",
+        "region": "亚洲",
+        "kt": 345,
+        "status": "ok",
+        "note": "Rio：OT 345 kt（100%），+61% YoY",
+        "href": "https://cdn.financialreports.eu/financialreports/media/filings/4666/2026/RNS/4666_rns_2026-01-21_809a5314-c369-48ee-845d-826e3767ce78.html",
+        "lat": 43,
+        "lon": 106.85
+      },
+      {
+        "n": 10,
+        "name": "Morenci",
+        "country": "美国",
+        "region": "北美洲",
+        "kt": 313.1,
+        "status": "pend",
+        "note": "界面；FCX 72% JV",
+        "href": "https://last10k.com/sec-filings/fcx/0000831259-26-000006.htm",
+        "lat": 33.05,
+        "lon": -109.33
+      },
+      {
+        "n": 11,
+        "name": "Quellaveco",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "kt": 310.2,
+        "status": "ok",
+        "note": "Anglo 2025：310,200 t",
+        "href": "https://www.investegate.co.uk/announcement/rns/anglo-american--aal/anglo-american-full-year-2025-results/9439268",
+        "lat": -17.1,
+        "lon": -70.6
+      },
+      {
+        "n": 12,
+        "name": "El Teniente",
+        "country": "智利",
+        "region": "南美洲",
+        "kt": 310,
+        "status": "ok",
+        "note": "Codelco≈310 kt（事故年）",
+        "href": "https://www.reuters.com/world/americas/chiles-codelco-reports-485-billion-pre-tax-profit-2025-2026-03-27/",
+        "lat": -34.08,
+        "lon": -70.35
+      },
+      {
+        "n": 13,
+        "name": "Los Pelambres",
+        "country": "智利",
+        "region": "南美洲",
+        "kt": 295.3,
+        "status": "ok",
+        "note": "Antofagasta 2025=295.3",
+        "href": "https://www.marketscreener.com/news/antofagasta-quarterly-production-report-a-q4-2025-report-ce7e5bdedd80f325",
+        "lat": -31.7,
+        "lon": -70.5
+      },
+      {
+        "n": 14,
+        "name": "Radomiro Tomic",
+        "country": "智利",
+        "region": "南美洲",
+        "kt": 295,
+        "status": "pend",
+        "note": "界面；Codelco 分部",
+        "href": "https://www.reuters.com/world/americas/chiles-codelco-reports-485-billion-pre-tax-profit-2025-2026-03-27/",
+        "lat": -22.15,
+        "lon": -68.9
+      },
+      {
+        "n": 15,
+        "name": "Chuquicamata",
+        "country": "智利",
+        "region": "南美洲",
+        "kt": 265.8,
+        "status": "ok",
+        "note": "2025 265.8 kt",
+        "href": "https://www.industrialinfo.com/news/article/codelco-records-profits-of-us242-billion--355597",
+        "lat": -22.3,
+        "lon": -68.9
+      },
+      {
+        "n": 16,
+        "name": "Toquepala",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "kt": 248.4,
+        "status": "pend",
+        "approx": true,
+        "note": "界面；SCCO",
+        "href": "https://last10k.com/sec-filings/scco/0001104659-26-021492.htm",
+        "lat": -17.3,
+        "lon": -70.7
+      },
+      {
+        "n": 17,
+        "name": "Toromocho",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "kt": 247.8,
+        "status": "pend",
+        "note": "界面；Chinalco 待公告",
+        "href": null,
+        "lat": -11.6,
+        "lon": -76.15
+      },
+      {
+        "n": 18,
+        "name": "Centinela",
+        "country": "智利",
+        "region": "南美洲",
+        "kt": 240.4,
+        "status": "ok",
+        "note": "Antofagasta District 240.4 kt",
+        "href": "https://www.investegate.co.uk/announcement/rns/antofagasta--anto/q4-2025-production-report/9392533",
+        "lat": -22.1,
+        "lon": -69.3
+      },
+      {
+        "n": 19,
+        "name": "Aktogay",
+        "country": "哈萨克斯坦",
+        "region": "亚洲",
+        "kt": 225.7,
+        "status": "ok",
+        "note": "KAZ 2025：225.7 kt",
+        "href": "https://www.kazminerals.com/q4-2025-production-report/",
+        "lat": 46.95,
+        "lon": 79.7
+      },
+      {
+        "n": 20,
+        "name": "Spence",
+        "country": "智利",
+        "region": "南美洲",
+        "kt": 212.6,
+        "status": "warn",
+        "note": "BHP FY26 212.6 kt",
+        "href": "https://www.bhp.com/-/media/documents/media/reports-and-presentations/2026/260716_bhpoperationalreviewfortheyearended30june2026.pdf",
+        "lat": -22.75,
+        "lon": -69.3
+      },
+      {
+        "n": 21,
+        "name": "Julong",
+        "country": "中国",
+        "region": "亚洲",
+        "kt": 193.8,
+        "status": "pend",
+        "note": "界面；待公告",
+        "href": null,
+        "lat": 31.7,
+        "lon": 92.2
+      },
+      {
+        "n": 22,
+        "name": "Kansanshi",
+        "country": "赞比亚",
+        "region": "非洲",
+        "kt": 181,
+        "status": "ok",
+        "note": "FQM 2025：181 kt",
+        "href": "https://www.first-quantum.com/news/first-quantum-minerals-announces-2025-preliminary-production-and-2026-2028-guidance/",
+        "lat": -12.1,
+        "lon": 26
+      },
+      {
+        "n": 23,
+        "name": "Sentinel",
+        "country": "赞比亚",
+        "region": "非洲",
+        "kt": 189,
+        "status": "ok",
+        "note": "FQM 2025：189 kt",
+        "href": "https://www.first-quantum.com/news/first-quantum-minerals-announces-2025-preliminary-production-and-2026-2028-guidance/",
+        "lat": -12.3,
+        "lon": 25.6
+      }
+    ],
+    "TRACK": [
+      {
+        "name": "Kamoa-Kakula",
+        "country": "刚果（金）",
+        "region": "非洲",
+        "tag": "Ivanhoe",
+        "reserve": "13,100.0",
+        "reserveDate": "2025-12-31",
+        "reserveStatus": "pend",
+        "init": "380–420",
+        "initDate": "2025-12-03",
+        "latest": "290–310",
+        "latestNote": "冶炼产出含铜¹",
+        "yoyNote": "口径变更",
+        "adjKt": -10,
+        "adjPct": -3.2,
+        "adjDate": "2026-07-29",
+        "actual": 135.75,
+        "actualAsOf": "2026-06-30",
+        "progress": 45.2,
+        "qNote": "H1 界面",
+        "trail": "Ivanhoe",
+        "href": "https://www.nasdaq.com/press-release/ivanhoe-mines-provides-2025-production-results-2026-production-guidance-2026-01-15",
+        "status": "ok"
+      },
+      {
+        "name": "Las Bambas",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "tag": "MMG",
+        "reserve": "≈4,664",
+        "reserveDate": "2026-06-30",
+        "reserveStatus": "pend",
+        "init": "380–400",
+        "initDate": "2026",
+        "latest": "380–400",
+        "latestNote": "2026 指引维持",
+        "yoyKt": 0,
+        "adjNote": "—",
+        "actual": 410.834,
+        "actualAsOf": "FY2025",
+        "qNote": "MMG 410,834 t",
+        "trail": "MMG Q4",
+        "href": "https://www.mmg.com/investors/reports-and-presentations/strong-fourth-quarter-driven-by-record-and-near-record-production-results/",
+        "status": "ok"
+      },
+      {
+        "name": "Kansanshi",
+        "country": "赞比亚",
+        "region": "非洲",
+        "tag": "FQM",
+        "reserve": "≈5,224",
+        "reserveStatus": "pend",
+        "init": "175–205",
+        "initDate": "2026",
+        "latest": "175–205",
+        "latestNote": "矿端含铜",
+        "yoyKt": 0,
+        "adjNote": "—",
+        "actual": 89.342,
+        "actualAsOf": "H1 2026",
+        "progress": 47,
+        "qNote": "FY2025=181 kt",
+        "trail": "FQM",
+        "href": "https://www.first-quantum.com/news/first-quantum-minerals-announces-2025-preliminary-production-and-2026-2028-guidance/",
+        "status": "ok"
+      },
+      {
+        "name": "Sentinel",
+        "country": "赞比亚",
+        "region": "非洲",
+        "tag": "FQM",
+        "reserve": "≈2,275",
+        "reserveStatus": "pend",
+        "init": "190–220",
+        "initDate": "2026",
+        "latest": "190–220",
+        "latestNote": "Trident–Sentinel",
+        "yoyKt": 0,
+        "adjNote": "—",
+        "actual": 95.587,
+        "actualAsOf": "H1 2026",
+        "qNote": "FY2025=189 kt",
+        "trail": "FQM",
+        "href": "https://www.first-quantum.com/news/first-quantum-minerals-announces-2025-preliminary-production-and-2026-2028-guidance/",
+        "status": "ok"
+      },
+      {
+        "name": "Escondida",
+        "country": "智利",
+        "region": "南美洲",
+        "tag": "BHP FY",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "1,000–1,100",
+        "initDate": "FY27",
+        "latest": "1,000–1,100",
+        "latestNote": "精矿+阴极",
+        "yoyKt": 0,
+        "adjNote": "—",
+        "actual": 1261.2,
+        "actualAsOf": "FY26",
+        "qNote": "100% 口径",
+        "trail": "BHP",
+        "href": "https://www.bhp.com/-/media/documents/media/reports-and-presentations/2026/260716_bhpoperationalreviewfortheyearended30june2026.pdf",
+        "status": "ok"
+      },
+      {
+        "name": "Spence",
+        "country": "智利",
+        "region": "南美洲",
+        "tag": "BHP FY",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "210–230",
+        "initDate": "FY27",
+        "latest": "210–230",
+        "latestNote": "阴极+精矿",
+        "yoyKt": 0,
+        "adjNote": "—",
+        "actual": 212.6,
+        "actualAsOf": "FY26",
+        "qNote": "",
+        "trail": "BHP",
+        "href": "https://www.bhp.com/-/media/documents/media/reports-and-presentations/2026/260716_bhpoperationalreviewfortheyearended30june2026.pdf",
+        "status": "ok"
+      },
+      {
+        "name": "Oyu Tolgoi",
+        "country": "蒙古",
+        "region": "亚洲",
+        "tag": "Rio 100%",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "~500 中期",
+        "latestNote": "2028–36 年均约 500 kt",
+        "actual": 345,
+        "actualAsOf": "FY2025",
+        "qNote": "+61% YoY",
+        "trail": "Rio Q4",
+        "href": "https://cdn.financialreports.eu/financialreports/media/filings/4666/2026/RNS/4666_rns_2026-01-21_809a5314-c369-48ee-845d-826e3767ce78.html",
+        "status": "ok"
+      },
+      {
+        "name": "Quellaveco",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "tag": "Anglo 100%",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "310–340",
+        "latest": "~300/年",
+        "latestNote": "中期水平",
+        "yoyKt": 0,
+        "adjNote": "—",
+        "actual": 310.2,
+        "actualAsOf": "FY2025",
+        "trail": "Anglo FY",
+        "href": "https://www.investegate.co.uk/announcement/rns/anglo-american--aal/anglo-american-full-year-2025-results/9439268",
+        "status": "ok"
+      },
+      {
+        "name": "Centinela",
+        "country": "智利",
+        "region": "南美洲",
+        "tag": "Antofagasta",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "集团 650–700",
+        "latestNote": "2026 集团指引",
+        "actual": 240.4,
+        "actualAsOf": "FY2025",
+        "trail": "Antofagasta Q4",
+        "href": "https://www.investegate.co.uk/announcement/rns/antofagasta--anto/q4-2025-production-report/9392533",
+        "status": "ok"
+      }
+    ],
+    "SOURCES": [
+      {
+        "field": "全球矿端 2025e",
+        "value": "23.0 Mt",
+        "align": "USGS",
+        "status": "ok",
+        "detail": "MCS 2026 铜章 23,000 千吨。",
+        "links": [
+          {
+            "label": "USGS PDF",
+            "url": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-copper.pdf"
+          }
+        ]
+      },
+      {
+        "field": "Skouries",
+        "value": "2026-09-08 首产",
+        "align": "Eldorado",
+        "status": "ok",
+        "detail": "首产日 2026-09-08；Q4 商业生产预期；临时供电。",
+        "links": [
+          {
+            "label": "6-K 转述",
+            "url": "https://www.stocktitan.net/sec-filings/EGO/6-k-eldorado-gold-corp-fi-current-report-foreign-issuer-a8edd0931524.html"
+          },
+          {
+            "label": "CIM",
+            "url": "https://magazine.cim.org/en/news/2026/first-copper-gold-concentrate-at-eldorado-gold-s-skouries-project-en/"
+          }
+        ]
+      },
+      {
+        "field": "Makoko",
+        "value": "Inferred 612 Mt @1.80%",
+        "align": "Ivanhoe",
+        "status": "ok",
+        "detail": "Ivanhoe 2026-09-08：推断资源，非 Ore Reserve。",
+        "links": [
+          {
+            "label": "Ivanhoe",
+            "url": "https://www.ivanhoemines.com/news-stories/news-release/ivanhoe-mines-increases-the-size-of-massive-western-forelands-copper-discovery-by-30/"
+          }
+        ]
+      },
+      {
+        "field": "Las Bambas 2025",
+        "value": "410,834 t",
+        "align": "MMG",
+        "status": "ok",
+        "links": [
+          {
+            "label": "MMG",
+            "url": "https://www.mmg.com/investors/reports-and-presentations/strong-fourth-quarter-driven-by-record-and-near-record-production-results/"
+          }
+        ]
+      },
+      {
+        "field": "Grasberg/PTFI",
+        "value": "≈453.6 kt",
+        "align": "FCX",
+        "status": "ok",
+        "links": [
+          {
+            "label": "FCX 8-K",
+            "url": "https://last10k.com/sec-filings/fcx/0000831259-26-000006.htm"
+          }
+        ]
+      },
+      {
+        "field": "Oyu Tolgoi",
+        "value": "345 kt",
+        "align": "Rio",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Rio Q4",
+            "url": "https://cdn.financialreports.eu/financialreports/media/filings/4666/2026/RNS/4666_rns_2026-01-21_809a5314-c369-48ee-845d-826e3767ce78.html"
+          }
+        ]
+      },
+      {
+        "field": "Quellaveco",
+        "value": "310.2 kt",
+        "align": "Anglo",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Anglo",
+            "url": "https://www.investegate.co.uk/announcement/rns/anglo-american--aal/anglo-american-full-year-2025-results/9439268"
+          }
+        ]
+      },
+      {
+        "field": "Centinela",
+        "value": "240.4 kt",
+        "align": "Antofagasta",
+        "status": "ok",
+        "links": [
+          {
+            "label": "ANTO Q4",
+            "url": "https://www.investegate.co.uk/announcement/rns/antofagasta--anto/q4-2025-production-report/9392533"
+          }
+        ]
+      },
+      {
+        "field": "Aktogay",
+        "value": "225.7 kt",
+        "align": "KAZ",
+        "status": "ok",
+        "links": [
+          {
+            "label": "KAZ",
+            "url": "https://www.kazminerals.com/q4-2025-production-report/"
+          }
+        ]
+      },
+      {
+        "field": "LME / SHFE / COMEX",
+        "value": "234.475 / 54.78 / 696.259",
+        "align": "交易所转引",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Worldal 9/11",
+            "url": "http://www.worldal.com/market/lme/2026-09-11/178911575175065.shtml"
+          },
+          {
+            "label": "Worldal 9/15",
+            "url": "http://www.worldal.com/market/lme/2026-09-15/178945956375075.shtml"
+          },
+          {
+            "label": "中国有色网",
+            "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474011"
+          },
+          {
+            "label": "ICA Weekly",
+            "url": "https://copper.com.au/news/mining/copper-weekly-brief-week-ending-11-september-2026/"
+          }
+        ]
+      },
+      {
+        "field": "Kansanshi/Sentinel",
+        "value": "181/189；指引 175–205/190–220",
+        "align": "FQM",
+        "status": "ok",
+        "links": [
+          {
+            "label": "FQM",
+            "url": "https://www.first-quantum.com/news/first-quantum-minerals-announces-2025-preliminary-production-and-2026-2028-guidance/"
+          }
+        ]
+      },
+      {
+        "field": "仍待矿级",
+        "value": "Buenavista/Cerro Verde/Morenci/Toromocho/储量TR",
+        "align": "待 10-K",
+        "status": "pend",
+        "links": [
+          {
+            "label": "SCCO",
+            "url": "https://last10k.com/sec-filings/scco/0001104659-26-021492.htm"
+          },
+          {
+            "label": "FCX",
+            "url": "https://last10k.com/sec-filings/fcx/0000831259-26-000006.htm"
+          },
+          {
+            "label": "Glencore",
+            "url": "https://www.investegate.co.uk/announcement/rns/glencore--glen/full-year-2025-production-report-/9392468"
+          }
+        ]
+      }
+    ]
+  },
+  "Al": {
+    "CHANGES": [
+      {
+        "id": "ega",
+        "when": "2026-H2 进展",
+        "title": "EGA Al Taweelah 复产加速",
+        "desc": "冶炼槽重启推进；氧化铝炼厂目标年内满产。中东供给风险缓释。",
+        "tag": "复产",
+        "status": "ok",
+        "detail": "ING 2026-07：Al Taweelah 铝冶炼已有约 7% 槽重启；炼厂氧化铝目标年末满产；重启不完全依赖炼厂满产。",
+        "links": [
+          {
+            "label": "ING Think",
+            "url": "https://think.ing.com/articles/aluminium-retreats-as-middle-east-supply-risks-ease/"
+          }
+        ]
+      },
+      {
+        "id": "lme-draw",
+        "when": "2026-08/09",
+        "title": "LME 铝库存世纪低位附近",
+        "desc": "2026 年库存大幅去化；9/15 开市库存约 243.6 kt。",
+        "tag": "库存",
+        "status": "ok",
+        "detail": "LME Insight：8/28 约 244.5 kt，称世纪之交以来低位；Worldal 9/15 官方开市 243,600 t（−250）。",
+        "links": [
+          {
+            "label": "Worldal 9/15",
+            "url": "http://www.worldal.com/market/lme/2026-09-15/178945956375075.shtml"
+          },
+          {
+            "label": "LME Insight 转述",
+            "url": "https://www.lmeinsight.com/lme-aluminium-stocks-hit-lowest-level-since-the-turn-of-the-century/"
+          }
+        ]
+      },
+      {
+        "id": "yarwun",
+        "when": "2025-11-18",
+        "title": "Rio 宣布 Yarwun 氧化铝减产 40%",
+        "desc": "自 2026-10 起减产约 40%，以延寿至约 2035。",
+        "tag": "炼厂",
+        "status": "ok",
+        "detail": "Rio：Yarwun 自 2026 年 10 月起产量下调约 40%，延长运营至 2035 并探索进一步延寿。",
+        "links": [
+          {
+            "label": "Rio 公告页",
+            "url": "https://www.riotinto.com/en/news/releases/2025/rio-tinto-to-reduce-production-at-yarwun-alumina-refinery"
+          },
+          {
+            "label": "Q4 产量包",
+            "url": "https://cdn.financialreports.eu/financialreports/media/filings/4666/2026/RNS/4666_rns_2026-01-21_809a5314-c369-48ee-845d-826e3767ce78.html"
+          }
+        ]
+      },
+      {
+        "id": "china-cap",
+        "when": "2025 全年",
+        "title": "中国原铝逼近 45 Mt 天花板",
+        "desc": "2025 产量约 44.3–45.0 Mt 量级，增速放缓；2026 增量空间受限。",
+        "tag": "政策",
+        "status": "warn",
+        "detail": "Rusal 转述中国 2025 约 44.3 Mt、运行产能约 44.6 Mt；IndexBox/NBS 口径有 45.02 Mt 说法——并列保留。",
+        "links": [
+          {
+            "label": "Rusal/TASS",
+            "url": "https://tass.com/economy/2103419"
+          },
+          {
+            "label": "IndexBox",
+            "url": "https://www.indexbox.io/blog/chinas-2025-aluminium-output-hits-4502m-tons-growth-slows-to-24/"
+          },
+          {
+            "label": "IAI 趋势",
+            "url": "https://www.alcircle.com/news/world-primary-aluminium-production-growth-hits-5-year-low-in-2025-as-gcc-output-weakens-and-china-nears-45mt-ceiling-117046"
+          }
+        ]
+      }
+    ],
+    "INV": [
+      {
+        "id": "lme",
+        "ex": "LME Al",
+        "val": "243.6",
+        "unit": "kt",
+        "lbl": "官方开市库存（转载）",
+        "foot": "2026-09-15 · −0.25 kt",
+        "extra": "Worldal：ALUMINIUM 243,600 t。年内自高位大幅去化。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Worldal 9/15",
+            "url": "http://www.worldal.com/market/lme/2026-09-15/178945956375075.shtml"
+          }
+        ]
+      },
+      {
+        "id": "shfe",
+        "ex": "SHFE Al",
+        "val": "189.895",
+        "unit": "kt",
+        "lbl": "期货仓存（转载）",
+        "foot": "2026-09-17 · 日 −5.325 kt",
+        "extra": "Gate/金十转上期所：铝 189,895 吨。仓单与总库存口径可能不同，点开核验。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Gate/金十转述",
+            "url": "https://www.gate.com/news/detail/shfe-metal-futures-warehouse-inventories-decline-on-september-17-with-24337915"
+          },
+          {
+            "label": "9/16 仓单",
+            "url": "https://www.gate.com/news/detail/shfe-base-metal-warehouse-receipts-mixed-on-september-16-aluminum-down-6802-24309450"
+          }
+        ]
+      }
+    ],
+    "RANK": [
+      {
+        "n": 1,
+        "name": "Weipa",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "bauxite",
+        "unit": "Mt",
+        "kt": 35.13,
+        "status": "warn",
+        "note": "GlobalData 2023 产能量级 ~35.1 Mtpa；Rio 2025 集团铝土 62.4 Mt",
+        "href": "https://discoveryalert.com.au/news/bauxite-mines-2023-global-production-leaders/",
+        "lat": -12.66,
+        "lon": 141.87
+      },
+      {
+        "n": 2,
+        "name": "SMB-Winning Boké",
+        "country": "几内亚",
+        "region": "非洲",
+        "type": "bauxite",
+        "unit": "Mt",
+        "kt": 32.02,
+        "status": "warn",
+        "note": "2023 ~32.0 Mtpa 量级；几内亚为全球第一铝土生产国",
+        "href": "https://discoveryalert.com.au/news/bauxite-mines-2023-global-production-leaders/",
+        "lat": 10.93,
+        "lon": -14.3
+      },
+      {
+        "n": 3,
+        "name": "Huntly",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "bauxite",
+        "unit": "Mt",
+        "kt": 22.19,
+        "status": "warn",
+        "note": "Alcoa WA · 2023 ~22.2 Mtpa",
+        "href": "https://discoveryalert.com.au/news/bauxite-mines-2023-global-production-leaders/",
+        "lat": -32.6,
+        "lon": 116.2
+      },
+      {
+        "n": 4,
+        "name": "Sangarédi",
+        "country": "几内亚",
+        "region": "非洲",
+        "type": "bauxite",
+        "unit": "Mt",
+        "kt": 14.28,
+        "status": "warn",
+        "note": "2023 ~14.3 Mtpa",
+        "href": "https://discoveryalert.com.au/news/bauxite-mines-2023-global-production-leaders/",
+        "lat": 11.1,
+        "lon": -13.8
+      },
+      {
+        "n": 5,
+        "name": "Boddington bauxite",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "bauxite",
+        "unit": "Mt",
+        "kt": 13.66,
+        "status": "warn",
+        "note": "South32 · 2023 ~13.7 Mtpa",
+        "href": "https://discoveryalert.com.au/news/bauxite-mines-2023-global-production-leaders/",
+        "lat": -32.75,
+        "lon": 116.35
+      },
+      {
+        "n": 6,
+        "name": "Boffa (Chalco)",
+        "country": "几内亚",
+        "region": "非洲",
+        "type": "bauxite",
+        "unit": "Mt",
+        "kt": 13.5,
+        "status": "warn",
+        "note": "中铝 · 2023 ~13.5 Mtpa",
+        "href": "https://discoveryalert.com.au/news/bauxite-mines-2023-global-production-leaders/",
+        "lat": 10.2,
+        "lon": -14
+      },
+      {
+        "n": 7,
+        "name": "GAC Boké (EGA)",
+        "country": "几内亚",
+        "region": "非洲",
+        "type": "bauxite",
+        "unit": "Mt",
+        "kt": 11.97,
+        "status": "warn",
+        "note": "EGA · 2023 ~12.0 Mtpa",
+        "href": "https://discoveryalert.com.au/news/bauxite-mines-2023-global-production-leaders/",
+        "lat": 11,
+        "lon": -14.05
+      },
+      {
+        "n": 8,
+        "name": "Gove",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "bauxite",
+        "unit": "Mt",
+        "kt": 11.57,
+        "status": "warn",
+        "note": "Rio NT · 2023 ~11.6 Mtpa",
+        "href": "https://discoveryalert.com.au/news/bauxite-mines-2023-global-production-leaders/",
+        "lat": -12.25,
+        "lon": 136.82
+      },
+      {
+        "n": 9,
+        "name": "MRN Trombetas",
+        "country": "巴西",
+        "region": "南美洲",
+        "type": "bauxite",
+        "unit": "Mt",
+        "kt": 11.47,
+        "status": "warn",
+        "note": "Glencore 管理 · 2023 ~11.5 Mtpa",
+        "href": "https://discoveryalert.com.au/news/bauxite-mines-2023-global-production-leaders/",
+        "lat": -1.4,
+        "lon": -56.4
+      },
+      {
+        "n": 10,
+        "name": "Paragominas",
+        "country": "巴西",
+        "region": "南美洲",
+        "type": "bauxite",
+        "unit": "Mt",
+        "kt": 10.9,
+        "status": "warn",
+        "note": "Hydro · 2023 ~10.9 Mtpa",
+        "href": "https://discoveryalert.com.au/news/bauxite-mines-2023-global-production-leaders/",
+        "lat": -3,
+        "lon": -47.4
+      },
+      {
+        "n": 11,
+        "name": "China Hongqiao（电解铝销售）",
+        "country": "中国",
+        "region": "亚洲",
+        "type": "smelter",
+        "unit": "kt",
+        "kt": 5824,
+        "status": "ok",
+        "note": "2025 电解铝销售 5.824 Mt",
+        "href": "https://news.futunn.com/en/post/70417399/china-hongqiao-01378-hk-strong-full-year-2025-performance-with",
+        "lat": 37.38,
+        "lon": 118.02
+      },
+      {
+        "n": 12,
+        "name": "Chalco 原铝",
+        "country": "中国",
+        "region": "亚洲",
+        "type": "smelter",
+        "unit": "kt",
+        "kt": 8080,
+        "status": "ok",
+        "note": "2025 原铝产量 8.08 Mt（+6.2%）",
+        "href": "https://www.alcircle.com/press-release/chalco-s-2025-revenue-rises-1-7-per-cent-y-o-y-117883",
+        "lat": 39.9,
+        "lon": 116.4
+      },
+      {
+        "n": 13,
+        "name": "Rusal 原铝",
+        "country": "俄罗斯",
+        "region": "欧洲",
+        "type": "smelter",
+        "unit": "kt",
+        "kt": 3918,
+        "status": "ok",
+        "note": "2025 3.918 Mt（−1.9%）；铝土 18.453 Mt",
+        "href": "https://tass.com/economy/2103419",
+        "lat": 56.01,
+        "lon": 92.87
+      },
+      {
+        "n": 14,
+        "name": "Rio Tinto 原铝（份额）",
+        "country": "全球",
+        "region": "大洋洲",
+        "type": "smelter",
+        "unit": "kt",
+        "kt": 3380,
+        "status": "ok",
+        "note": "2025 3.38 Mt（+3%）；指引上沿达成",
+        "href": "https://cdn.financialreports.eu/financialreports/media/filings/4666/2026/RNS/4666_rns_2026-01-21_809a5314-c369-48ee-845d-826e3767ce78.html",
+        "lat": -23.7,
+        "lon": 133.88
+      },
+      {
+        "n": 15,
+        "name": "Alcoa 原铝（指引/产量带）",
+        "country": "全球",
+        "region": "北美洲",
+        "type": "smelter",
+        "unit": "kt",
+        "kt": 2400,
+        "status": "ok",
+        "note": "2025 产量指引 2.3–2.5 Mt；2026 2.4–2.6 Mt",
+        "href": "https://www.businesswire.com/news/home/20260117526434/en/Alcoa-Corporation-Reports-Fourth-Quarter-and-Full-Year-2025-Results",
+        "lat": 40.44,
+        "lon": -79.99
+      },
+      {
+        "n": 16,
+        "name": "Al Taweelah / EGA",
+        "country": "阿联酋",
+        "region": "亚洲",
+        "type": "smelter",
+        "unit": "kt",
+        "kt": 0,
+        "status": "pend",
+        "note": "复产中；吨位随季报更新",
+        "href": "https://think.ing.com/articles/aluminium-retreats-as-middle-east-supply-risks-ease/",
+        "lat": 24.3,
+        "lon": 54.55,
+        "approx": true
+      }
+    ],
+    "TRACK": [
+      {
+        "name": "Rio Tinto — Bauxite",
+        "country": "澳大利亚等",
+        "region": "大洋洲",
+        "tag": "矿山",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": ">61",
+        "initDate": "2025 指引",
+        "latest": "62.4 Mt 实际",
+        "latestNote": "2025 +6%",
+        "actual": 62.4,
+        "actualAsOf": "FY2025",
+        "qNote": "Mt 铝土",
+        "trail": "Rio Q4",
+        "href": "https://cdn.financialreports.eu/financialreports/media/filings/4666/2026/RNS/4666_rns_2026-01-21_809a5314-c369-48ee-845d-826e3767ce78.html",
+        "status": "ok"
+      },
+      {
+        "name": "Rio Tinto — Alumina",
+        "country": "全球",
+        "region": "大洋洲",
+        "tag": "炼厂",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "7.4–7.8",
+        "initDate": "2025",
+        "latest": "7.6 Mt",
+        "latestNote": "2025 +4%；Yarwun 将减产",
+        "actual": 7.6,
+        "actualAsOf": "FY2025",
+        "qNote": "Mt 氧化铝",
+        "trail": "Rio Q4",
+        "href": "https://cdn.financialreports.eu/financialreports/media/filings/4666/2026/RNS/4666_rns_2026-01-21_809a5314-c369-48ee-845d-826e3767ce78.html",
+        "status": "ok"
+      },
+      {
+        "name": "Rio Tinto — Aluminium",
+        "country": "全球",
+        "region": "大洋洲",
+        "tag": "冶炼",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "3.25–3.45",
+        "initDate": "2025",
+        "latest": "3.38 Mt",
+        "latestNote": "上沿；2026 指引约 3.2–3.4",
+        "actual": 3.38,
+        "actualAsOf": "FY2025",
+        "qNote": "Mt 原铝",
+        "trail": "Rio Q4",
+        "href": "https://cdn.financialreports.eu/financialreports/media/filings/4666/2026/RNS/4666_rns_2026-01-21_809a5314-c369-48ee-845d-826e3767ce78.html",
+        "status": "ok"
+      },
+      {
+        "name": "Alcoa — Alumina",
+        "country": "全球",
+        "region": "北美洲",
+        "tag": "炼厂",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "9.5–9.7",
+        "initDate": "2025",
+        "latest": "9.7–9.9",
+        "latestNote": "2026 指引",
+        "actual": null,
+        "actualAsOf": "",
+        "qNote": "Kwinana 已关停影响",
+        "trail": "Alcoa FY",
+        "href": "https://www.businesswire.com/news/home/20260117526434/en/Alcoa-Corporation-Reports-Fourth-Quarter-and-Full-Year-2025-Results",
+        "status": "ok"
+      },
+      {
+        "name": "Alcoa — Aluminum",
+        "country": "全球",
+        "region": "北美洲",
+        "tag": "冶炼",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "2.3–2.5",
+        "initDate": "2025",
+        "latest": "2.4–2.6",
+        "latestNote": "2026 因重启上调",
+        "actual": null,
+        "actualAsOf": "",
+        "qNote": "San Ciprián 等重启",
+        "trail": "Alcoa FY",
+        "href": "https://www.businesswire.com/news/home/20260117526434/en/Alcoa-Corporation-Reports-Fourth-Quarter-and-Full-Year-2025-Results",
+        "status": "ok"
+      },
+      {
+        "name": "Rusal — Aluminium",
+        "country": "俄罗斯",
+        "region": "欧洲",
+        "tag": "冶炼",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "3.918 Mt",
+        "latestNote": "−1.9% YoY",
+        "actual": 3.918,
+        "actualAsOf": "FY2025",
+        "qNote": "销售 4.49 Mt",
+        "trail": "Rusal",
+        "href": "https://tass.com/economy/2103419",
+        "status": "ok"
+      },
+      {
+        "name": "Rusal — Bauxite",
+        "country": "多国",
+        "region": "欧洲",
+        "tag": "矿山",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "18.453 Mt",
+        "latestNote": "+16.2% YoY",
+        "actual": 18.453,
+        "actualAsOf": "FY2025",
+        "trail": "Rusal",
+        "href": "https://tass.com/economy/2103419",
+        "status": "ok"
+      },
+      {
+        "name": "Chalco — 原铝",
+        "country": "中国",
+        "region": "亚洲",
+        "tag": "冶炼",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "8.08 Mt",
+        "latestNote": "+6.2%",
+        "actual": 8.08,
+        "actualAsOf": "FY2025",
+        "trail": "Chalco/Mysteel",
+        "href": "https://www.alcircle.com/press-release/chalco-s-2025-revenue-rises-1-7-per-cent-y-o-y-117883",
+        "status": "ok"
+      },
+      {
+        "name": "Chalco — 冶金级氧化铝",
+        "country": "中国",
+        "region": "亚洲",
+        "tag": "炼厂",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "17.35 Mt",
+        "latestNote": "+2.9%；外销 6.42 Mt",
+        "actual": 17.35,
+        "actualAsOf": "FY2025",
+        "trail": "Chalco",
+        "href": "https://www.alcircle.com/press-release/chalco-s-2025-revenue-rises-1-7-per-cent-y-o-y-117883",
+        "status": "ok"
+      },
+      {
+        "name": "China Hongqiao — 电解铝销售",
+        "country": "中国",
+        "region": "亚洲",
+        "tag": "冶炼",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "5.824 Mt",
+        "latestNote": "销售 −0.2% YoY",
+        "actual": 5.824,
+        "actualAsOf": "FY2025",
+        "qNote": "氧化铝销售 13.397 Mt",
+        "trail": "Hongqiao",
+        "href": "https://news.futunn.com/en/post/70417399/china-hongqiao-01378-hk-strong-full-year-2025-performance-with",
+        "status": "ok"
+      },
+      {
+        "name": "Hydro — Aluminium Metal",
+        "country": "挪威/全球",
+        "region": "欧洲",
+        "tag": "冶炼",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "挪威槽重启中",
+        "latestNote": "Q4 产量 +2.5% YoY",
+        "actual": null,
+        "actualAsOf": "Q4 2025",
+        "trail": "Hydro Q4",
+        "href": "https://www.hydro.com/en/global/media/news/2026/hydros-fourth-quarter-2025-results-solid-upstream-performance-driving-strong-cash-flow-generation/",
+        "status": "warn"
+      },
+      {
+        "name": "Hydro — Alunorte",
+        "country": "巴西",
+        "region": "南美洲",
+        "tag": "炼厂",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "nameplate",
+        "latest": "超名牌产能",
+        "latestNote": "Q4 2025 运营强",
+        "actual": null,
+        "actualAsOf": "Q4 2025",
+        "trail": "Hydro Q4",
+        "href": "https://www.hydro.com/en/global/media/news/2026/hydros-fourth-quarter-2025-results-solid-upstream-performance-driving-strong-cash-flow-generation/",
+        "status": "ok"
+      }
+    ],
+    "SOURCES": [
+      {
+        "field": "全球原铝 2025",
+        "value": "73.784 Mt",
+        "align": "IAI（媒体转述）",
+        "status": "ok",
+        "detail": "Al Circle：IAI 世界原铝 2025 年 73.784 Mt，较 2024 的 73.009 Mt 约 +1.06%。",
+        "links": [
+          {
+            "label": "Al Circle / IAI",
+            "url": "https://www.alcircle.com/news/world-primary-aluminium-production-growth-hits-5-year-low-in-2025-as-gcc-output-weakens-and-china-nears-45mt-ceiling-117046"
+          }
+        ]
+      },
+      {
+        "field": "中国原铝 2025",
+        "value": "~44.3–45.0 Mt",
+        "align": "多源对照",
+        "status": "warn",
+        "detail": "Rusal：44.3 Mt；IndexBox 引 NBS：45.02 Mt。产能顶约 45 Mt。",
+        "links": [
+          {
+            "label": "TASS/Rusal",
+            "url": "https://tass.com/economy/2103419"
+          },
+          {
+            "label": "IndexBox",
+            "url": "https://www.indexbox.io/blog/chinas-2025-aluminium-output-hits-4502m-tons-growth-slows-to-24/"
+          }
+        ]
+      },
+      {
+        "field": "铝土国别 2025e",
+        "value": "几内亚 150 / 澳 97 / 中 87 Mt… 世界~433",
+        "align": "USGS 转引",
+        "status": "warn",
+        "detail": "Measured World 称据 USGS；需对照 MCS 2026 铝土章原表。",
+        "links": [
+          {
+            "label": "Measured World",
+            "url": "https://measuredworld.com/categories/resources/bauxite-production"
+          },
+          {
+            "label": "USGS MCS 2026",
+            "url": "https://www.usgs.gov/publications/mineral-commodity-summaries-2026"
+          }
+        ]
+      },
+      {
+        "field": "Top 铝土矿山 2023 量级",
+        "value": "Weipa 等 Top10",
+        "align": "GlobalData 转述",
+        "status": "warn",
+        "detail": "Discovery Alert 转 GlobalData 2023 Mtpa，非 2025 实测吨——地图标口径注意。",
+        "links": [
+          {
+            "label": "Discovery Alert",
+            "url": "https://discoveryalert.com.au/news/bauxite-mines-2023-global-production-leaders/"
+          }
+        ]
+      },
+      {
+        "field": "Rio 2025 铝链",
+        "value": "铝土 62.4 / 氧化铝 7.6 / 原铝 3.38 Mt",
+        "align": "Rio Q4",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Rio Q4 包",
+            "url": "https://cdn.financialreports.eu/financialreports/media/filings/4666/2026/RNS/4666_rns_2026-01-21_809a5314-c369-48ee-845d-826e3767ce78.html"
+          }
+        ]
+      },
+      {
+        "field": "Alcoa 2025–26 指引",
+        "value": "氧化铝/原铝产量带",
+        "align": "Alcoa",
+        "status": "ok",
+        "links": [
+          {
+            "label": "FY2025",
+            "url": "https://www.businesswire.com/news/home/20260117526434/en/Alcoa-Corporation-Reports-Fourth-Quarter-and-Full-Year-2025-Results"
+          },
+          {
+            "label": "Q3 2025",
+            "url": "https://www.businesswire.com/news/home/20251020074565/en/Alcoa-Corporation-Reports-Third-Quarter-2025-Results"
+          }
+        ]
+      },
+      {
+        "field": "Rusal 2025",
+        "value": "原铝 3.918 / 铝土 18.453 / 氧化铝 6.858 Mt",
+        "align": "Rusal",
+        "status": "ok",
+        "links": [
+          {
+            "label": "TASS",
+            "url": "https://tass.com/economy/2103419"
+          }
+        ]
+      },
+      {
+        "field": "Chalco 2025",
+        "value": "原铝 8.08 / 氧化铝 17.35 Mt",
+        "align": "公司/媒体",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Al Circle",
+            "url": "https://www.alcircle.com/press-release/chalco-s-2025-revenue-rises-1-7-per-cent-y-o-y-117883"
+          }
+        ]
+      },
+      {
+        "field": "Hongqiao 2025",
+        "value": "电解铝销售 5.824 Mt",
+        "align": "年报转述",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Futu 转述",
+            "url": "https://news.futunn.com/en/post/70417399/china-hongqiao-01378-hk-strong-full-year-2025-performance-with"
+          }
+        ]
+      },
+      {
+        "field": "LME / SHFE 铝库存",
+        "value": "243.6 / 189.9 kt",
+        "align": "交易所转引",
+        "status": "ok",
+        "links": [
+          {
+            "label": "LME",
+            "url": "http://www.worldal.com/market/lme/2026-09-15/178945956375075.shtml"
+          },
+          {
+            "label": "SHFE",
+            "url": "https://www.gate.com/news/detail/shfe-metal-futures-warehouse-inventories-decline-on-september-17-with-24337915"
+          }
+        ]
+      },
+      {
+        "field": "Yarwun 减产",
+        "value": "2026-10 起约 −40%",
+        "align": "Rio",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Rio",
+            "url": "https://www.riotinto.com/en/news/releases/2025/rio-tinto-to-reduce-production-at-yarwun-alumina-refinery"
+          }
+        ]
+      },
+      {
+        "field": "EGA 复产",
+        "value": "进行中",
+        "align": "ING/公司更新",
+        "status": "ok",
+        "links": [
+          {
+            "label": "ING",
+            "url": "https://think.ing.com/articles/aluminium-retreats-as-middle-east-supply-risks-ease/"
+          }
+        ]
+      }
+    ]
+  },
+  "PbZn": {
+    "CHANGES": [
+      {
+        "id": "ilzsg",
+        "when": "2025 全年 / 2026-02",
+        "title": "ILZSG：精炼锌缺口 33 kt",
+        "desc": "矿山 +5.4%，精炼 +2.1%，需求 +1.9% 至 13.86 Mt；报告库存降至 739 kt。",
+        "tag": "平衡",
+        "status": "ok",
+        "detail": "Mining.com / ScrapMonster 转 ILZSG 初数：缺口 33 kt（2024 为 69 kt）；Kipushi 爬坡、Tara 重启支撑矿山增量；中国精炼 +6.1%，中国外 −1.6%。",
+        "links": [
+          {
+            "label": "Mining.com",
+            "url": "https://www.mining.com/web/global-zinc-market-remains-in-deficit-in-2025-study-group-says/"
+          },
+          {
+            "label": "ScrapMonster",
+            "url": "https://www.scrapmonster.com/news/zinc/global-zinc-market-faces-supply-deficit-in-2025-ilzsg-2026-2-25/98564"
+          }
+        ]
+      },
+      {
+        "id": "tara",
+        "when": "2025",
+        "title": "Boliden：Tara 重启 + 组合扩张",
+        "desc": "2025 锌精矿含锌 350.8 kt（+114%）；精炼锌 457.3 kt（+1%）。",
+        "tag": "矿山",
+        "status": "ok",
+        "detail": "Metalnomist 转：Tara 重启 + Somincor/Zinkgruvan 并入驱动矿山锌翻倍量级增长；Odda 精炼爬坡。",
+        "links": [
+          {
+            "label": "Metalnomist / Boliden",
+            "url": "https://www.metalnomist.com/2026/04/boliden-zinc-output-surge-reshapes-its.html"
+          }
+        ]
+      },
+      {
+        "id": "nyrstar",
+        "when": "2026-04-01",
+        "title": "Nyrstar 美资产售予 Korea Zinc 交割",
+        "desc": "田纳西矿山 + Clarksville 冶炼厂完成交割；2026 金属仍由 Trafigura 营销。",
+        "tag": "资产",
+        "status": "ok",
+        "detail": "Nyrstar 2026-04-02：East/Mid Tennessee 与 Clarksville 冶炼厂已于 4/1 交割给 Korea Zinc。",
+        "links": [
+          {
+            "label": "Nyrstar",
+            "url": "https://www.nyrstar.com/resource-center/press-releases/nyrstar-completes-sale-of-its-us-assets-to-korea-zinc"
+          }
+        ]
+      },
+      {
+        "id": "kipushi",
+        "when": "2024–2025",
+        "title": "Kipushi 锌矿爬坡（刚果金）",
+        "desc": "ILZSG 将 DRC/Kipushi 列为 2025 矿山增量来源之一。",
+        "tag": "爬坡",
+        "status": "warn",
+        "detail": "公开转述确认爬坡贡献全球矿山增量；矿级 2025 绝对吨待 Ivanhoe/合作方季报补全。",
+        "links": [
+          {
+            "label": "ILZSG 转述",
+            "url": "https://www.mining.com/web/global-zinc-market-remains-in-deficit-in-2025-study-group-says/"
+          }
+        ]
+      }
+    ],
+    "INV": [
+      {
+        "id": "lme-zn",
+        "ex": "LME Zn",
+        "val": "112.675",
+        "unit": "kt",
+        "lbl": "仓库库存（转载）",
+        "foot": "约 2026-09-17 · +1.45 kt",
+        "extra": "Capital Market：112,675 t。Worldal 9/15 曾见 111,225 t。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Capital Market",
+            "url": "https://www.capitalmarket.com/markets/news/commodity-mid-session-news/commodities-buzz-lme-zinc-inventories-at-one-week-high/1732740"
+          }
+        ]
+      },
+      {
+        "id": "lme-pb",
+        "ex": "LME Pb",
+        "val": "375.6",
+        "unit": "kt",
+        "lbl": "仓库库存（转载）",
+        "foot": "2026-09-17 · −2.75 kt",
+        "extra": "全球铁合金网转：铅 375,600 t。9/10 曾见约 384.45 kt。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "qqthj 9/17",
+            "url": "https://qqthj.com/news/202609173638826.html"
+          },
+          {
+            "label": "Capital Market 9/10",
+            "url": "https://www.capitalmarket.com/markets/news/commodity-mid-session-news/commodities-buzz-lme-lead-inventories-drop-to-around-two-month-low/1731611"
+          }
+        ]
+      },
+      {
+        "id": "shfe-zn",
+        "ex": "SHFE Zn",
+        "val": "94.053",
+        "unit": "kt",
+        "lbl": "锌仓单合计",
+        "foot": "2026-09-17 · −0.98 kt",
+        "extra": "99期货/上期所锌仓单日报总计 94,053 吨。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "99期货仓单",
+            "url": "https://www.99qh.com/article/%E9%94%8C-1093784"
+          }
+        ]
+      }
+    ],
+    "RANK": [
+      {
+        "n": 1,
+        "name": "Hindustan Zinc（矿端金属）",
+        "country": "印度",
+        "region": "亚洲",
+        "type": "smelter",
+        "metal": "Zn+Pb",
+        "kt": 1095,
+        "status": "ok",
+        "note": "FY25 矿端金属 1,095 kt；精炼金属 1,052 kt",
+        "href": "https://www.businesswire.com/news/home/20250428395155/en/Hindustan-Zinc-Beats-Estimates-FY25-Profit-Soars-33-to-US%241224-Million-With-Record-Production",
+        "lat": 25,
+        "lon": 74.7
+      },
+      {
+        "n": 2,
+        "name": "Red Dog",
+        "country": "美国",
+        "region": "北美洲",
+        "type": "mine",
+        "metal": "Zn",
+        "kt": 462.7,
+        "status": "ok",
+        "note": "Teck 2025 锌精矿含锌 462.7 kt（指引 430–470）",
+        "href": "https://www.stocktitan.net/sec-filings/TCKRF/6-k-teck-resources-ltd-current-report-foreign-issuer-194704c9119d.html",
+        "lat": 68.07,
+        "lon": -162.84
+      },
+      {
+        "n": 3,
+        "name": "Boliden 矿山锌合计",
+        "country": "欧洲",
+        "region": "欧洲",
+        "type": "mine",
+        "metal": "Zn",
+        "kt": 350.764,
+        "status": "ok",
+        "note": "2025 锌精矿含锌 350,764 t（+114% YoY）",
+        "href": "https://www.metalnomist.com/2026/04/boliden-zinc-output-surge-reshapes-its.html",
+        "lat": 64.75,
+        "lon": 20.95
+      },
+      {
+        "n": 4,
+        "name": "Boliden 精炼锌",
+        "country": "欧洲",
+        "region": "欧洲",
+        "type": "smelter",
+        "metal": "Zn",
+        "kt": 457.345,
+        "status": "ok",
+        "note": "2025 精炼锌 457,345 t（+1%）；Odda 爬坡",
+        "href": "https://www.metalnomist.com/2026/04/boliden-zinc-output-surge-reshapes-its.html",
+        "lat": 60.07,
+        "lon": 5.47
+      },
+      {
+        "n": 5,
+        "name": "Teck 锌精矿合计",
+        "country": "加拿大/美",
+        "region": "北美洲",
+        "type": "mine",
+        "metal": "Zn",
+        "kt": 565,
+        "status": "ok",
+        "note": "2025 565 kt（Red Dog+Antamina 权益）",
+        "href": "https://www.stocktitan.net/sec-filings/TCKRF/6-k-teck-resources-ltd-current-report-foreign-issuer-194704c9119d.html",
+        "lat": 49.28,
+        "lon": -123.12
+      },
+      {
+        "n": 6,
+        "name": "Trail 精炼锌",
+        "country": "加拿大",
+        "region": "北美洲",
+        "type": "smelter",
+        "metal": "Zn",
+        "kt": 229.9,
+        "status": "ok",
+        "note": "Teck Trail 2025 精炼锌 229.9 kt（指引顶）",
+        "href": "https://www.stocktitan.net/sec-filings/TCKRF/6-k-teck-resources-ltd-current-report-foreign-issuer-194704c9119d.html",
+        "lat": 49.1,
+        "lon": -117.7
+      },
+      {
+        "n": 7,
+        "name": "Glencore 锌（指引）",
+        "country": "全球",
+        "region": "欧洲",
+        "type": "mine",
+        "metal": "Zn",
+        "kt": 720,
+        "status": "warn",
+        "note": "2026 指引维持 700–740 kt；H1 产量 −21%",
+        "href": "https://www.europesays.com/ch/129924/",
+        "lat": 47.37,
+        "lon": 8.54,
+        "approx": true
+      },
+      {
+        "n": 8,
+        "name": "Antamina Zn（Teck 22.5%）",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "type": "mine",
+        "metal": "Zn",
+        "kt": 102.3,
+        "status": "ok",
+        "note": "Teck 权益 2025 102.3 kt；2026 指引下调至 35–45 kt",
+        "href": "https://www.stocktitan.net/sec-filings/TCKRF/6-k-teck-resources-ltd-current-report-foreign-issuer-194704c9119d.html",
+        "lat": -9.55,
+        "lon": -77.1
+      },
+      {
+        "n": 9,
+        "name": "Dugald River",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "mine",
+        "metal": "Zn",
+        "kt": 46.082,
+        "status": "ok",
+        "note": "MMG Q2 2026 单季 46,082 t 锌精矿含锌（非全年）",
+        "href": "https://www.mmg.com/investors/reports-and-presentations/strong-q2-production-drives-confidence-in-full-year-outlook/",
+        "lat": -20.2,
+        "lon": 140.2
+      },
+      {
+        "n": 10,
+        "name": "Rosebery（锌当量语境）",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "mine",
+        "metal": "Zn",
+        "kt": 9.456,
+        "status": "warn",
+        "note": "Q2 2026 锌 9,456 t；锌当量 33,618 t（含贵金属）",
+        "href": "https://www.mmg.com/investors/reports-and-presentations/strong-q2-production-drives-confidence-in-full-year-outlook/",
+        "lat": -41.78,
+        "lon": 145.54
+      },
+      {
+        "n": 11,
+        "name": "Tara",
+        "country": "爱尔兰",
+        "region": "欧洲",
+        "type": "mine",
+        "metal": "Zn",
+        "kt": 0,
+        "status": "pend",
+        "note": "Boliden 重启贡献 2025 矿山增量；矿级吨待拆分",
+        "href": "https://www.metalnomist.com/2026/04/boliden-zinc-output-surge-reshapes-its.html",
+        "lat": 53.98,
+        "lon": -7.25
+      },
+      {
+        "n": 12,
+        "name": "Kipushi",
+        "country": "刚果(金)",
+        "region": "非洲",
+        "type": "mine",
+        "metal": "Zn",
+        "kt": 0,
+        "status": "pend",
+        "note": "ILZSG：2024 投产、2025 爬坡；绝对吨待补",
+        "href": "https://www.mining.com/web/global-zinc-market-remains-in-deficit-in-2025-study-group-says/",
+        "lat": -11.76,
+        "lon": 27.25
+      },
+      {
+        "n": 13,
+        "name": "Clarksville / Nyrstar USA",
+        "country": "美国",
+        "region": "北美洲",
+        "type": "smelter",
+        "metal": "Zn",
+        "kt": 0,
+        "status": "pend",
+        "note": "2026-04 售予 Korea Zinc；美国唯一原锌冶炼厂之一",
+        "href": "https://www.nyrstar.com/resource-center/press-releases/nyrstar-completes-sale-of-its-us-assets-to-korea-zinc",
+        "lat": 36.53,
+        "lon": -87.36
+      }
+    ],
+    "TRACK": [
+      {
+        "name": "Red Dog",
+        "country": "美国",
+        "region": "北美洲",
+        "tag": "矿山 Zn",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "430–470",
+        "initDate": "2025",
+        "latest": "462.7 kt 实际",
+        "latestNote": "指引上半区",
+        "actual": 462.7,
+        "actualAsOf": "FY2025",
+        "qNote": "kt 含锌",
+        "trail": "Teck 6-K",
+        "href": "https://www.stocktitan.net/sec-filings/TCKRF/6-k-teck-resources-ltd-current-report-foreign-issuer-194704c9119d.html",
+        "status": "ok"
+      },
+      {
+        "name": "Teck 锌精矿合计",
+        "country": "多国",
+        "region": "北美洲",
+        "tag": "矿山 Zn",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "525–575",
+        "initDate": "2025",
+        "latest": "565 kt",
+        "latestNote": "2026 指引 410–460",
+        "actual": 565,
+        "actualAsOf": "FY2025",
+        "trail": "Teck",
+        "href": "https://www.stocktitan.net/sec-filings/TCKRF/6-k-teck-resources-ltd-current-report-foreign-issuer-194704c9119d.html",
+        "status": "ok"
+      },
+      {
+        "name": "Trail 精炼锌",
+        "country": "加拿大",
+        "region": "北美洲",
+        "tag": "精炼 Zn",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "190–230",
+        "initDate": "2025",
+        "latest": "229.9 kt",
+        "latestNote": "2026 仍 190–230",
+        "actual": 229.9,
+        "actualAsOf": "FY2025",
+        "trail": "Teck",
+        "href": "https://www.stocktitan.net/sec-filings/TCKRF/6-k-teck-resources-ltd-current-report-foreign-issuer-194704c9119d.html",
+        "status": "ok"
+      },
+      {
+        "name": "Antamina Zn（Teck 22.5%）",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "tag": "矿山 Zn",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "95–105",
+        "initDate": "2025",
+        "latest": "35–45",
+        "latestNote": "2026 矿计划下调",
+        "actual": 102.3,
+        "actualAsOf": "FY2025",
+        "trail": "Teck",
+        "href": "https://www.teck.com/news/news-releases/2026/teck-reports-unaudited-fourth-quarter-results-for-2025",
+        "status": "ok"
+      },
+      {
+        "name": "Hindustan Zinc 矿端金属",
+        "country": "印度",
+        "region": "亚洲",
+        "tag": "矿山 Zn/Pb",
+        "reserve": "金属储量>13.1 Mt",
+        "reserveStatus": "ok",
+        "init": "—",
+        "latest": "1,095 kt",
+        "latestNote": "FY25 纪录",
+        "actual": 1095,
+        "actualAsOf": "FY25",
+        "qNote": "精炼金属 1,052 kt",
+        "trail": "HZL",
+        "href": "https://www.businesswire.com/news/home/20250428395155/en/Hindustan-Zinc-Beats-Estimates-FY25-Profit-Soars-33-to-US%241224-Million-With-Record-Production",
+        "status": "ok"
+      },
+      {
+        "name": "Boliden 矿山锌",
+        "country": "欧洲",
+        "region": "欧洲",
+        "tag": "矿山 Zn",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "350.8 kt",
+        "latestNote": "+114% YoY",
+        "actual": 350.764,
+        "actualAsOf": "FY2025",
+        "trail": "Boliden 转述",
+        "href": "https://www.metalnomist.com/2026/04/boliden-zinc-output-surge-reshapes-its.html",
+        "status": "ok"
+      },
+      {
+        "name": "Boliden 精炼锌",
+        "country": "欧洲",
+        "region": "欧洲",
+        "tag": "精炼 Zn",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "457.3 kt",
+        "latestNote": "+1%；Odda +10% 至 167.1 kt",
+        "actual": 457.345,
+        "actualAsOf": "FY2025",
+        "trail": "Boliden",
+        "href": "https://www.metalnomist.com/2026/04/boliden-zinc-output-surge-reshapes-its.html",
+        "status": "ok"
+      },
+      {
+        "name": "Glencore 锌",
+        "country": "全球",
+        "region": "欧洲",
+        "tag": "矿山 Zn",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "700–740",
+        "initDate": "2026",
+        "latest": "指引维持",
+        "latestNote": "H1 −21%（Lady Loretta 关停等）",
+        "actual": null,
+        "actualAsOf": "H1 2026",
+        "trail": "媒体转 H1",
+        "href": "https://www.europesays.com/ch/129924/",
+        "status": "warn"
+      },
+      {
+        "name": "Dugald River",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "tag": "矿山 Zn",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "全年指引见季报",
+        "latest": "Q2 46.1 kt",
+        "latestNote": "+6% YoY 单季",
+        "actual": 46.082,
+        "actualAsOf": "Q2 2026",
+        "qNote": "非全年",
+        "trail": "MMG Q2",
+        "href": "https://www.mmg.com/investors/reports-and-presentations/strong-q2-production-drives-confidence-in-full-year-outlook/",
+        "status": "ok"
+      },
+      {
+        "name": "Rosebery",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "tag": "矿山 Zn",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "Q2 Zn 9.5 kt",
+        "latestNote": "锌当量 33.6 kt",
+        "actual": 9.456,
+        "actualAsOf": "Q2 2026",
+        "trail": "MMG Q2",
+        "href": "https://www.mmg.com/investors/reports-and-presentations/strong-q2-production-drives-confidence-in-full-year-outlook/",
+        "status": "warn"
+      }
+    ],
+    "SOURCES": [
+      {
+        "field": "精炼锌平衡 2025",
+        "value": "缺口 33 kt；需求 13.86 Mt",
+        "align": "ILZSG",
+        "status": "ok",
+        "detail": "矿山 +5.4%；精炼 +2.1%；中国精炼 +6.1%；报告库存 739 kt（−77）。",
+        "links": [
+          {
+            "label": "Mining.com",
+            "url": "https://www.mining.com/web/global-zinc-market-remains-in-deficit-in-2025-study-group-says/"
+          },
+          {
+            "label": "ScrapMonster",
+            "url": "https://www.scrapmonster.com/news/zinc/global-zinc-market-faces-supply-deficit-in-2025-ilzsg-2026-2-25/98564"
+          }
+        ]
+      },
+      {
+        "field": "Teck Red Dog / 合计 / Trail",
+        "value": "462.7 / 565 / 229.9 kt",
+        "align": "Teck 6-K",
+        "status": "ok",
+        "links": [
+          {
+            "label": "6-K 转述",
+            "url": "https://www.stocktitan.net/sec-filings/TCKRF/6-k-teck-resources-ltd-current-report-foreign-issuer-194704c9119d.html"
+          },
+          {
+            "label": "Q4 新闻",
+            "url": "https://www.teck.com/news/news-releases/2026/teck-reports-unaudited-fourth-quarter-results-for-2025"
+          }
+        ]
+      },
+      {
+        "field": "HZL FY25",
+        "value": "矿端 1,095 / 精炼 1,052 kt",
+        "align": "Hindustan Zinc",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Business Wire",
+            "url": "https://www.businesswire.com/news/home/20250428395155/en/Hindustan-Zinc-Beats-Estimates-FY25-Profit-Soars-33-to-US%241224-Million-With-Record-Production"
+          }
+        ]
+      },
+      {
+        "field": "Boliden 2025 Zn",
+        "value": "矿山 350.8 / 精炼 457.3 kt",
+        "align": "公司转述",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Metalnomist",
+            "url": "https://www.metalnomist.com/2026/04/boliden-zinc-output-surge-reshapes-its.html"
+          }
+        ]
+      },
+      {
+        "field": "Glencore Zn 指引",
+        "value": "700–740 kt；H1 −21%",
+        "align": "H1 更新转述",
+        "status": "warn",
+        "links": [
+          {
+            "label": "EuropeSays 转",
+            "url": "https://www.europesays.com/ch/129924/"
+          }
+        ]
+      },
+      {
+        "field": "MMG Q2 2026 Zn",
+        "value": "Dugald 46.1 / 集团 55.5 kt 单季",
+        "align": "MMG",
+        "status": "ok",
+        "links": [
+          {
+            "label": "MMG Q2",
+            "url": "https://www.mmg.com/investors/reports-and-presentations/strong-q2-production-drives-confidence-in-full-year-outlook/"
+          }
+        ]
+      },
+      {
+        "field": "Nyrstar USA 出售",
+        "value": "2026-04-01 交割 Korea Zinc",
+        "align": "Nyrstar",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Nyrstar",
+            "url": "https://www.nyrstar.com/resource-center/press-releases/nyrstar-completes-sale-of-its-us-assets-to-korea-zinc"
+          }
+        ]
+      },
+      {
+        "field": "LME Zn / Pb · SHFE Zn",
+        "value": "112.7 / 375.6 / 94.1 kt",
+        "align": "交易所转引",
+        "status": "ok",
+        "links": [
+          {
+            "label": "LME Zn",
+            "url": "https://www.capitalmarket.com/markets/news/commodity-mid-session-news/commodities-buzz-lme-zinc-inventories-at-one-week-high/1732740"
+          },
+          {
+            "label": "LME Pb",
+            "url": "https://qqthj.com/news/202609173638826.html"
+          },
+          {
+            "label": "SHFE Zn",
+            "url": "https://www.99qh.com/article/%E9%94%8C-1093784"
+          }
+        ]
+      },
+      {
+        "field": "USGS MCS 2026",
+        "value": "铅锌章待逐格",
+        "align": "USGS",
+        "status": "pend",
+        "links": [
+          {
+            "label": "MCS 2026",
+            "url": "https://www.usgs.gov/publications/mineral-commodity-summaries-2026"
+          }
+        ]
+      },
+      {
+        "field": "Kipushi / Tara 矿级吨",
+        "value": "待拆分",
+        "align": "季报",
+        "status": "pend",
+        "links": [
+          {
+            "label": "ILZSG",
+            "url": "https://www.mining.com/web/global-zinc-market-remains-in-deficit-in-2025-study-group-says/"
+          },
+          {
+            "label": "Boliden",
+            "url": "https://www.metalnomist.com/2026/04/boliden-zinc-output-surge-reshapes-its.html"
+          }
+        ]
+      }
+    ]
+  },
+  "Ni": {
+    "CHANGES": [
+      {
+        "id": "insg",
+        "when": "2025 / 2026-10",
+        "title": "INSG：2025 镍过剩约 209 kt",
+        "desc": "产量约 3.81 Mt、需求约 3.60 Mt；2026 过剩或约 261 kt。",
+        "tag": "平衡",
+        "status": "ok",
+        "detail": "Mining Weekly 转 INSG 2025-10：过剩 209 kt；2026 过剩 261 kt。4 月曾报 198 kt——采用更近 10 月口径。",
+        "links": [
+          {
+            "label": "Mining Weekly / INSG",
+            "url": "https://www.miningweekly.com/article/nickel-market-forecast-to-be-in-209-000-t-surplus-in-2025-says-insg-2025-10-07"
+          },
+          {
+            "label": "INN 4月",
+            "url": "https://investingnews.com/insg-nickel-market-forecast/"
+          }
+        ]
+      },
+      {
+        "id": "bhp-wan",
+        "when": "FY25",
+        "title": "BHP 西澳镍临时停产",
+        "desc": "WAN FY25 约 30 kt 后临时停产；拟不晚于 2027-02 复盘。",
+        "tag": "停产",
+        "status": "ok",
+        "detail": "BHP Western Australia Nickel 临时停产。",
+        "links": [
+          {
+            "label": "E&MJ",
+            "url": "https://www.e-mj.com/news/australia-and-oceania/bhp-delivers-record-numbers-for-fy25/"
+          }
+        ]
+      },
+      {
+        "id": "vale",
+        "when": "FY2025",
+        "title": "Vale 镍 177 kt",
+        "desc": "同比 +10.8%；Onça Puma 二号炉、Voisey's Bay 爬坡。",
+        "tag": "产量",
+        "status": "ok",
+        "detail": "Vale：2025 镍 177 kt；销售 173 kt。",
+        "links": [
+          {
+            "label": "Vale 6-K",
+            "url": "https://www.stocktitan.net/sec-filings/VALE/6-k-vale-s-a-current-report-foreign-issuer-16f0d2e28f02.html"
+          }
+        ]
+      },
+      {
+        "id": "ptvale",
+        "when": "FY2025",
+        "title": "PT Vale 镍锍 72,027 t",
+        "desc": "印尼 Sorowako 等；Bahodopi 投产。",
+        "tag": "印尼",
+        "status": "ok",
+        "detail": "PT Vale Indonesia 2025 nickel in matte 72,027 t。",
+        "links": [
+          {
+            "label": "PT Vale",
+            "url": "https://www.vale.com/w/pt-vale-indonesia-strengthens-performance-and-lays-a-solid-foundation-for-sustainable-growth-in-2025"
+          }
+        ]
+      }
+    ],
+    "INV": [
+      {
+        "id": "lme-ni",
+        "ex": "LME Ni",
+        "val": "278.58",
+        "unit": "kt",
+        "lbl": "仓库库存（转载）",
+        "foot": "2026-09-15 · +4.218 kt",
+        "extra": "SunSirs：278,580 t。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "SunSirs",
+            "url": "https://www.sunsirs.com/uk/detail_news-36191.html"
+          }
+        ]
+      },
+      {
+        "id": "shfe-ni",
+        "ex": "SHFE Ni",
+        "val": "93.931",
+        "unit": "kt",
+        "lbl": "镍仓单合计",
+        "foot": "2026-09-17 · −0.763 kt",
+        "extra": "上期所仓单总计 93,931 吨。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "99期货",
+            "url": "https://www.99qh.com/article/%E9%95%8D-1093786"
+          }
+        ]
+      }
+    ],
+    "RANK": [
+      {
+        "n": 1,
+        "name": "Indonesia NPI/下游（示意）",
+        "country": "印尼",
+        "region": "亚洲",
+        "type": "smelter",
+        "kt": 0,
+        "status": "pend",
+        "note": "全球第一产镍国；厂级拆分待补",
+        "href": "https://www.reuters.com/markets/commodities/chinese-firms-control-around-75-indonesian-nickel-capacity-report-finds-2025-02-05/",
+        "lat": -2.8,
+        "lon": 122.1
+      },
+      {
+        "n": 2,
+        "name": "Nornickel（集团）",
+        "country": "俄罗斯",
+        "region": "欧洲",
+        "type": "smelter",
+        "kt": 0,
+        "status": "pend",
+        "note": "2025 符合指引、同比略降；绝对吨待表",
+        "href": "https://www.marketscreener.com/news/nornickel-announces-consolidated-production-results-for-fy2025-ce7e5bded88bf02d",
+        "lat": 69.35,
+        "lon": 88.2
+      },
+      {
+        "n": 3,
+        "name": "Vale 镍（集团）",
+        "country": "巴西/加",
+        "region": "南美洲",
+        "type": "smelter",
+        "kt": 177,
+        "status": "ok",
+        "note": "2025 177 kt（+10.8%）",
+        "href": "https://www.stocktitan.net/sec-filings/VALE/6-k-vale-s-a-current-report-foreign-issuer-16f0d2e28f02.html",
+        "lat": -6.5,
+        "lon": -51
+      },
+      {
+        "n": 4,
+        "name": "PT Vale Indonesia 镍锍",
+        "country": "印尼",
+        "region": "亚洲",
+        "type": "mine",
+        "kt": 72.027,
+        "status": "ok",
+        "note": "2025 matte 72,027 t",
+        "href": "https://www.vale.com/w/pt-vale-indonesia-strengthens-performance-and-lays-a-solid-foundation-for-sustainable-growth-in-2025",
+        "lat": -2.52,
+        "lon": 121.35
+      },
+      {
+        "n": 5,
+        "name": "Glencore 自有镍",
+        "country": "全球",
+        "region": "大洋洲",
+        "type": "mine",
+        "kt": 71.9,
+        "status": "ok",
+        "note": "2025 71.9 kt",
+        "href": "https://www.investegate.co.uk/announcement/rns/glencore--glen/full-year-2025-production-report-/9392468",
+        "lat": -28.7,
+        "lon": 121.9
+      },
+      {
+        "n": 6,
+        "name": "Ambatovy",
+        "country": "马达加斯加",
+        "region": "非洲",
+        "type": "smelter",
+        "kt": 35,
+        "status": "warn",
+        "approx": true,
+        "note": "指引 mid-30 kt",
+        "href": "https://www.cnbcafrica.com/2025/sumitomo-says-ambatovy-nickel-project-unaffected-by-madagascar-political-turmoil",
+        "lat": -18.85,
+        "lon": 48.45
+      },
+      {
+        "n": 7,
+        "name": "BHP WAN",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "mine",
+        "kt": 30,
+        "status": "ok",
+        "note": "FY25 约 30 kt 后停产",
+        "href": "https://www.e-mj.com/news/australia-and-oceania/bhp-delivers-record-numbers-for-fy25/",
+        "lat": -31.5,
+        "lon": 121.5
+      },
+      {
+        "n": 8,
+        "name": "Voisey's Bay",
+        "country": "加拿大",
+        "region": "北美洲",
+        "type": "mine",
+        "kt": 0,
+        "status": "pend",
+        "note": "地下矿爬坡；矿级待拆",
+        "href": "https://www.stocktitan.net/sec-filings/VALE/6-k-vale-s-a-current-report-foreign-issuer-16f0d2e28f02.html",
+        "lat": 56.33,
+        "lon": -62.1
+      },
+      {
+        "n": 9,
+        "name": "Onça Puma",
+        "country": "巴西",
+        "region": "南美洲",
+        "type": "smelter",
+        "kt": 0,
+        "status": "pend",
+        "note": "二号炉投产 +15 ktpy 名义",
+        "href": "https://www.stocktitan.net/sec-filings/VALE/6-k-vale-s-a-current-report-foreign-issuer-16f0d2e28f02.html",
+        "lat": -6.5,
+        "lon": -51
+      },
+      {
+        "n": 10,
+        "name": "Sudbury",
+        "country": "加拿大",
+        "region": "北美洲",
+        "type": "mine",
+        "kt": 0,
+        "status": "pend",
+        "note": "Vale 加拿大；矿级待拆",
+        "href": "https://www.stocktitan.net/sec-filings/VALE/6-k-vale-s-a-current-report-foreign-issuer-16f0d2e28f02.html",
+        "lat": 46.49,
+        "lon": -81
+      }
+    ],
+    "TRACK": [
+      {
+        "name": "Vale 镍",
+        "country": "全球",
+        "region": "南美洲",
+        "tag": "集团",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "177 kt",
+        "latestNote": "+10.8%",
+        "actual": 177,
+        "actualAsOf": "FY2025",
+        "qNote": "销售 173 kt",
+        "trail": "Vale",
+        "href": "https://www.stocktitan.net/sec-filings/VALE/6-k-vale-s-a-current-report-foreign-issuer-16f0d2e28f02.html",
+        "status": "ok"
+      },
+      {
+        "name": "PT Vale 镍锍",
+        "country": "印尼",
+        "region": "亚洲",
+        "tag": "matte",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "约 71",
+        "latest": "72.027 kt",
+        "latestNote": "实际",
+        "actual": 72.027,
+        "actualAsOf": "FY2025",
+        "trail": "PT Vale",
+        "href": "https://www.vale.com/w/pt-vale-indonesia-strengthens-performance-and-lays-a-solid-foundation-for-sustainable-growth-in-2025",
+        "status": "ok"
+      },
+      {
+        "name": "Glencore 自有镍",
+        "country": "全球",
+        "region": "大洋洲",
+        "tag": "矿山",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "74–80",
+        "initDate": "2025",
+        "latest": "71.9 kt",
+        "latestNote": "Koniambo C&M",
+        "actual": 71.9,
+        "actualAsOf": "FY2025",
+        "trail": "Glencore",
+        "href": "https://www.investegate.co.uk/announcement/rns/glencore--glen/full-year-2025-production-report-/9392468",
+        "status": "ok"
+      },
+      {
+        "name": "BHP WAN",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "tag": "停产",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "临时停产",
+        "latestNote": "2027-02 前复盘",
+        "actual": 30,
+        "actualAsOf": "FY2025",
+        "trail": "BHP",
+        "href": "https://www.e-mj.com/news/australia-and-oceania/bhp-delivers-record-numbers-for-fy25/",
+        "status": "ok"
+      },
+      {
+        "name": "Ambatovy",
+        "country": "马达加斯加",
+        "region": "非洲",
+        "tag": "HPAL",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "mid-30 kt",
+        "latest": "指引维持",
+        "latestNote": "",
+        "actual": null,
+        "actualAsOf": "",
+        "trail": "Sumitomo",
+        "href": "https://www.cnbcafrica.com/2025/sumitomo-says-ambatovy-nickel-project-unaffected-by-madagascar-political-turmoil",
+        "status": "warn"
+      },
+      {
+        "name": "Nornickel 镍",
+        "country": "俄罗斯",
+        "region": "欧洲",
+        "tag": "集团",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "符合指引",
+        "latest": "同比略降",
+        "latestNote": "绝对吨待表",
+        "actual": null,
+        "actualAsOf": "FY2025",
+        "trail": "Nornickel",
+        "href": "https://www.marketscreener.com/news/nornickel-announces-consolidated-production-results-for-fy2025-ce7e5bded88bf02d",
+        "status": "pend"
+      },
+      {
+        "name": "全球原生镍",
+        "country": "全球",
+        "region": "亚洲",
+        "tag": "INSG",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "过剩 209 kt",
+        "latestNote": "产量 3.81 / 需求 3.60 Mt",
+        "actual": 3810,
+        "actualAsOf": "2025e 产量 kt",
+        "trail": "INSG",
+        "href": "https://www.miningweekly.com/article/nickel-market-forecast-to-be-in-209-000-t-surplus-in-2025-says-insg-2025-10-07",
+        "status": "ok"
+      }
+    ],
+    "SOURCES": [
+      {
+        "field": "INSG 2025",
+        "value": "过剩约 209 kt；3.81 / 3.60 Mt",
+        "align": "INSG",
+        "status": "ok",
+        "detail": "2025-10 预测",
+        "links": [
+          {
+            "label": "Mining Weekly",
+            "url": "https://www.miningweekly.com/article/nickel-market-forecast-to-be-in-209-000-t-surplus-in-2025-says-insg-2025-10-07"
+          }
+        ]
+      },
+      {
+        "field": "Vale 2025 Ni",
+        "value": "177 kt",
+        "align": "Vale",
+        "status": "ok",
+        "links": [
+          {
+            "label": "6-K",
+            "url": "https://www.stocktitan.net/sec-filings/VALE/6-k-vale-s-a-current-report-foreign-issuer-16f0d2e28f02.html"
+          }
+        ]
+      },
+      {
+        "field": "PT Vale matte",
+        "value": "72,027 t",
+        "align": "PT Vale",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Vale",
+            "url": "https://www.vale.com/w/pt-vale-indonesia-strengthens-performance-and-lays-a-solid-foundation-for-sustainable-growth-in-2025"
+          }
+        ]
+      },
+      {
+        "field": "Glencore Ni",
+        "value": "71.9 kt",
+        "align": "Glencore",
+        "status": "ok",
+        "links": [
+          {
+            "label": "FY",
+            "url": "https://www.investegate.co.uk/announcement/rns/glencore--glen/full-year-2025-production-report-/9392468"
+          }
+        ]
+      },
+      {
+        "field": "BHP WAN",
+        "value": "FY25 ~30 kt 后停产",
+        "align": "BHP",
+        "status": "ok",
+        "links": [
+          {
+            "label": "E&MJ",
+            "url": "https://www.e-mj.com/news/australia-and-oceania/bhp-delivers-record-numbers-for-fy25/"
+          }
+        ]
+      },
+      {
+        "field": "LME/SHFE Ni",
+        "value": "278.58 / 93.93 kt",
+        "align": "交易所",
+        "status": "ok",
+        "links": [
+          {
+            "label": "LME",
+            "url": "https://www.sunsirs.com/uk/detail_news-36191.html"
+          },
+          {
+            "label": "SHFE",
+            "url": "https://www.99qh.com/article/%E9%95%8D-1093786"
+          }
+        ]
+      },
+      {
+        "field": "待补",
+        "value": "Nornickel 绝对吨 / 印尼 NPI 厂级",
+        "align": "待公告",
+        "status": "pend",
+        "links": []
+      }
+    ]
+  },
+  "Sn": {
+    "CHANGES": [
+      {
+        "id": "cru-bal-2025",
+        "when": "2025 / CRU",
+        "title": "CRU：2025 精锡缺口约 18 kt",
+        "desc": "全球精锡产量约 371.4 kt、消费约 389.4 kt（Timah 年报转引 CRU）。",
+        "tag": "平衡",
+        "status": "ok",
+        "detail": "与 SMM 年中「或转小幅过剩」口径不同：此处采用公司披露引用的 CRU 年末口径；SMM 2024 曾估精锡约 374 / 消 373 kt、缺口约 11 kt。",
+        "links": [
+          {
+            "label": "PT Timah / Ocean Mining 转载",
+            "url": "https://oceanmining.news/2026/04/23/strengthening-tin-governance-tins-records-profit-above-target/"
+          },
+          {
+            "label": "SMM 2025 中展望",
+            "url": "https://news.metal.com/newscontent/103361534-smm-global-tin-may-turn-to-a-slight-surplus-in-2025-but-structural-contradictions-will-dominate-fluctuations-in-tin-prices-indonesia-conference"
+          }
+        ]
+      },
+      {
+        "id": "wa-myanmar",
+        "when": "2023–2026",
+        "title": "缅甸佤邦锡矿复产偏慢",
+        "desc": "曼相等地停产压制中国进口精矿；雨季结束后边际恢复，但增量受限。",
+        "tag": "供给扰动",
+        "status": "ok",
+        "detail": "SMM：佤邦曾占中国锡精矿进口大头；2025 进口份额进一步下滑。市场预期中期复产初期金属量增量或不超过约 1 万吨级，且有 2–3 个月传导期。",
+        "links": [
+          {
+            "label": "SMM 印尼会",
+            "url": "https://news.metal.com/newscontent/103361534-smm-global-tin-may-turn-to-a-slight-surplus-in-2025-but-structural-contradictions-will-dominate-fluctuations-in-tin-prices-indonesia-conference"
+          }
+        ]
+      },
+      {
+        "id": "timah-2025",
+        "when": "FY2025",
+        "title": "PT Timah：精锡 17.8 kt（−6%）",
+        "desc": "矿锡 18.6 kt Sn、精锡 17.8 kt、销售 16.6 kt；均价 +13% 至 3.52 万美元/t。",
+        "tag": "公司",
+        "status": "ok",
+        "detail": "非法采矿与新矿区社区阻力拖累产量；出口约占印尼精锡出口 24%（印尼出口合计 53.05 kt）。",
+        "links": [
+          {
+            "label": "Bisnis.com",
+            "url": "https://ekonomi.bisnis.com/read/20260423/44/1968892/produksi-logam-timah-tins-turun-jadi-17815-metrik-ton-sepanjang-2025"
+          },
+          {
+            "label": "Ocean Mining / 公司稿",
+            "url": "https://oceanmining.news/2026/04/23/strengthening-tin-governance-tins-records-profit-above-target/"
+          }
+        ]
+      },
+      {
+        "id": "alphamin-2025",
+        "when": "FY2025",
+        "title": "Alphamin Bisie：含锡 18.6 kt 创纪录",
+        "desc": "Mpama 北/南合计含锡产量 18,576 t（+7%）；2026 指引约 2 万吨。",
+        "tag": "公司",
+        "status": "ok",
+        "detail": "2025 年 3–4 月因东部安全一度停产；复产后年化产能约 2 万吨级。北基伍安全风险仍高。",
+        "links": [
+          {
+            "label": "Alphamin YE",
+            "url": "https://www.alphaminresources.com/2026/03/11/alphamin-announces-filing-of-year-end-financial-results-award-of-long-term-incentives-exploration-update/"
+          },
+          {
+            "label": "GlobeNewswire",
+            "url": "https://www.globenewswire.com/news-release/2026/01/19/3221017/36579/en/ALPHAMIN-ANNOUNCES-RECORD-FY2025-TIN-PRODUCTION-FY2026-PRODUCTION-GUIDANCE-EXPLORATION-UPDATE-SENIOR-MANAGEMENT-CHANGES.html"
+          }
+        ]
+      }
+    ],
+    "INV": [
+      {
+        "id": "lme-sn",
+        "ex": "LME Sn",
+        "val": "4.99",
+        "unit": "kt",
+        "lbl": "仓库库存",
+        "foot": "2026-09-16 · +0.10 kt",
+        "extra": "SMM：9/15 为 4,890 t（−230）；9/16 回升至 4,990 t；注销仓单比例约 26–27%。年末 2025 末 LME 约 5.42 kt（Timah/CRU 语境）。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "SMM 9/17",
+            "url": "https://news.metal.com/newscontent/104118530-shfe-tin-rose-124-overnight-to-close-at-400240-with-the-400000-level-becoming-new-support-smm-tin-morning-meeting-summary"
+          },
+          {
+            "label": "SMM 9/16",
+            "url": "https://news.metal.com/newscontent/104116298-lme-tin-inventory-4890-mt-down-230-mt-september-fomc-rate-hike-almost-certain-watch-for-decision-smm-tin-morning-news"
+          }
+        ]
+      },
+      {
+        "id": "shfe-sn",
+        "ex": "SHFE Sn",
+        "val": "7.65",
+        "unit": "kt",
+        "lbl": "期货库存（转载）",
+        "foot": "2026-09-11",
+        "extra": "SMM：SHFE 锡库存 7,652 t（+1,153）；同期社会库存约 9,425 t（周增 1,533）。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "SMM 晨会",
+            "url": "https://news.metal.com/newscontent/104118530-shfe-tin-rose-124-overnight-to-close-at-400240-with-the-400000-level-becoming-new-support-smm-tin-morning-meeting-summary"
+          }
+        ]
+      }
+    ],
+    "RANK": [
+      {
+        "n": 1,
+        "name": "云锡 · 精锡（集团）",
+        "country": "中国",
+        "region": "亚洲",
+        "type": "smelter",
+        "kt": 86.2,
+        "status": "ok",
+        "note": "2025 锡锭产量 8.62 万吨、销量 8.53 万吨；全球精锡市占约 27%",
+        "href": "https://www.internationaltin.org/yunnan-tin-net-profits-surge-36-in-2025/",
+        "lat": 23.36,
+        "lon": 103.15
+      },
+      {
+        "n": 2,
+        "name": "印尼精锡出口（全国）",
+        "country": "印尼",
+        "region": "亚洲",
+        "type": "smelter",
+        "kt": 53.05,
+        "status": "ok",
+        "note": "2025 印尼精锡出口 53,050 t；含 Timah 与其他冶炼",
+        "href": "https://oceanmining.news/2026/04/23/strengthening-tin-governance-tins-records-profit-above-target/",
+        "lat": -2.06,
+        "lon": 105.16
+      },
+      {
+        "n": 3,
+        "name": "Alphamin Bisie（含锡）",
+        "country": "刚果(金)",
+        "region": "非洲",
+        "type": "mine",
+        "kt": 18.576,
+        "status": "ok",
+        "note": "FY2025 含锡 18,576 t；Mpama North/South",
+        "href": "https://www.alphaminresources.com/2026/03/11/alphamin-announces-filing-of-year-end-financial-results-award-of-long-term-incentives-exploration-update/",
+        "lat": -1,
+        "lon": 27.75
+      },
+      {
+        "n": 4,
+        "name": "PT Timah 精锡",
+        "country": "印尼",
+        "region": "亚洲",
+        "type": "smelter",
+        "kt": 17.815,
+        "status": "ok",
+        "note": "FY2025 精锡 17,815 t；矿锡 18,635 t Sn",
+        "href": "https://ekonomi.bisnis.com/read/20260423/44/1968892/produksi-logam-timah-tins-turun-jadi-17815-metrik-ton-sepanjang-2025",
+        "lat": -2.07,
+        "lon": 105.18
+      },
+      {
+        "n": 5,
+        "name": "Minsur Pisco 精锡（示意）",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "type": "smelter",
+        "kt": 0,
+        "status": "pend",
+        "note": "Q3'25 8,699 t + Q4'25 8,596 t；全年绝对值待拼齐季报",
+        "href": "https://energiminas.com/2026/02/17/minsur-produccion-de-estano-refinado-alcanzo-los-8596-toneladas-en-cuarto-trimestre-de-2025/",
+        "lat": -13.71,
+        "lon": -76.2
+      },
+      {
+        "n": 6,
+        "name": "Minsur San Rafael（矿）",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "type": "mine",
+        "kt": 0,
+        "status": "pend",
+        "note": "Q3'25 含锡约 8.98 kt（San Rafael+B2）；全年待核",
+        "href": "https://www.internationaltin.org/minsur-q3-revenue-surges-on-higher-tin-production/",
+        "lat": -14.23,
+        "lon": -70.35
+      },
+      {
+        "n": 7,
+        "name": "缅甸佤邦矿区（示意）",
+        "country": "缅甸",
+        "region": "亚洲",
+        "type": "mine",
+        "kt": 0,
+        "status": "pend",
+        "note": "曼相等主产区停/复产主导中国进口波动；厂级吨待核",
+        "href": "https://news.metal.com/newscontent/103361534-smm-global-tin-may-turn-to-a-slight-surplus-in-2025-but-structural-contradictions-will-dominate-fluctuations-in-tin-prices-indonesia-conference",
+        "lat": 22.1,
+        "lon": 99
+      },
+      {
+        "n": 8,
+        "name": "中国矿锡（全国示意）",
+        "country": "中国",
+        "region": "亚洲",
+        "type": "mine",
+        "kt": 69,
+        "status": "pend",
+        "note": "Payne/公开转述 2024 矿锡约 69 kt 量级；资源枯竭与进口依赖上升",
+        "href": "https://payneinstitute.mines.edu/tin-demand-is-booming-opportunities-and-risks-for-small-communities-in-indonesia/",
+        "lat": 23.4,
+        "lon": 103.2
+      },
+      {
+        "n": 9,
+        "name": "印尼矿锡（全国示意）",
+        "country": "印尼",
+        "region": "亚洲",
+        "type": "mine",
+        "kt": 50,
+        "status": "pend",
+        "note": "公开转述 2024 约 50 kt；ASM 占比高、治理整顿影响供给",
+        "href": "https://payneinstitute.mines.edu/tin-demand-is-booming-opportunities-and-risks-for-small-communities-in-indonesia/",
+        "lat": -2.5,
+        "lon": 106
+      },
+      {
+        "n": 10,
+        "name": "云锡自产矿锡（2024 锚）",
+        "country": "中国",
+        "region": "亚洲",
+        "type": "mine",
+        "kt": 25.6,
+        "status": "ok",
+        "note": "2024 自产锡矿 2.56 万吨（+3.5%）；2025 自产矿吨待核",
+        "href": "https://news.futunn.com/en/post/58432956/yunnan-tin-co-ltd-000960-continuous-increase-in-production-in",
+        "lat": 23.35,
+        "lon": 103.12
+      }
+    ],
+    "TRACK": [
+      {
+        "name": "云锡精锡",
+        "country": "中国",
+        "region": "亚洲",
+        "tag": "集团",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "2024 84.8 kt",
+        "latest": "86.2 kt",
+        "latestNote": "+9.9% YoY",
+        "actual": 86.2,
+        "actualAsOf": "FY2025",
+        "qNote": "销量 85.3 kt；全球市占约 27%",
+        "trail": "YTC",
+        "href": "http://news.10jqka.com.cn/field/sr/20260330/56988733.shtml",
+        "status": "ok"
+      },
+      {
+        "name": "PT Timah 精锡",
+        "country": "印尼",
+        "region": "亚洲",
+        "tag": "冶炼",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "2024 18.9 kt",
+        "latest": "17.8 kt",
+        "latestNote": "−6%",
+        "actual": 17.815,
+        "actualAsOf": "FY2025",
+        "qNote": "矿锡 18.6 kt Sn",
+        "trail": "TINS",
+        "href": "https://ekonomi.bisnis.com/read/20260423/44/1968892/produksi-logam-timah-tins-turun-jadi-17815-metrik-ton-sepanjang-2025",
+        "status": "ok"
+      },
+      {
+        "name": "Alphamin Bisie",
+        "country": "刚果(金)",
+        "region": "非洲",
+        "tag": "矿山",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "2024 ~17.3 kt",
+        "latest": "18.6 kt",
+        "latestNote": "+7%",
+        "actual": 18.576,
+        "actualAsOf": "FY2025",
+        "qNote": "2026 指引 ~20 kt",
+        "trail": "AFM",
+        "href": "https://www.alphaminresources.com/2026/03/11/alphamin-announces-filing-of-year-end-financial-results-award-of-long-term-incentives-exploration-update/",
+        "status": "ok"
+      },
+      {
+        "name": "Minsur 精锡",
+        "country": "秘鲁",
+        "region": "南美洲",
+        "tag": "冶炼",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "Q3+Q4 ~17.3 kt",
+        "latestNote": "全年待核",
+        "actual": null,
+        "actualAsOf": "2025 部分季度",
+        "qNote": "Q3 8.70 + Q4 8.60",
+        "trail": "Minsur",
+        "href": "https://energiminas.com/2026/02/17/minsur-produccion-de-estano-refinado-alcanzo-los-8596-toneladas-en-cuarto-trimestre-de-2025/",
+        "status": "pend"
+      },
+      {
+        "name": "印尼精锡出口",
+        "country": "印尼",
+        "region": "亚洲",
+        "tag": "贸易",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "53.05 kt",
+        "latestNote": "FY2025",
+        "actual": 53.05,
+        "actualAsOf": "FY2025",
+        "qNote": "Timah 约占 24%",
+        "trail": "BKPM/公司",
+        "href": "https://oceanmining.news/2026/04/23/strengthening-tin-governance-tins-records-profit-above-target/",
+        "status": "ok"
+      },
+      {
+        "name": "全球精锡 · CRU",
+        "country": "全球",
+        "region": "全球",
+        "tag": "平衡",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "产 371.4 / 消 389.4",
+        "latestNote": "缺口 ~18 kt",
+        "actual": 371.369,
+        "actualAsOf": "2025e CRU",
+        "qNote": "Timah 年报转引",
+        "trail": "CRU",
+        "href": "https://oceanmining.news/2026/04/23/strengthening-tin-governance-tins-records-profit-above-target/",
+        "status": "ok"
+      },
+      {
+        "name": "LME 锡库存",
+        "country": "全球",
+        "region": "欧洲",
+        "tag": "库存",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "2025 初 4.76",
+        "latest": "4.99 kt",
+        "latestNote": "2026-09-16",
+        "actual": 4.99,
+        "actualAsOf": "2026-09-16",
+        "qNote": "2025 末约 5.42 kt",
+        "trail": "LME/SMM",
+        "href": "https://news.metal.com/newscontent/104118530-shfe-tin-rose-124-overnight-to-close-at-400240-with-the-400000-level-becoming-new-support-smm-tin-morning-meeting-summary",
+        "status": "ok"
+      }
+    ],
+    "SOURCES": [
+      {
+        "field": "CRU 精锡平衡 2025",
+        "value": "产 371.4 / 消 389.4 kt，缺口 ~18 kt",
+        "align": "CRU via Timah",
+        "status": "ok",
+        "detail": "公司年报转引",
+        "links": [
+          {
+            "label": "Ocean Mining",
+            "url": "https://oceanmining.news/2026/04/23/strengthening-tin-governance-tins-records-profit-above-target/"
+          }
+        ]
+      },
+      {
+        "field": "云锡精锡 2025",
+        "value": "产量 86.2 kt / 销量 85.3 kt",
+        "align": "年报/研报",
+        "status": "ok",
+        "detail": "全球市占约 27.16%",
+        "links": [
+          {
+            "label": "同花顺研报摘",
+            "url": "http://news.10jqka.com.cn/field/sr/20260330/56988733.shtml"
+          },
+          {
+            "label": "ITA",
+            "url": "https://www.internationaltin.org/yunnan-tin-net-profits-surge-36-in-2025/"
+          }
+        ]
+      },
+      {
+        "field": "PT Timah FY2025",
+        "value": "矿 18.635 / 精 17.815 / 销 16.634 kt",
+        "align": "公司",
+        "status": "ok",
+        "detail": "均价 35,240 $/t",
+        "links": [
+          {
+            "label": "Bisnis",
+            "url": "https://ekonomi.bisnis.com/read/20260423/44/1968892/produksi-logam-timah-tins-turun-jadi-17815-metrik-ton-sepanjang-2025"
+          }
+        ]
+      },
+      {
+        "field": "Alphamin Bisie FY2025",
+        "value": "含锡 18,576 t",
+        "align": "公司",
+        "status": "ok",
+        "detail": "2026 指引 ~20 kt",
+        "links": [
+          {
+            "label": "Alphamin",
+            "url": "https://www.alphaminresources.com/2026/03/11/alphamin-announces-filing-of-year-end-financial-results-award-of-long-term-incentives-exploration-update/"
+          }
+        ]
+      },
+      {
+        "field": "LME/SHFE 库存",
+        "value": "LME 4.99 kt (9/16)；SHFE 7.65 kt (9/11)",
+        "align": "SMM 转载",
+        "status": "ok",
+        "detail": "社会库存约 9.4 kt",
+        "links": [
+          {
+            "label": "SMM",
+            "url": "https://news.metal.com/newscontent/104118530-shfe-tin-rose-124-overnight-to-close-at-400240-with-the-400000-level-becoming-new-support-smm-tin-morning-meeting-summary"
+          }
+        ]
+      },
+      {
+        "field": "Minsur 2025 全年",
+        "value": "仅有 Q3/Q4 精锡季报",
+        "align": "季报",
+        "status": "pend",
+        "detail": "全年绝对值待核",
+        "links": [
+          {
+            "label": "Energiminas Q4",
+            "url": "https://energiminas.com/2026/02/17/minsur-produccion-de-estano-refinado-alcanzo-los-8596-toneladas-en-cuarto-trimestre-de-2025/"
+          }
+        ]
+      },
+      {
+        "field": "SMM 平衡展望",
+        "value": "2025 或转小幅过剩（年中口径）",
+        "align": "SMM",
+        "status": "warn",
+        "detail": "与 CRU 年末缺口口径冲突，并列备查",
+        "links": [
+          {
+            "label": "SMM",
+            "url": "https://news.metal.com/newscontent/103361534-smm-global-tin-may-turn-to-a-slight-surplus-in-2025-but-structural-contradictions-will-dominate-fluctuations-in-tin-prices-indonesia-conference"
+          }
+        ]
+      }
+    ]
+  },
+  "Li": {
+    "CHANGES": [
+      {
+        "id": "sqm-2025",
+        "when": "FY2025",
+        "title": "SQM：锂销售创纪录约 258 kt LCE",
+        "desc": "智利与澳大利亚业务合计锂销售近 258,000 吨 LCE；年末价格回升。",
+        "tag": "公司",
+        "status": "ok",
+        "detail": "公司 2025 年报表述 record sales volumes of nearly 258,000 metric tons LCE。天齐侧转述：智利约 235 kt、Holland 项目约 23 kt。",
+        "links": [
+          {
+            "label": "SQM AR 转 MarketScreener",
+            "url": "https://www.marketscreener.com/news/sociedad-qu-mica-y-minera-de-chile-s-a-2025-annual-report-2025-annual-report-ce7f59d8d08ef025"
+          },
+          {
+            "label": "天齐点评转述 SQM",
+            "url": "https://news.futunn.com/en/post/70828022/tianqi-lithium-002466-2025-annual-report-commentary-abundant-mineral-resources"
+          }
+        ]
+      },
+      {
+        "id": "balance-split",
+        "when": "2025–2026",
+        "title": "全球锂平衡：过剩收窄，口径分歧大",
+        "desc": "公开转述 2025 全球 LCE 过剩约 10–14 万吨量级不等；2026 或进一步收窄。中国碳酸锂 H2 或月度短缺。",
+        "tag": "平衡",
+        "status": "warn",
+        "detail": "GruMarket 等：2025 过剩约 141 kt LCE、2026 约 109 kt、消费约 1.48 Mt LCE。Fastmarkets 更早口径曾给 2025 过剩仅约 1 万吨、2026 微缺——与宽口径过剩并存，页面不合并为单一「事实」。SMM：2026 下半年中国碳酸锂在供给恢复下仍可能月度缺口。",
+        "links": [
+          {
+            "label": "GruMarket 展望",
+            "url": "https://grumarket.com/articles/lithium-market-outlook-5-trends/"
+          },
+          {
+            "label": "Fastmarkets 2025",
+            "url": "https://www.fastmarkets.com/insights/facing-the-tightening-lithium-supply-challenge-in-2025/"
+          },
+          {
+            "label": "SMM H2 2026",
+            "url": "https://news.metal.com/newscontent/104106084-smm-analysis-lithium-carbonate-supply-recovered-yet-sd-deficit-persist-outlook-for-h2-2026"
+          }
+        ]
+      },
+      {
+        "id": "ganfeng-2025",
+        "when": "FY2025",
+        "title": "赣锋：锂盐产销约 18 万吨级",
+        "desc": "锂盐产量约 18.2 万吨（+40%）、销量约 18.5 万吨；C-O 盐湖碳酸锂约 3.4 万吨。",
+        "tag": "公司",
+        "status": "ok",
+        "detail": "年报/点评口径；营收约 230.8 亿元。马里 Goulamina 精矿 2025 起出货。",
+        "links": [
+          {
+            "label": "Futubull 年报点评",
+            "url": "https://news.futunn.com/en/post/71155860/ganfeng-lithium-002460-2025-annual-report-commentary-profit-reversal-and"
+          },
+          {
+            "label": "EnergyTrend",
+            "url": "https://www.energytrend.com/news/20260331-51172.html"
+          }
+        ]
+      },
+      {
+        "id": "inv-revision",
+        "when": "2026-09",
+        "title": "中国碳酸锂社库上修削弱「紧缺」叙事",
+        "desc": "公开转述库存估计由约 7.9 万吨上修至约 17.5 万吨量级，现货中枢回落。",
+        "tag": "库存",
+        "status": "ok",
+        "detail": "Skillings 转述：约 78.8 → 175 kt；同时称约 50 万吨级产能闲置/延迟。库存口径为行业调查转述，非交易所仓单。",
+        "links": [
+          {
+            "label": "Skillings",
+            "url": "https://www.skillings.net/lithium-price-forecast-2026-inventory-shock-and-supply-discipline/"
+          },
+          {
+            "label": "Mysteel 调查入口",
+            "url": "https://www.mysteel.net/mysteel-surveys/5139906-survey-china-monthly-lithium-carbonate-inventory-sep-2026"
+          }
+        ]
+      }
+    ],
+    "INV": [
+      {
+        "id": "cn-lc-social",
+        "ex": "中国碳酸锂社库",
+        "val": "~175",
+        "unit": "kt",
+        "lbl": "行业调查（转述）",
+        "foot": "2026-09 前后上修",
+        "extra": "由约 78.8 kt 上修至约 175 kt；非 LME 仓单。SMM 另跟踪月度产需。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Skillings",
+            "url": "https://www.skillings.net/lithium-price-forecast-2026-inventory-shock-and-supply-discipline/"
+          }
+        ]
+      },
+      {
+        "id": "cn-lc-aug-out",
+        "ex": "中国碳酸锂产量",
+        "val": "116.4",
+        "unit": "kt/月",
+        "lbl": "SMM 国内产量",
+        "foot": "2026-08 · +7% MoM",
+        "extra": "SMM：9 月产量或约 12.85 万吨；总供给（含进口）8 月约 14.3、9 月约 15.8 万吨。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "SMM H2 分析",
+            "url": "https://news.metal.com/newscontent/104106084-smm-analysis-lithium-carbonate-supply-recovered-yet-sd-deficit-persist-outlook-for-h2-2026"
+          }
+        ]
+      }
+    ],
+    "RANK": [
+      {
+        "n": 1,
+        "name": "SQM 锂销售（集团）",
+        "country": "智利/澳",
+        "region": "南美洲",
+        "type": "brine",
+        "kt": 258,
+        "unit": "kt LCE",
+        "status": "ok",
+        "note": "FY2025 销售近 258 kt LCE（智利+澳洲）",
+        "href": "https://www.marketscreener.com/news/sociedad-qu-mica-y-minera-de-chile-s-a-2025-annual-report-2025-annual-report-ce7f59d8d08ef025",
+        "lat": -23.5,
+        "lon": -68.25
+      },
+      {
+        "n": 2,
+        "name": "Greenbushes 锂辉石",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "mine",
+        "kt": 1350,
+        "unit": "kt SC",
+        "status": "ok",
+        "note": "2025 产约 135 万吨精矿、销 141 万吨；产能约 214 万吨/年（天齐口径）",
+        "href": "https://news.futunn.com/en/post/70828022/tianqi-lithium-002466-2025-annual-report-commentary-abundant-mineral-resources",
+        "lat": -33.85,
+        "lon": 116.06
+      },
+      {
+        "n": 3,
+        "name": "Pilgangoora（PLS）",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "mine",
+        "kt": 879.5,
+        "unit": "kt SC",
+        "status": "ok",
+        "note": "FY26（至 2026-06）产 87.95 万吨精矿；FY25 为 75.46 万吨",
+        "href": "https://kalkine.com.au/news/announcements/pilbara-minerals-reports-fy26-npat-of-526m-and-record-production-amid-pricing-recovery",
+        "lat": -21.12,
+        "lon": 118.88
+      },
+      {
+        "n": 4,
+        "name": "赣锋锂盐（集团）",
+        "country": "中国",
+        "region": "亚洲",
+        "type": "smelter",
+        "kt": 182,
+        "unit": "kt 锂盐",
+        "status": "ok",
+        "note": "2025 锂盐产量约 18.2 万吨、销量约 18.5 万吨",
+        "href": "https://news.futunn.com/en/post/71155860/ganfeng-lithium-002460-2025-annual-report-commentary-profit-reversal-and",
+        "lat": 27.82,
+        "lon": 114.93
+      },
+      {
+        "n": 5,
+        "name": "天齐锂盐出货",
+        "country": "中国/澳",
+        "region": "亚洲",
+        "type": "smelter",
+        "kt": 73,
+        "unit": "kt 锂盐",
+        "status": "ok",
+        "note": "2025 锂盐出货约 7.3 万吨（+9.8%）",
+        "href": "https://news.futunn.com/en/post/70828022/tianqi-lithium-002466-2025-annual-report-commentary-abundant-mineral-resources",
+        "lat": 30.57,
+        "lon": 104.07
+      },
+      {
+        "n": 6,
+        "name": "C-O 盐湖（赣锋）",
+        "country": "阿根廷",
+        "region": "南美洲",
+        "type": "brine",
+        "kt": 34,
+        "unit": "kt LC",
+        "status": "ok",
+        "note": "2025 碳酸锂约 3.4 万吨；2026 指引 3.5–4.0 万吨",
+        "href": "https://news.futunn.com/en/post/71155860/ganfeng-lithium-002460-2025-annual-report-commentary-profit-reversal-and",
+        "lat": -23.55,
+        "lon": -66.75
+      },
+      {
+        "n": 7,
+        "name": "Albemarle Energy Storage",
+        "country": "美/智利/澳",
+        "region": "北美洲",
+        "type": "smelter",
+        "kt": 0,
+        "unit": "kt LCE",
+        "status": "pend",
+        "note": "2025 销量同比提升、盐端产量创新高，但公开稿未给全年 LCE 绝对吨",
+        "href": "https://www.albemarle.com/us/en/news/albemarle-reports-fourth-quarter-and-full-year-2025-results",
+        "lat": -23.6,
+        "lon": -68.4
+      },
+      {
+        "n": 8,
+        "name": "中国碳酸锂月产（8月）",
+        "country": "中国",
+        "region": "亚洲",
+        "type": "smelter",
+        "kt": 116.4,
+        "unit": "kt/月",
+        "status": "ok",
+        "note": "SMM 2026-08 国内产量；非年化矿山产量",
+        "href": "https://news.metal.com/newscontent/104106084-smm-analysis-lithium-carbonate-supply-recovered-yet-sd-deficit-persist-outlook-for-h2-2026",
+        "lat": 27.7,
+        "lon": 114.4
+      },
+      {
+        "n": 9,
+        "name": "Goulamina（马里）",
+        "country": "马里",
+        "region": "非洲",
+        "type": "mine",
+        "kt": 337,
+        "unit": "kt SC",
+        "status": "ok",
+        "note": "赣锋口径 2025 精矿产量预期约 33.7 万吨；首船 2025-06",
+        "href": "https://news.futunn.com/en/post/71155860/ganfeng-lithium-002460-2025-annual-report-commentary-profit-reversal-and",
+        "lat": 12,
+        "lon": -8.3
+      },
+      {
+        "n": 10,
+        "name": "Mt Cattlin（示意）",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "mine",
+        "kt": 0,
+        "unit": "kt SC",
+        "status": "pend",
+        "note": "Arcadium/力拓体系；2024 产量承压，2025 并入力拓后厂级吨待核",
+        "href": "https://www.prnewswire.com/news-releases/arcadium-lithium-releases-fourth-quarter-and-full-year-2024-results-302387891.html",
+        "lat": -33.33,
+        "lon": 120.12
+      }
+    ],
+    "TRACK": [
+      {
+        "name": "SQM 锂销售",
+        "country": "智利",
+        "region": "南美洲",
+        "tag": "盐湖/硬岩",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "~258 kt LCE",
+        "latestNote": "FY2025 纪录",
+        "actual": 258,
+        "actualAsOf": "FY2025",
+        "qNote": "智利+澳洲",
+        "trail": "SQM",
+        "href": "https://www.marketscreener.com/news/sociedad-qu-mica-y-minera-de-chile-s-a-2025-annual-report-2025-annual-report-ce7f59d8d08ef025",
+        "status": "ok"
+      },
+      {
+        "name": "Greenbushes SC",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "tag": "矿山",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "135 万 t 产",
+        "latestNote": "销 141 万 t",
+        "actual": 1350,
+        "actualAsOf": "CY2025",
+        "qNote": "产能约 214 万 tpa",
+        "trail": "Talison/天齐",
+        "href": "https://news.futunn.com/en/post/70828022/tianqi-lithium-002466-2025-annual-report-commentary-abundant-mineral-resources",
+        "status": "ok"
+      },
+      {
+        "name": "Pilgangoora SC",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "tag": "矿山",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "FY25 75.5 万 t",
+        "latest": "FY26 88.0 万 t",
+        "latestNote": "+17%",
+        "actual": 879.5,
+        "actualAsOf": "FY26",
+        "qNote": "ASX:PLS",
+        "trail": "PLS",
+        "href": "https://kalkine.com.au/news/announcements/pilbara-minerals-reports-fy26-npat-of-526m-and-record-production-amid-pricing-recovery",
+        "status": "ok"
+      },
+      {
+        "name": "赣锋锂盐",
+        "country": "中国",
+        "region": "亚洲",
+        "tag": "冶炼",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "产 18.2 / 销 18.5",
+        "latestNote": "+40% 级",
+        "actual": 182,
+        "actualAsOf": "FY2025",
+        "qNote": "万吨锂盐",
+        "trail": "Ganfeng",
+        "href": "https://news.futunn.com/en/post/71155860/ganfeng-lithium-002460-2025-annual-report-commentary-profit-reversal-and",
+        "status": "ok"
+      },
+      {
+        "name": "天齐锂盐",
+        "country": "中国",
+        "region": "亚洲",
+        "tag": "冶炼",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "7.3 万 t",
+        "latestNote": "+9.8%",
+        "actual": 73,
+        "actualAsOf": "FY2025",
+        "qNote": "出货",
+        "trail": "Tianqi",
+        "href": "https://news.futunn.com/en/post/70828022/tianqi-lithium-002466-2025-annual-report-commentary-abundant-mineral-resources",
+        "status": "ok"
+      },
+      {
+        "name": "全球 LCE 平衡（转述）",
+        "country": "全球",
+        "region": "全球",
+        "tag": "平衡",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "2025 过剩宽口径",
+        "latest": "过剩收窄",
+        "latestNote": "口径分裂",
+        "actual": null,
+        "actualAsOf": "2025–26e",
+        "qNote": "见 CHANGES",
+        "trail": "多方",
+        "href": "https://grumarket.com/articles/lithium-market-outlook-5-trends/",
+        "status": "warn"
+      },
+      {
+        "name": "中国 LC 社库",
+        "country": "中国",
+        "region": "亚洲",
+        "tag": "库存",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "~79 kt 旧估",
+        "latest": "~175 kt",
+        "latestNote": "上修",
+        "actual": 175,
+        "actualAsOf": "2026-09 转述",
+        "qNote": "非仓单",
+        "trail": "行业调查",
+        "href": "https://www.skillings.net/lithium-price-forecast-2026-inventory-shock-and-supply-discipline/",
+        "status": "ok"
+      }
+    ],
+    "SOURCES": [
+      {
+        "field": "SQM 2025 锂销售",
+        "value": "近 258 kt LCE",
+        "align": "公司年报",
+        "status": "ok",
+        "detail": "智利+澳洲",
+        "links": [
+          {
+            "label": "MarketScreener",
+            "url": "https://www.marketscreener.com/news/sociedad-qu-mica-y-minera-de-chile-s-a-2025-annual-report-2025-annual-report-ce7f59d8d08ef025"
+          }
+        ]
+      },
+      {
+        "field": "Greenbushes 2025",
+        "value": "产 1.35 / 销 1.41 Mt SC",
+        "align": "天齐转述",
+        "status": "ok",
+        "detail": "IGO 另有 FY 口径约 1.4–1.48 Mt，勿混日历年",
+        "links": [
+          {
+            "label": "Futubull 天齐",
+            "url": "https://news.futunn.com/en/post/70828022/tianqi-lithium-002466-2025-annual-report-commentary-abundant-mineral-resources"
+          },
+          {
+            "label": "Australian Mining CGP3",
+            "url": "https://www.australianmining.com.au/integral-operations-underway-for-greenbushes-lithium-production/"
+          }
+        ]
+      },
+      {
+        "field": "PLS FY26",
+        "value": "产 879.5 / 销 891.6 kt SC",
+        "align": "ASX 业绩转述",
+        "status": "ok",
+        "detail": "至 2026-06-30",
+        "links": [
+          {
+            "label": "Kalkine",
+            "url": "https://kalkine.com.au/news/announcements/pilbara-minerals-reports-fy26-npat-of-526m-and-record-production-amid-pricing-recovery"
+          }
+        ]
+      },
+      {
+        "field": "赣锋 2025 锂盐",
+        "value": "产约 182 / 销约 185 kt",
+        "align": "年报点评",
+        "status": "ok",
+        "detail": "C-O 约 34 kt LC",
+        "links": [
+          {
+            "label": "Futubull",
+            "url": "https://news.futunn.com/en/post/71155860/ganfeng-lithium-002460-2025-annual-report-commentary-profit-reversal-and"
+          }
+        ]
+      },
+      {
+        "field": "全球平衡",
+        "value": "2025 过剩 10–141 kt LCE 不等",
+        "align": "Fastmarkets/Gru 等",
+        "status": "warn",
+        "detail": "分歧大，并列",
+        "links": [
+          {
+            "label": "GruMarket",
+            "url": "https://grumarket.com/articles/lithium-market-outlook-5-trends/"
+          },
+          {
+            "label": "Fastmarkets",
+            "url": "https://www.fastmarkets.com/insights/facing-the-tightening-lithium-supply-challenge-in-2025/"
+          }
+        ]
+      },
+      {
+        "field": "中国 LC 库存/产量",
+        "value": "社库~175 kt；2026-08 产 116.4 kt",
+        "align": "SMM/转述",
+        "status": "ok",
+        "detail": "库存上修",
+        "links": [
+          {
+            "label": "SMM",
+            "url": "https://news.metal.com/newscontent/104106084-smm-analysis-lithium-carbonate-supply-recovered-yet-sd-deficit-persist-outlook-for-h2-2026"
+          },
+          {
+            "label": "Skillings",
+            "url": "https://www.skillings.net/lithium-price-forecast-2026-inventory-shock-and-supply-discipline/"
+          }
+        ]
+      },
+      {
+        "field": "Albemarle LCE 绝对吨",
+        "value": "未在新闻稿直接披露全年 LCE",
+        "align": "公司",
+        "status": "pend",
+        "detail": "待 10-K/补充",
+        "links": [
+          {
+            "label": "Albemarle FY2025",
+            "url": "https://www.albemarle.com/us/en/news/albemarle-reports-fourth-quarter-and-full-year-2025-results"
+          }
+        ]
+      }
+    ]
+  },
+  "Fe": {
+    "CHANGES": [
+      {
+        "id": "usgs-2025",
+        "when": "2025e / MCS 2026",
+        "title": "USGS：澳可用铁矿约 980 Mt 居首",
+        "desc": "2025e 可用矿：澳大利亚 980、巴西 420、印度 310、中国 290 Mt；17 国合计约 2,546 Mt。",
+        "tag": "基准",
+        "status": "ok",
+        "detail": "StatRanker 转 USGS MCS 2026 Iron Ore；口径为 mine production of usable iron ore。",
+        "links": [
+          {
+            "label": "StatRanker / USGS",
+            "url": "https://statranker.org/economy/resources-mining/iron-ore-mine-production-by-country-2026-2025-usgs-estimates/"
+          },
+          {
+            "label": "USGS MCS 2026",
+            "url": "https://www.usgs.gov/publications/mineral-commodity-summaries-2026"
+          }
+        ]
+      },
+      {
+        "id": "vale-rio-2025",
+        "when": "CY2025",
+        "title": "Vale 铁矿 336 Mt；Pilbara 327 Mt",
+        "desc": "Vale 产量 336.1 Mt（+2.6%）、销售 314.4 Mt；Rio Pilbara 产量 327.3 / 发运 326.2 Mt。含加拿大后 Rio 集团铁矿约 336.6 Mt。",
+        "tag": "公司",
+        "status": "ok",
+        "detail": "Vale 时隔多年在「相对 Pilbara」口径上重回领先；Rio 集团总量（含 IOC 等）仍略高。Simandou Q4 2025 首船。",
+        "links": [
+          {
+            "label": "Mining Weekly / Vale",
+            "url": "https://www.miningweekly.com/article/vales-iron-ore-output-hits-seven-year-high-in-2025-surpassing-rio-tintos-pilbara-2026-01-28"
+          },
+          {
+            "label": "Rio Q4 2025",
+            "url": "https://markets.financialcontent.com/wss/article/bizwire-2026-1-20-rio-tinto-releases-fourth-quarter-2025-production-results"
+          },
+          {
+            "label": "Vale 6-K",
+            "url": "https://www.stocktitan.net/sec-filings/VALE/6-k-a-vale-s-a-amended-current-report-foreign-issuer-184f2a79c17d.html"
+          }
+        ]
+      },
+      {
+        "id": "simandou",
+        "when": "2025-12 / 2026-01",
+        "title": "Simandou 首船抵华",
+        "desc": "几内亚高品位矿（约 65% Fe）启动；规划合计约 120 Mtpa 量级。首船近 20 万吨抵马迹山。",
+        "tag": "供给",
+        "status": "ok",
+        "detail": "Rio SimFer + WCS/宝武等；爬坡至满产需数年。",
+        "links": [
+          {
+            "label": "Reuters / Baowu",
+            "url": "https://www.marketscreener.com/news/china-receives-first-shipment-of-simandou-iron-ore-ce7e58dfdd8cf12c"
+          },
+          {
+            "label": "Rio Final Results 摘",
+            "url": "https://www.investegate.co.uk/announcement/rns/rio-tinto--rio/final-results/9437257"
+          }
+        ]
+      },
+      {
+        "id": "steel-2025",
+        "when": "CY2025",
+        "title": "全球粗钢 2025 约 18.49 亿吨（−2%）",
+        "desc": "worldsteel：世界粗钢 1,849.4 Mt；中国 960.8 Mt（−4.4%）。",
+        "tag": "需求",
+        "status": "ok",
+        "detail": "铁矿需求锚：钢产同比回落，印度 164.9 Mt（+10.4%）抵消部分。",
+        "links": [
+          {
+            "label": "worldsteel Dec/年",
+            "url": "https://worldsteel.org/media/press-releases/2026/december-2025-crude-steel-production-2025-global-crude-steel-production/"
+          }
+        ]
+      }
+    ],
+    "INV": [
+      {
+        "id": "cn-port-io",
+        "ex": "中国进口矿港口库存",
+        "val": "171.36",
+        "unit": "Mt",
+        "lbl": "47 港合计（Mysteel）",
+        "foot": "截至 2026-09-17 · 周+1.13 Mt",
+        "extra": "粉矿约 138.95、块矿约 17.28 Mt。前周 9/10 为 170.23 Mt。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Mysteel 9/18",
+            "url": "https://www.mysteel.net/mysteel-surveys/5141529-survey-imported-io-port-stocks-analysis-20260918"
+          },
+          {
+            "label": "Mysteel 9/11",
+            "url": "https://www.mysteel.net/mysteel-surveys/5140564-survey-imported-io-port-stocks-analysis-20260911"
+          }
+        ]
+      },
+      {
+        "id": "mill-sinter-fines",
+        "ex": "钢厂进口烧结粉库存",
+        "val": "14.4",
+        "unit": "Mt",
+        "lbl": "64 家 BF 样本（Mysteel）",
+        "foot": "截至 2026-09-16 · 周+5%",
+        "extra": "节前补库；即期需求仅边际扩张。",
+        "status": "ok",
+        "links": [
+          {
+            "label": "Mysteel 周报",
+            "url": "https://www.mysteel.net/analysis/5141323-weekly-chinese-steel-mills-build-up-imported-iron-ore-stocks-before-holiday"
+          }
+        ]
+      }
+    ],
+    "RANK": [
+      {
+        "n": 1,
+        "name": "澳大利亚（全国可用矿）",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "mine",
+        "kt": 980,
+        "unit": "Mt",
+        "status": "ok",
+        "note": "USGS MCS 2026 · 2025e usable ore",
+        "href": "https://statranker.org/economy/resources-mining/iron-ore-mine-production-by-country-2026-2025-usgs-estimates/",
+        "lat": -22.5,
+        "lon": 117
+      },
+      {
+        "n": 2,
+        "name": "巴西（全国可用矿）",
+        "country": "巴西",
+        "region": "南美洲",
+        "type": "mine",
+        "kt": 420,
+        "unit": "Mt",
+        "status": "ok",
+        "note": "USGS 2025e",
+        "href": "https://statranker.org/economy/resources-mining/iron-ore-mine-production-by-country-2026-2025-usgs-estimates/",
+        "lat": -6.1,
+        "lon": -50.4
+      },
+      {
+        "n": 3,
+        "name": "Vale 铁矿（集团）",
+        "country": "巴西",
+        "region": "南美洲",
+        "type": "mine",
+        "kt": 336.1,
+        "unit": "Mt",
+        "status": "ok",
+        "note": "CY2025 产量 336.1；销售 314.4；S11D 纪录 86 Mt",
+        "href": "https://www.stocktitan.net/sec-filings/VALE/6-k-a-vale-s-a-amended-current-report-foreign-issuer-184f2a79c17d.html",
+        "lat": -6.05,
+        "lon": -50.35
+      },
+      {
+        "n": 4,
+        "name": "Rio Tinto Pilbara",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "mine",
+        "kt": 327.3,
+        "unit": "Mt",
+        "status": "ok",
+        "note": "CY2025 产量 327.3 / 发运 326.2（100%）；集团含加拿大约 336.6",
+        "href": "https://markets.financialcontent.com/wss/article/bizwire-2026-1-20-rio-tinto-releases-fourth-quarter-2025-production-results",
+        "lat": -23.35,
+        "lon": 119.75
+      },
+      {
+        "n": 5,
+        "name": "印度（全国可用矿）",
+        "country": "印度",
+        "region": "亚洲",
+        "type": "mine",
+        "kt": 310,
+        "unit": "Mt",
+        "status": "ok",
+        "note": "USGS 2025e",
+        "href": "https://statranker.org/economy/resources-mining/iron-ore-mine-production-by-country-2026-2025-usgs-estimates/",
+        "lat": 22.1,
+        "lon": 85.4
+      },
+      {
+        "n": 6,
+        "name": "中国（全国可用矿）",
+        "country": "中国",
+        "region": "亚洲",
+        "type": "mine",
+        "kt": 290,
+        "unit": "Mt",
+        "status": "ok",
+        "note": "USGS 2025e；品位与进口依赖另计",
+        "href": "https://statranker.org/economy/resources-mining/iron-ore-mine-production-by-country-2026-2025-usgs-estimates/",
+        "lat": 40,
+        "lon": 118.5
+      },
+      {
+        "n": 7,
+        "name": "BHP WAIO",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "mine",
+        "kt": 256.9,
+        "unit": "Mt",
+        "status": "ok",
+        "note": "FY26 权益约 257；100% 约 291；集团铁矿 265 含 Samarco",
+        "href": "https://www.stocktitan.net/sec-filings/BHP/6-k-bhp-group-ltd-current-report-foreign-issuer-1e85ed4da612.html",
+        "lat": -22.8,
+        "lon": 118.7
+      },
+      {
+        "n": 8,
+        "name": "Fortescue 发运",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "type": "mine",
+        "kt": 198.4,
+        "unit": "Mt",
+        "status": "ok",
+        "note": "FY25 发运纪录 198.4（赤铁 191.3 + Iron Bridge 7.1）",
+        "href": "https://www.marketscreener.com/news/fortescue-june-2025-quarterly-production-report-ce7c5cd2d081fe20",
+        "lat": -22.15,
+        "lon": 119.4
+      },
+      {
+        "n": 9,
+        "name": "Simandou（规划/首船）",
+        "country": "几内亚",
+        "region": "非洲",
+        "type": "mine",
+        "kt": 0,
+        "unit": "Mtpa",
+        "status": "pend",
+        "note": "规划约 120 Mtpa；2025 末首船，爬坡中，年绝对吨待核",
+        "href": "https://www.marketscreener.com/news/china-receives-first-shipment-of-simandou-iron-ore-ce7e58dfdd8cf12c",
+        "lat": 8.5,
+        "lon": -8.9
+      },
+      {
+        "n": 10,
+        "name": "南非（全国可用矿）",
+        "country": "南非",
+        "region": "非洲",
+        "type": "mine",
+        "kt": 66,
+        "unit": "Mt",
+        "status": "ok",
+        "note": "USGS 2025e · Kumba 等",
+        "href": "https://statranker.org/economy/resources-mining/iron-ore-mine-production-by-country-2026-2025-usgs-estimates/",
+        "lat": -27.85,
+        "lon": 23
+      }
+    ],
+    "TRACK": [
+      {
+        "name": "Vale 铁矿",
+        "country": "巴西",
+        "region": "南美洲",
+        "tag": "集团",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "2024 327.7",
+        "latest": "336.1 Mt",
+        "latestNote": "+2.6%",
+        "actual": 336.1,
+        "actualAsOf": "CY2025",
+        "qNote": "销 314.4；2026 指引 335–345",
+        "trail": "Vale",
+        "href": "https://www.stocktitan.net/sec-filings/VALE/6-k-a-vale-s-a-amended-current-report-foreign-issuer-184f2a79c17d.html",
+        "status": "ok"
+      },
+      {
+        "name": "Rio Pilbara",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "tag": "矿山",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "2024 ~328",
+        "latest": "327.3 / 326.2",
+        "latestNote": "产/运",
+        "actual": 327.3,
+        "actualAsOf": "CY2025",
+        "qNote": "100% 口径",
+        "trail": "Rio",
+        "href": "https://markets.financialcontent.com/wss/article/bizwire-2026-1-20-rio-tinto-releases-fourth-quarter-2025-production-results",
+        "status": "ok"
+      },
+      {
+        "name": "BHP 铁矿",
+        "country": "澳大利亚/巴西",
+        "region": "大洋洲",
+        "tag": "集团",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "FY25 263",
+        "latest": "265 Mt",
+        "latestNote": "FY26 纪录",
+        "actual": 264.7,
+        "actualAsOf": "FY26",
+        "qNote": "WAIO 257；Samarco 7.8",
+        "trail": "BHP",
+        "href": "https://www.stocktitan.net/sec-filings/BHP/6-k-bhp-group-ltd-current-report-foreign-issuer-1e85ed4da612.html",
+        "status": "ok"
+      },
+      {
+        "name": "FMG 发运",
+        "country": "澳大利亚",
+        "region": "大洋洲",
+        "tag": "发运",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "FY24 191.6",
+        "latest": "198.4 Mt",
+        "latestNote": "+4%",
+        "actual": 198.4,
+        "actualAsOf": "FY25",
+        "qNote": "C1 约 17.99 USD/wmt",
+        "trail": "FMG",
+        "href": "https://www.marketscreener.com/news/fortescue-june-2025-quarterly-production-report-ce7c5cd2d081fe20",
+        "status": "ok"
+      },
+      {
+        "name": "全球粗钢",
+        "country": "全球",
+        "region": "全球",
+        "tag": "需求",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "2024 1887",
+        "latest": "1849 Mt",
+        "latestNote": "−2.0%",
+        "actual": 1849.4,
+        "actualAsOf": "CY2025",
+        "qNote": "中国 960.8",
+        "trail": "worldsteel",
+        "href": "https://worldsteel.org/media/press-releases/2026/december-2025-crude-steel-production-2025-global-crude-steel-production/",
+        "status": "ok"
+      },
+      {
+        "name": "中国 47 港进口矿库存",
+        "country": "中国",
+        "region": "亚洲",
+        "tag": "库存",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "—",
+        "latest": "171.36 Mt",
+        "latestNote": "2026-09-17",
+        "actual": 171.36,
+        "actualAsOf": "2026-09-17",
+        "qNote": "周+1.13",
+        "trail": "Mysteel",
+        "href": "https://www.mysteel.net/mysteel-surveys/5141529-survey-imported-io-port-stocks-analysis-20260918",
+        "status": "ok"
+      },
+      {
+        "name": "Simandou",
+        "country": "几内亚",
+        "region": "非洲",
+        "tag": "新建",
+        "reserve": "—",
+        "reserveStatus": "pend",
+        "init": "首船 2025-12",
+        "latest": "爬坡中",
+        "latestNote": "~120 Mtpa 规划",
+        "actual": null,
+        "actualAsOf": "2026",
+        "qNote": "年产量待核",
+        "trail": "Rio/WCS",
+        "href": "https://www.marketscreener.com/news/china-receives-first-shipment-of-simandou-iron-ore-ce7e58dfdd8cf12c",
+        "status": "pend"
+      }
+    ],
+    "SOURCES": [
+      {
+        "field": "USGS 可用矿 2025e",
+        "value": "澳 980 / 巴 420 / 印 310 / 中 290 Mt",
+        "align": "MCS 2026",
+        "status": "ok",
+        "detail": "17 国合计约 2546 Mt",
+        "links": [
+          {
+            "label": "StatRanker",
+            "url": "https://statranker.org/economy/resources-mining/iron-ore-mine-production-by-country-2026-2025-usgs-estimates/"
+          }
+        ]
+      },
+      {
+        "field": "Vale CY2025",
+        "value": "产 336.1 / 销 314.4 Mt",
+        "align": "公司 6-K",
+        "status": "ok",
+        "detail": "球团产 31.4 Mt",
+        "links": [
+          {
+            "label": "StockTitan 6-K",
+            "url": "https://www.stocktitan.net/sec-filings/VALE/6-k-a-vale-s-a-amended-current-report-foreign-issuer-184f2a79c17d.html"
+          }
+        ]
+      },
+      {
+        "field": "Rio Pilbara CY2025",
+        "value": "产 327.3 / 运 326.2 Mt",
+        "align": "公司",
+        "status": "ok",
+        "detail": "集团铁矿约 336.6",
+        "links": [
+          {
+            "label": "Rio Q4",
+            "url": "https://markets.financialcontent.com/wss/article/bizwire-2026-1-20-rio-tinto-releases-fourth-quarter-2025-production-results"
+          }
+        ]
+      },
+      {
+        "field": "BHP FY26",
+        "value": "铁矿 265；WAIO 257 Mt",
+        "align": "公司 6-K",
+        "status": "ok",
+        "detail": "WAIO 100% 约 291",
+        "links": [
+          {
+            "label": "BHP",
+            "url": "https://www.stocktitan.net/sec-filings/BHP/6-k-bhp-group-ltd-current-report-foreign-issuer-1e85ed4da612.html"
+          }
+        ]
+      },
+      {
+        "field": "FMG FY25",
+        "value": "发运 198.4 Mt",
+        "align": "公司季报",
+        "status": "ok",
+        "detail": "Iron Bridge 7.1",
+        "links": [
+          {
+            "label": "MarketScreener",
+            "url": "https://www.marketscreener.com/news/fortescue-june-2025-quarterly-production-report-ce7c5cd2d081fe20"
+          }
+        ]
+      },
+      {
+        "field": "worldsteel 2025",
+        "value": "粗钢 1849.4 Mt；中国 960.8",
+        "align": "协会",
+        "status": "ok",
+        "detail": "全球 −2%",
+        "links": [
+          {
+            "label": "worldsteel",
+            "url": "https://worldsteel.org/media/press-releases/2026/december-2025-crude-steel-production-2025-global-crude-steel-production/"
+          }
+        ]
+      },
+      {
+        "field": "中国港口库存",
+        "value": "171.36 Mt（2026-09-17）",
+        "align": "Mysteel",
+        "status": "ok",
+        "detail": "47 港",
+        "links": [
+          {
+            "label": "Mysteel",
+            "url": "https://www.mysteel.net/mysteel-surveys/5141529-survey-imported-io-port-stocks-analysis-20260918"
+          }
+        ]
+      }
+    ]
+  }
+};;;;
+
+let currentMetal=(new URLSearchParams(location.search).get('metal'))||'Cu';
+if(!METAL_DATA[currentMetal]) currentMetal='Cu';
+let CHANGES=[],INV=[],RANK=[],TRACK=[],SOURCES=[];
+let region='全球',mode='project',sortKey='actual',mapFilter='all';
+let map,markerLayer,markersByN={},mapReady=false;
+function chip(st){return st==='ok'?'<span class="chip ok">已核验</span>':st==='warn'?'<span class="chip warn">口径注意</span>':'<span class="chip pend">待核</span>';}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),2200);}
+async function copyText(text){try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(text);else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}toast('已复制链接');}catch(e){toast('复制失败');}}
+function openUrl(url){if(!url){toast('暂无外链');return;}const w=window.open(url,'_blank','noopener,noreferrer');toast(w?'已尝试打开外链':'预览可能拦截弹窗 — 请复制链接');}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer').setAttribute('aria-hidden','true');const bd=document.getElementById('backdrop');bd.classList.remove('open');setTimeout(()=>{bd.hidden=true;},200);document.querySelectorAll('.rank button.active, table.track tr.active, .sources tr.active').forEach(el=>el.classList.remove('active'));}
+function openDrawer({title,sub,status,blocks,links}){
+  document.getElementById('d-title').textContent=title||'详情';
+  document.getElementById('d-sub').innerHTML=`${sub||''} ${status?chip(status):''}`;
+  const body=document.getElementById('d-body');
+  body.innerHTML=(blocks||[]).map(b=>`<div class="block"><div class="label">${b.label}</div><div class="${b.big?'value':'note'}">${b.text||''}</div></div>`).join('')
+    +(links&&links.length?`<div class="block"><div class="label">来源 URL</div>${links.map(l=>`<div style="margin-bottom:10px"><div style="font-weight:700;font-size:12px;margin-bottom:4px">${l.label||'链接'}</div><div class="url-box">${l.url}</div><div style="display:flex;gap:8px;margin-top:8px"><button type="button" class="btn primary btn-open" data-u="${encodeURIComponent(l.url)}">尝试打开</button><button type="button" class="btn ghost btn-copy" data-u="${encodeURIComponent(l.url)}">复制</button></div></div>`).join('')}</div>`:'<div class="block"><div class="note">暂无公开 URL</div></div>');
+  const ft=document.getElementById('d-ft');const p=links&&links[0];
+  ft.innerHTML=`${p?`<button type="button" class="btn primary" id="ft-o">打开主来源</button><button type="button" class="btn ghost" id="ft-c">复制主来源</button>`:''}<button type="button" class="btn" id="ft-x">关闭</button>`;
+  if(p){document.getElementById('ft-o').onclick=()=>openUrl(p.url);document.getElementById('ft-c').onclick=()=>copyText(p.url);}
+  document.getElementById('ft-x').onclick=closeDrawer;
+  body.querySelectorAll('.btn-open').forEach(b=>b.onclick=()=>openUrl(decodeURIComponent(b.dataset.u)));
+  body.querySelectorAll('.btn-copy').forEach(b=>b.onclick=()=>copyText(decodeURIComponent(b.dataset.u)));
+  const bd=document.getElementById('backdrop');bd.hidden=false;
+  requestAnimationFrame(()=>{bd.classList.add('open');document.getElementById('drawer').classList.add('open');});
+}
+function applyTheme(m){
+  const t=THEMES[m]; const r=document.documentElement.style;
+  r.setProperty('--accent',t.accent); r.setProperty('--accent-2',t.accent2);
+  r.setProperty('--banner-bg',t.banner_bg); r.setProperty('--banner-bd',t.banner_bd); r.setProperty('--banner-fg',t.banner_fg);
+  r.setProperty('--map-bg',t.map_bg); r.setProperty('--hover',t.hover); r.setProperty('--active-row',t.active_row); r.setProperty('--logo-grad',t.grad);
+  document.getElementById('kicker').textContent=t.kicker;
+  document.getElementById('page-title').textContent=t.title;
+  document.getElementById('page-lead').textContent=t.lead;
+  document.getElementById('banner-text').innerHTML='<strong>地图：</strong>'+t.banner+' 默认 <b>Esri World Street</b>。';
+  document.getElementById('rank-h').innerHTML=t.rank_h+' <em style="font-weight:600;color:var(--muted);font-size:11px">点击飞到地图</em>';
+  document.getElementById('bench1-lbl').textContent=t.bench1_lbl;
+  document.getElementById('bench1-val').textContent=t.bench1_val;
+  document.getElementById('bench1-sub').textContent=t.bench1_sub;
+  document.getElementById('meta-pills').innerHTML=`<span class="pill">${t.pills}</span><span class="pill">样本点 <strong id="mine-count">—</strong></span><span class="pill">底图 <strong>Esri</strong></span>`;
+  document.getElementById('rail-note').innerHTML=`侧栏切换 Cu/Al/Pb·Zn/Ni/Sn/Li/Fe<br>默认底图 Esri World Street<br>核验日 2026-09-18 · <strong>${t.note}</strong>`;
+  document.getElementById('foot-left').textContent='矿端公开核验台 · 统一页 · '+t.note;
+  document.title='矿端公开核验台 · '+(m==='PbZn'?'铅锌':m==='Sn'?'锡':m==='Li'?'锂':m==='Fe'?'铁':m);
+}
+function unitLabel(r){if(r.unit)return r.unit; if(currentMetal==='Al'&&r.type==='bauxite')return 'Mt'; return 'kt';}
+function passFilter(r){
+  if(mapFilter==='all')return true; if(mapFilter==='ok')return r.status==='ok';
+  if(mapFilter==='bauxite')return r.type==='bauxite'; if(mapFilter==='smelter')return r.type==='smelter';
+  if(mapFilter==='mine')return r.type==='mine'||r.type==='brine'||(!r.type&&r.lat!=null);
+  if(['南美洲','北美洲','非洲','亚洲','大洋洲','欧洲'].includes(mapFilter))return r.region===mapFilter;
+  return true;
+}
+function rPx(r){const v=r.kt||0; if(!v)return 11; if(currentMetal==='Al'&&r.type==='bauxite')return Math.max(10,Math.min(30,Math.sqrt(v)*2.2)); if(currentMetal==='Fe'||r.unit==='Mt'||r.unit==='Mtpa')return Math.max(10,Math.min(32,Math.sqrt(v)*0.9)); if(currentMetal==='Li'&&v>200)return Math.max(10,Math.min(28,Math.sqrt(v)*0.35)); return Math.max(10,Math.min(28,Math.sqrt(v)*1.1));}
+function colorOf(st){return st==='ok'?'#047857':st==='warn'?'#b45309':'#64748b';}
+function mineIcon(r){const s=rPx(r),c=colorOf(r.status),ring=r.type==='smelter'?'2px dashed #fff':'2px solid #fff'; return L.divIcon({className:'',iconSize:[s,s],iconAnchor:[s/2,s/2],html:`<div style="width:${s}px;height:${s}px;border-radius:50%;background:${c};border:${ring};box-shadow:0 1px 6px rgba(0,0,0,.35);opacity:.92"></div>`});}
+function openMine(r,el){document.querySelectorAll('.rank button.active').forEach(x=>x.classList.remove('active')); if(el)el.classList.add('active'); if(map&&r.lat!=null){map.flyTo([r.lat,r.lon],Math.max(map.getZoom(),5),{duration:.6}); const m=markersByN[r.n]; if(m)m.openPopup();} openDrawer({title:r.name,sub:`${r.country||''} · ${r.region||''} · #${r.n}`,status:r.status,blocks:[{label:'产量',big:true,text:`${r.approx?'≈':''}${r.kt!=null?Number(r.kt).toLocaleString(undefined,{maximumFractionDigits:3}):'—'} ${unitLabel(r)}`},{label:'坐标',text:r.lat!=null?`${r.lat.toFixed(3)}, ${r.lon.toFixed(3)}`:'—'},{label:'说明',text:r.note||''}],links:r.href?[{label:'主来源',url:r.href}]:[]});}
+function renderMapMarkers(){if(!markerLayer)return; markerLayer.clearLayers(); markersByN={}; const list=RANK.filter(r=>r.lat!=null&&passFilter(r)); list.forEach(r=>{const m=L.marker([r.lat,r.lon],{icon:mineIcon(r),title:r.name}); const pop=`<div class="mine-pop"><h4 style="margin:0 0 4px">${r.name}</h4><p style="margin:0;font-size:12px">${r.country||''} · ${r.kt!=null?r.kt:'—'} ${unitLabel(r)}</p><p style="margin:4px 0 0;font-size:12px;color:#475569">${r.note||''}</p><button type="button" class="btn primary" style="margin-top:8px;padding:4px 8px;font-size:11px" data-n="${r.n}">打开来源</button></div>`; m.bindPopup(pop,{maxWidth:280}); m.on('popupopen',e=>{const btn=e.popup.getElement().querySelector('button[data-n]'); if(btn)btn.onclick=()=>openMine(r,document.querySelector(`#rank-list button[data-n="${r.n}"]`));}); m.addTo(markerLayer); markersByN[r.n]=m;}); document.getElementById('vis-count').textContent=list.length; document.getElementById('vis-sum').textContent=list.reduce((s,r)=>s+(r.kt||0),0).toLocaleString(undefined,{maximumFractionDigits:0}); const mc=document.getElementById('mine-count'); if(mc)mc.textContent=RANK.length; if(list.length){try{map.fitBounds(L.featureGroup(Object.values(markersByN)).getBounds().pad(0.18),{maxZoom:5});}catch(e){}}}
+function buildFilters(){const el=document.getElementById('map-filters'); let btns=[{f:'all',l:'全部'},{f:'ok',l:'仅已核验'}]; if(currentMetal==='Al')btns.splice(1,0,{f:'bauxite',l:'铝土矿'},{f:'smelter',l:'原铝枢纽'}); if(currentMetal==='PbZn'||currentMetal==='Ni')btns.splice(1,0,{f:'mine',l:'矿山'},{f:'smelter',l:'冶炼/公司'}); if(currentMetal==='Cu')btns=btns.concat([{f:'南美洲',l:'南美'},{f:'北美洲',l:'北美'},{f:'非洲',l:'非洲'},{f:'亚洲',l:'亚洲'}]); if(currentMetal==='Al')btns=btns.concat([{f:'非洲',l:'非洲'},{f:'大洋洲',l:'大洋洲'},{f:'亚洲',l:'亚洲'},{f:'南美洲',l:'南美'}]); if(currentMetal==='PbZn'||currentMetal==='Ni')btns=btns.concat([{f:'北美洲',l:'北美'},{f:'大洋洲',l:'大洋洲'},{f:'欧洲',l:'欧洲'},{f:'亚洲',l:'亚洲'},{f:'非洲',l:'非洲'},{f:'南美洲',l:'南美'}]); el.innerHTML=btns.map((b,i)=>`<button type="button" class="${i===0?'on':''}" data-f="${b.f}">${b.l}</button>`).join(''); mapFilter='all';}
+function buildRegions(){const set=new Set(TRACK.map(r=>r.region).filter(Boolean)); const regs=['全球',...[...set].sort()]; document.getElementById('regions').innerHTML=regs.map((r,i)=>`<button type="button" class="${i===0?'active':''}" data-r="${r}">${r}</button>`).join(''); region='全球'; document.querySelectorAll('#regions button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#regions button').forEach(x=>x.classList.toggle('active',x===b)); region=b.dataset.r; renderTrack();});}
+function renderPanels(){const th=THEMES[currentMetal]; document.getElementById('changes').innerHTML=CHANGES.map(c=>`<button type="button" class="item" data-id="${c.id}"><div><div class="when">${c.when||''}</div><div class="title">${c.title||''}</div><div class="desc">${c.desc||''}</div><div class="hint">打开来源 →</div></div><div class="tag">${c.tag||''}</div></button>`).join('')||'<div class="meta">暂无</div>'; document.getElementById('inv-list').innerHTML=INV.map(x=>`<button type="button" data-id="${x.id}"><div class="ex">${x.ex} <span class="chip ok">${th.inv_chip}</span></div><div class="val">${x.val} <small>${x.unit||'kt'}</small></div><div class="lbl">${x.lbl||''}</div><div class="lbl" style="margin-top:4px">${x.foot||''}</div></button>`).join('')||'<div class="meta">暂无</div>'; document.getElementById('rank-list').innerHTML=RANK.map(r=>`<button type="button" data-n="${r.n}"><div class="n">${String(r.n).padStart(2,'0')}</div><div><div class="nm">${r.name}</div><div class="ct">${r.country||''} · ${r.note||''}</div><div style="margin-top:4px">${chip(r.status)}</div></div><div class="kt">${r.kt!=null?((r.approx?'≈':'')+Number(r.kt).toLocaleString(undefined,{maximumFractionDigits:2})):'—'} <small>${unitLabel(r)}</small></div><div style="color:var(--accent);font-weight:800">›</div></button>`).join('')||'<div class="meta" style="padding:16px">无数据</div>'; document.getElementById('src-body').innerHTML=SOURCES.map((s,i)=>`<tr data-i="${i}"><td><strong>${s.field}</strong></td><td>${s.value}</td><td>${s.align}</td><td>${chip(s.status)} ›</td></tr>`).join('');}
+function filtered(){const q=document.getElementById('q').value.trim().toLowerCase(); let rows=TRACK.filter(r=>region==='全球'||r.region===region); if(q)rows=rows.filter(r=>(r.name+(r.country||'')+(r.region||'')+(r.tag||'')).toLowerCase().includes(q)); rows=[...rows]; if(sortKey==='name')rows.sort((a,b)=>a.name.localeCompare(b.name)); else rows.sort((a,b)=>(b.actual||0)-(a.actual||0)); if(mode==='region')rows.sort((a,b)=>(a.region||'').localeCompare(b.region||'')||a.name.localeCompare(b.name)); return rows;}
+function openTrack(r,tr){document.querySelectorAll('table.track tr.active').forEach(x=>x.classList.remove('active')); if(tr)tr.classList.add('active'); openDrawer({title:r.name,sub:`${r.country||''} · ${r.region||''} · ${r.tag||''}`,status:r.status,blocks:[{label:'储量',text:r.reserve||'—'},{label:'指引',text:`${r.init||'—'} → ${r.latest||'—'} · ${r.latestNote||''}`},{label:'实际',text:r.actual==null?'—':`${r.actual} · ${r.actualAsOf||''}`},{label:'轨迹',text:r.trail||'—'}],links:r.href?[{label:r.trail||'来源',url:r.href}]:[]});}
+function renderTrack(){const rows=filtered(); document.getElementById('track-n').textContent=TRACK.length; document.getElementById('tbody').innerHTML=rows.map((r,i)=>`<tr data-i="${i}" tabindex="0"><td><div class="name">${r.name}</div><div class="meta">${r.country||''} · ${r.region||''} · ${r.tag||''}</div><div style="margin-top:4px">${chip(r.status)}</div></td><td><div class="num">${r.reserve||'—'}</div></td><td><div class="range">${r.init||'—'}</div><div class="meta">${r.initDate||''}</div></td><td><div class="range">${r.latest||'—'}</div><div class="badge">${r.latestNote||''}</div></td><td><div class="meta">${r.yoyNote||'—'}</div></td><td><div class="meta">${r.adjNote||(r.adjKt!=null?r.adjKt:'—')}</div></td><td>${r.actual==null?'<div class="meta">—</div>':`<div class="actual">${Number(r.actual).toLocaleString(undefined,{maximumFractionDigits:3})}</div><div class="meta">${r.actualAsOf||''}</div><div class="meta">${r.qNote||''}</div>`}</td><td style="color:var(--accent);font-weight:800">›</td></tr>`).join('')||'<tr><td colspan="8" class="meta" style="padding:20px">无匹配</td></tr>'; document.querySelectorAll('#tbody tr[data-i]').forEach(tr=>{const r=rows[+tr.dataset.i]; tr.onclick=()=>openTrack(r,tr);});}
+function loadMetal(m,pushUrl=true){if(!METAL_DATA||!METAL_DATA[m]){toast('无此品种数据');return;} currentMetal=m; const d=METAL_DATA[m]; CHANGES=d.CHANGES||[]; INV=d.INV||[]; RANK=d.RANK||[]; TRACK=d.TRACK||[]; SOURCES=d.SOURCES||[]; applyTheme(m); document.querySelectorAll('#metal-switch button[data-metal]').forEach(b=>b.classList.toggle('on',b.dataset.metal===m)); buildFilters(); buildRegions(); renderPanels(); renderTrack(); if(mapReady)renderMapMarkers(); if(pushUrl){try{const u=new URL(location.href); u.searchParams.set('metal',m); history.replaceState(null,'',u);}catch(e){}} closeDrawer(); toast('已切换：'+(m==='PbZn'?'Pb/Zn':m)+` · 榜单 ${RANK.length}`);}
+function initMap(){if(typeof L==='undefined'){document.getElementById('leaflet-map').innerHTML='<div style="padding:24px;color:#b91c1c"><b>Leaflet 未加载</b></div>';return;} map=L.map('leaflet-map',{worldCopyJump:true,scrollWheelZoom:true,minZoom:2,maxZoom:12}).setView([10,20],2.2); const bases=[{name:'Esri World Street',url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',opts:{maxZoom:12,attribution:'Tiles &copy; Esri'}},{name:'Carto Positron',url:'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',opts:{subdomains:'abcd',maxZoom:12,attribution:'&copy; OSM &copy; CARTO'}},{name:'Esri World Imagery',url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',opts:{maxZoom:12,attribution:'Tiles &copy; Esri'}},{name:'高德路网（国内）',url:'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',opts:{subdomains:'1234',maxZoom:12,attribution:'&copy; 高德'}},{name:'OSM.org（可能需代理）',url:'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',opts:{maxZoom:12,attribution:'&copy; OSM'}}]; let activeTile=null; function setBase(i){if(activeTile)map.removeLayer(activeTile); const b=bases[i]; activeTile=L.tileLayer(b.url,b.opts).addTo(map); document.getElementById('map-base-hint').textContent='底图：'+b.name+' · 拖拽缩放'; const sel=document.getElementById('base-sel'); if(sel)sel.value=String(i);} setBase(0); const foot=document.querySelector('.map-foot'); if(foot&&!document.getElementById('base-sel')){const wrap=document.createElement('label'); wrap.style.cssText='margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)'; wrap.innerHTML=`底图 <select id="base-sel" style="border:1px solid var(--line);border-radius:8px;padding:4px 8px;background:#fff">${bases.map((b,i)=>`<option value="${i}">${b.name}</option>`).join('')}</select>`; foot.appendChild(wrap); document.getElementById('base-sel').onchange=e=>setBase(+e.target.value);} let failN=0; map.on('tileerror',()=>{failN++; if(failN===6){toast('底图失败，切换下一源…'); const cur=+(document.getElementById('base-sel')?.value||0); if(cur+1<bases.length)setBase(cur+1); failN=0;}}); markerLayer=L.layerGroup().addTo(map); mapReady=true; setTimeout(()=>map.invalidateSize(),200); setTimeout(()=>map.invalidateSize(),600);}
+document.getElementById('metal-switch').addEventListener('click',e=>{const b=e.target.closest('button[data-metal]'); if(!b||b.disabled)return; loadMetal(b.dataset.metal);});
+document.getElementById('map-filters').addEventListener('click',e=>{const b=e.target.closest('button[data-f]'); if(!b)return; document.querySelectorAll('#map-filters button').forEach(x=>x.classList.toggle('on',x===b)); mapFilter=b.dataset.f; renderMapMarkers();});
+document.getElementById('rank-list').addEventListener('click',e=>{const b=e.target.closest('button[data-n]'); if(!b)return; openMine(RANK.find(x=>String(x.n)===b.dataset.n),b);});
+document.getElementById('changes').addEventListener('click',e=>{const b=e.target.closest('.item'); if(!b)return; const c=CHANGES.find(x=>x.id===b.dataset.id); if(!c)return; openDrawer({title:c.title,sub:c.when,status:c.status,blocks:[{label:'摘要',text:c.desc},{label:'核验',text:c.detail||c.desc}],links:c.links||[]});});
+document.getElementById('inv-list').addEventListener('click',e=>{const b=e.target.closest('button[data-id]'); if(!b)return; const x=INV.find(i=>i.id===b.dataset.id); if(!x)return; openDrawer({title:x.ex+' 库存',sub:x.lbl,status:x.status,blocks:[{label:'数值',big:true,text:x.val+' '+(x.unit||'kt')},{label:'说明',text:x.extra||''}],links:x.links||[]});});
+document.getElementById('bench').onclick=()=>{const s=SOURCES[0]; if(s)openDrawer({title:s.field,sub:s.align,status:s.status,blocks:[{label:'采用值',big:true,text:s.value},{label:'说明',text:s.detail||s.align}],links:s.links||[]});};
+document.getElementById('src-body').addEventListener('click',e=>{const tr=e.target.closest('tr[data-i]'); if(!tr)return; document.querySelectorAll('.sources tr.active').forEach(x=>x.classList.remove('active')); tr.classList.add('active'); const s=SOURCES[+tr.dataset.i]; openDrawer({title:s.field,sub:s.align,status:s.status,blocks:[{label:'采用值',big:true,text:s.value},{label:'说明',text:s.detail||s.align}],links:s.links||[]});});
+document.getElementById('q').oninput=renderTrack; document.getElementById('sort-key').onchange=e=>{sortKey=e.target.value;renderTrack();};
+document.querySelectorAll('#sort-mode button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#sort-mode button').forEach(x=>x.classList.toggle('active',x===b)); mode=b.dataset.mode; renderTrack();});
+document.getElementById('btn-export').onclick=()=>{const rows=filtered(); const h='name,country,region,tag,init,latest,actual,source\\n'; const body=rows.map(r=>[r.name,r.country||'',r.region||'',r.tag||'',r.init||'',r.latest||'',r.actual??'',r.href||''].map(v=>`"${v}"`).join(',')).join('\\n'); const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([h+body],{type:'text/csv'})); a.download=`mine-desk-${currentMetal}-track.csv`; a.click();};
+document.getElementById('d-close').onclick=closeDrawer; document.getElementById('backdrop').onclick=closeDrawer;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+initMap(); loadMetal(currentMetal,false);
+
+</script>
+</body>
+</html>

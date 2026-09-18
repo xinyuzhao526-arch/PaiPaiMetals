@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>矿端公开核验台 · 铝</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+if(typeof L==="undefined"){
+  document.write('<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/leaflet/1.9.4/leaflet.min.css">');
+  document.write('<script src="https://cdn.bootcdn.net/ajax/libs/leaflet/1.9.4/leaflet.min.js"><\\/script>');
+}
+</script>
+<style>
+:root{
+  --ink:#1a2332; --muted:#5a6b7c; --line:#e2e8f0; --bg:#f1f5f9; --paper:#fff;
+  --accent:#0f766e; --accent-2:#115e59; --ok:#047857; --warn:#b45309; --pend:#64748b; --neg:#b91c1c;
+  --rail:248px; --shadow:0 8px 30px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 "Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+button,input,select{font:inherit}
+a{color:var(--accent);font-weight:600}
+.shell{display:grid;grid-template-columns:var(--rail) 1fr;min-height:100vh}
+.rail{background:#0f172a;color:#e2e8f0;padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.logo{display:flex;gap:10px;align-items:center;padding:2px 6px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(145deg,#2dd4bf,#0f766e 60%,#115e59);display:grid;place-items:center}
+.logo-mark svg{width:20px;height:20px}
+.logo b{display:block;font-size:14px}
+.logo span{display:block;font-size:11px;color:#94a3b8;margin-top:2px}
+.metal-switch{margin-top:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.metal-switch a,.metal-switch button{border:1px solid rgba(148,163,184,.35);background:rgba(255,255,255,.04);color:#cbd5e1;border-radius:8px;padding:7px 0;font-size:11px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;display:block}
+.metal-switch a.on,.metal-switch button.on{background:#0f766e;border-color:#0f766e;color:#fff}
+.metal-switch button:disabled{opacity:.35;cursor:not-allowed}
+.rail nav{margin-top:16px;display:flex;flex-direction:column;gap:4px}
+.rail nav a{display:block;color:#cbd5e1;text-decoration:none;padding:9px 11px;border-radius:9px;font-weight:550}
+.rail nav a:hover,.rail nav a.active{background:rgba(45,212,191,.16);color:#fff}
+.rail .note{margin-top:20px;padding:11px;border-radius:10px;background:rgba(255,255,255,.04);font-size:11.5px;color:#94a3b8;line-height:1.55}
+.main{padding:18px 22px 48px;max-width:1320px}
+.top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px}
+.kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 6px}
+h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
+.lead{margin:8px 0 0;color:var(--muted);max-width:58ch}
+.meta-pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-size:11px;padding:5px 10px;border-radius:999px;background:var(--paper);border:1px solid var(--line);color:var(--muted)}
+.pill strong{color:var(--ink)}
+.banner{background:#f0fdfa;border:1px solid #99f6e4;border-radius:12px;padding:11px 13px;font-size:12.5px;line-height:1.65;color:#134e4a;margin-bottom:14px}
+.chip{display:inline-flex;align-items:center;font-size:10.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-weight:700}
+.chip.ok{background:#ecfdf5;border-color:#a7f3d0;color:var(--ok)}
+.chip.warn{background:#fffbeb;border-color:#fde68a;color:var(--warn)}
+.chip.pend{background:#f1f5f9;border-color:#cbd5e1;color:var(--pend)}
+.grid-2{display:grid;grid-template-columns:1.05fr 1fr;gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.card h2{margin:0 0 10px;font-size:15px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.card h2 em{font-style:normal;font-size:11px;font-weight:600;color:var(--muted)}
+.item{width:100%;border:1px solid transparent;background:#f8fafc;border-radius:11px;padding:11px;margin:0 0 8px;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px}
+.item:hover{border-color:#5eead4;background:#f0fdfa}
+.item .when{font-size:11px;color:var(--muted)}
+.item .title{font-weight:700;margin-top:2px}
+.item .desc{font-size:12.5px;color:#475569;margin-top:4px}
+.item .tag{font-weight:800;color:var(--accent-2);font-size:13px;text-align:right}
+.item .hint{font-size:10px;color:var(--accent);margin-top:6px;font-weight:600}
+.inv{display:grid;gap:8px}
+.inv button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px;text-align:left;cursor:pointer}
+.inv button:hover{border-color:#2dd4bf;box-shadow:0 0 0 3px rgba(15,118,110,.1)}
+.inv .ex{display:flex;justify-content:space-between;font-size:12px;font-weight:700}
+.inv .val{font-size:22px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin:6px 0 2px}
+.inv .val small{font-size:12px;color:var(--muted);font-weight:600}
+.inv .lbl{font-size:11px;color:var(--muted)}
+.bench{margin-top:10px;border:1px dashed #5eead4;background:#f0fdfa;border-radius:11px;padding:12px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.bench strong{font-size:20px;letter-spacing:-.03em}
+.map-wrap{display:grid;grid-template-columns:1.55fr .85fr;gap:14px;margin:14px 0}
+.map-card{padding:0;overflow:hidden;min-height:520px;display:flex;flex-direction:column}
+.map-toolbar{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center;background:#fff;z-index:2}
+.map-toolbar .filters{display:flex;gap:6px;flex-wrap:wrap}
+.map-toolbar button{border:1px solid var(--line);background:#f8fafc;border-radius:999px;padding:6px 10px;font-size:11px;cursor:pointer;font-weight:650}
+.map-toolbar button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.map-hint{font-size:11px;color:var(--muted)}
+#leaflet-map{flex:1;min-height:420px;width:100%;background:#ccfbf1}
+.map-foot{padding:10px 14px;border-top:1px solid var(--line);display:flex;gap:14px;flex-wrap:wrap;font-size:12px;align-items:center}
+.rank{max-height:560px;overflow:auto;padding:0}
+.rank-h{position:sticky;top:0;background:#fff;padding:14px 16px;border-bottom:1px solid var(--line);font-weight:800;z-index:2}
+.rank button{width:100%;border:0;border-bottom:1px solid #eef2f6;background:transparent;padding:12px 14px;display:grid;grid-template-columns:28px 1fr auto 14px;gap:8px;text-align:left;cursor:pointer}
+.rank button:hover,.rank button.active{background:#f0fdfa}
+.rank .n{color:var(--muted);font-variant-numeric:tabular-nums;font-size:12px}
+.rank .nm{font-weight:750}
+.rank .ct{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.rank .kt{font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
+.rank .kt small{color:var(--muted);font-weight:600;font-size:11px}
+.mine-pop h4{margin:0 0 4px;font-size:14px}
+.mine-pop p{margin:0;font-size:12px;color:#475569;line-height:1.45}
+.mine-pop .pop-actions{margin-top:8px;display:flex;gap:6px}
+.section{margin-top:26px}
+.section h2{margin:0 0 6px;font-size:18px;letter-spacing:-.02em}
+.section p.sub{margin:0 0 12px;color:var(--muted);font-size:13px}
+.kpis{display:grid;grid-template-columns:1.2fr 1fr .7fr;gap:12px;margin-bottom:12px}
+.kpi label{display:block;font-size:11px;color:var(--muted)}
+.kpi strong{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+.toolbar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:8px 0 10px}
+.search{border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-width:220px;background:#fff}
+.seg{display:flex;background:#e2e8f0;border-radius:10px;padding:3px}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:8px;cursor:pointer;color:var(--muted)}
+.seg button.active{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.regions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.regions button{border:0;background:0;cursor:pointer;padding:4px 2px;color:var(--muted);font-size:12.5px}
+.regions button.active{color:var(--accent-2);font-weight:800;border-bottom:2px solid var(--accent)}
+.table-wrap{overflow:auto;border-radius:14px;border:1px solid var(--line);background:#fff}
+table.track{width:100%;border-collapse:separate;border-spacing:0;min-width:1080px}
+table.track th{background:#0f172a;color:#e2e8f0;font-size:11px;font-weight:600;text-align:left;padding:12px;position:sticky;top:0}
+table.track th small{display:block;opacity:.7;font-weight:400;margin-top:2px}
+table.track td{padding:12px;border-bottom:1px solid #eef2f6;vertical-align:top;font-size:12.5px}
+table.track tbody tr{cursor:pointer}
+table.track tbody tr:hover td{background:#f8fafc}
+table.track tbody tr.active td{background:#ccfbf1}
+.name{font-weight:800;color:var(--accent-2)}
+.meta{color:var(--muted);font-size:11.5px;margin-top:2px}
+.range{color:#0f766e;font-weight:750;font-variant-numeric:tabular-nums}
+.num{font-variant-numeric:tabular-nums;font-weight:650}
+.badge{display:inline-block;margin-top:4px;font-size:10.5px;background:#f1f5f9;border-radius:6px;padding:2px 6px;color:#475569}
+.delta-neg{color:var(--neg);font-weight:800}
+.actual{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:650}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{color:var(--accent-2);border-color:#99f6e4;background:#f0fdfa}
+.sources{margin-top:26px}
+.sources table{width:100%;border-collapse:collapse;font-size:12.5px}
+.sources th,.sources td{border-bottom:1px solid #eef2f6;padding:10px 8px;text-align:left;vertical-align:top}
+.sources th{color:var(--muted);font-size:11px}
+.sources tbody tr{cursor:pointer}
+.sources tbody tr:hover{background:#f8fafc}
+.sources tbody tr.active{background:#ccfbf1}
+footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:5000;opacity:0;pointer-events:none;transition:opacity .18s}
+.backdrop.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(440px,100%);background:#fff;z-index:5001;box-shadow:-12px 0 40px rgba(0,0,0,.18);transform:translateX(100%);transition:transform .2s ease;display:flex;flex-direction:column}
+.drawer.open{transform:translateX(0)}
+.drawer-hd{padding:16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px}
+.drawer-hd h3{margin:0;font-size:17px}
+.drawer-hd .sub{font-size:12px;color:var(--muted);margin-top:4px}
+.drawer-bd{padding:16px;overflow:auto;flex:1}
+.drawer-bd .label{font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px}
+.drawer-bd .value{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.drawer-bd .note{font-size:13px;color:#334;line-height:1.55}
+.drawer-bd .block{margin-bottom:14px}
+.url-box{font-size:11px;word-break:break-all;background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:10px}
+.drawer-ft{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(16px);background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:12.5px;z-index:6000;opacity:0;pointer-events:none;transition:.2s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.leaflet-container{font:inherit}
+@media(max-width:1100px){
+  .shell{grid-template-columns:1fr}
+  .rail{position:relative;height:auto}
+  .grid-2,.map-wrap,.kpis{grid-template-columns:1fr}
+  #leaflet-map{min-height:360px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="logo">
+      <div class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 16l4-8 4 5 3-4 5 7" stroke="#ccfbf1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="2" fill="#5eead4"/></svg>
+      </div>
+      <div>
+        <b>矿端公开核验台</b>
+        <span>多金属 · 公开源</span>
+      </div>
+    </div>
+    <div class="metal-switch" aria-label="金属品种">
+      <a href="metals-atlas-copper-loggedin.html" data-metal="Cu">Cu</a>
+      <a class="on" href="metals-atlas-aluminum-loggedin.html" data-metal="Al">Al</a>
+      <a href="metals-atlas-pbzn-loggedin.html">Pb/Zn</a>
+      <a href="metals-atlas-unified.html?metal=Ni" style="border:1px solid rgba(148,163,184,.35);background:rgba(255,255,255,.04);color:#cbd5e1;border-radius:8px;padding:7px 0;font-size:11px;font-weight:700;text-align:center;text-decoration:none;display:block">Ni</a>
+      <button type="button" disabled title="待补充">Sn</button>
+      <button type="button" disabled title="待补充">Li</button>
+      <button type="button" disabled title="待补充">Fe</button>
+      <button type="button" disabled title="待补充">…</button>
+    </div>
+    <nav>
+      <a class="active" href="#top">总览</a>
+      <a href="#map">世界地图</a>
+      <a href="#events">供给事件</a>
+      <a href="#inv">交易所库存</a>
+      <a href="#track">产量追踪</a>
+      <a href="#sources">来源总表</a>
+    </nav>
+    <div class="note">
+      铝链：铝土矿 → 氧化铝 → 原铝<br>
+      底图 Carto/Esri/高德可切换<br>
+      核验日 2026-09-18 · 当前：铝<br>
+      <a href="metals-atlas-unified.html?metal=Al" style="color:#5eead4">→ 打开多金属统一页</a>
+    </div>
+  </aside>
+
+  <div class="main" id="top">
+    <div class="top">
+      <div>
+        <p class="kicker">Public aluminium verification desk</p>
+        <h1>铝 · 全链公开核验</h1>
+        <p class="lead">与铜页同框架：Leaflet 真实底图、抽屉来源、可复制链接。铝更强调<strong>三层口径</strong>——铝土矿、氧化铝、原铝（冶炼），勿把矿石吨与金属吨混排。</p>
+      </div>
+      <div class="meta-pills">
+        <span class="pill">品种 <strong>Al</strong></span>
+        <span class="pill">全球原铝 2025 <strong>73.8 Mt</strong></span>
+        <span class="pill">中国产能顶 <strong>~45 Mt</strong></span>
+        <span class="pill">样本点 <strong id="mine-count">—</strong></span>
+      </div>
+    </div>
+
+    <div class="banner">
+      <strong>口径：</strong>地图默认展示<strong>大型铝土矿山 / 关键冶炼枢纽</strong>（单位见各点说明）。全球原铝产量采用 IAI 口径；中国产量注意 NBS 与机构转述差异。底图失败时可选手动切换「高德 / Esri」。
+      <span class="chip ok">已核验</span>
+      <span class="chip warn">口径注意</span>
+      <span class="chip pend">待核</span>
+    </div>
+
+    <div class="grid-2" id="events">
+      <div class="card">
+        <h2>近期供给事件 <em>点击打开来源</em></h2>
+        <div id="changes"></div>
+      </div>
+      <div class="card" id="inv">
+        <h2>交易所库存 · 原铝 <em>kt</em></h2>
+        <div class="inv" id="inv-list"></div>
+        <div class="bench" id="bench" role="button" tabindex="0">
+          <div>
+            <div style="font-size:11px;color:var(--muted)">全球原铝产量 2025 · IAI</div>
+            <strong>73.784 Mt</strong>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">同比约 +1.1% · 增速五年低位</div>
+          </div>
+          <span class="chip ok">IAI</span>
+        </div>
+        <div class="bench" id="bench2" role="button" tabindex="0" style="margin-top:8px">
+          <div>
+            <div style="font-size:11px;color:var(--muted)">中国 2025 原铝 · 机构/局端对照</div>
+            <strong>~44.3–45.0 Mt</strong>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">逼近 ~45 Mt 产能天花板</div>
+          </div>
+          <span class="chip warn">口径注意</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="map-wrap" id="map">
+      <div class="card map-card">
+        <div class="map-toolbar">
+          <div class="filters" id="map-filters">
+            <button type="button" class="on" data-f="all">全部</button>
+            <button type="button" data-f="bauxite">铝土矿</button>
+            <button type="button" data-f="smelter">原铝枢纽</button>
+            <button type="button" data-f="非洲">非洲</button>
+            <button type="button" data-f="大洋洲">大洋洲</button>
+            <button type="button" data-f="亚洲">亚洲</button>
+            <button type="button" data-f="南美洲">南美</button>
+            <button type="button" data-f="ok">仅已核验</button>
+          </div>
+          <div class="map-hint" id="map-base-hint">拖拽缩放 · 点击气泡/榜单 · 底图自动选可访问源</div>
+        </div>
+        <div id="leaflet-map" role="application" aria-label="全球铝产业链地图"></div>
+        <div class="map-foot">
+          <span>可见 <strong id="vis-count">0</strong> 点</span>
+          <span>产量合计示意 <strong id="vis-sum">0</strong>（混单位，仅示意）</span>
+          <span class="chip warn">单位分类型</span>
+        </div>
+      </div>
+      <div class="card rank">
+        <div class="rank-h">样本榜 · 铝土矿 Mt / 原铝 kt <em style="font-weight:600;color:var(--muted);font-size:11px">点击飞到地图</em></div>
+        <div id="rank-list"></div>
+      </div>
+    </div>
+
+    <section class="section" id="track">
+      <h2>公司 / 项目产量追踪</h2>
+      <p class="sub">优先公司公告与产量报告；冶炼与矿山分列。储量列大量待 NI 43-101 / JORC 细表，标「待核」。</p>
+      <div class="kpis">
+        <div class="card kpi"><label>追踪行数</label><strong id="track-n">—</strong></div>
+        <div class="card kpi"><label>排序</label>
+          <select id="sort-key" class="search" style="margin-top:6px;width:100%">
+            <option value="actual">按已披露产量</option>
+            <option value="name">按名称</option>
+          </select>
+        </div>
+        <div class="card kpi"><label>模式</label>
+          <div class="seg" id="sort-mode" style="margin-top:6px">
+            <button type="button" class="active" data-mode="project">项目</button>
+            <button type="button" data-mode="region">区域</button>
+          </div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <input class="search" id="q" placeholder="搜索公司 / 矿山 / 国家…">
+        <button type="button" class="btn" id="btn-export">导出 CSV</button>
+      </div>
+      <div class="regions" id="regions">
+        <button type="button" class="active" data-r="全球">全球</button>
+        <button type="button" data-r="非洲">非洲</button>
+        <button type="button" data-r="大洋洲">大洋洲</button>
+        <button type="button" data-r="亚洲">亚洲</button>
+        <button type="button" data-r="欧洲">欧洲</button>
+        <button type="button" data-r="南美洲">南美</button>
+        <button type="button" data-r="北美洲">北美</button>
+      </div>
+      <div class="table-wrap">
+        <table class="track">
+          <thead>
+            <tr>
+              <th>主体<small>国家 · 环节</small></th>
+              <th>储量/资源<small>公开</small></th>
+              <th>期初指引</th>
+              <th>最新指引 / 备注</th>
+              <th>YoY</th>
+              <th>调整</th>
+              <th>已披露产量</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="sources" id="sources">
+      <h2 style="font-size:18px;margin:0 0 8px">来源总表</h2>
+      <p class="sub" style="margin-top:0">每条可点开复制 URL。二手媒体仅作线索，关键数字尽量回公司/IAI/交易所。</p>
+      <table>
+        <thead><tr><th>字段</th><th>采用值</th><th>对齐</th><th>状态</th></tr></thead>
+        <tbody id="src-body"></tbody>
+      </table>
+    </section>
+
+    <footer>
+      <span>矿端公开核验台 · 多金属框架 · 当前 Al</span>
+      <span>地图引擎 Leaflet · 底图可切换 · 非 MGW 商业镜像</span>
+    </footer>
+  </div>
+</div>
+
+<div class="backdrop" id="backdrop" hidden></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-hd">
+    <div><h3 id="d-title">详情</h3><div class="sub" id="d-sub"></div></div>
+    <button type="button" class="btn" id="d-close">关闭</button>
+  </div>
+  <div class="drawer-bd" id="d-body"></div>
+  <div class="drawer-ft" id="d-ft"></div>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const RIO_Q4="https://cdn.financialreports.eu/financialreports/media/filings/4666/2026/RNS/4666_rns_2026-01-21_809a5314-c369-48ee-845d-826e3767ce78.html";
+const RIO_Q3="https://www.riotinto.com/en/news/releases/2025/rio-tinto-releases-third-quarter-2025-production-results";
+const ALCOA_FY="https://www.businesswire.com/news/home/20260117526434/en/Alcoa-Corporation-Reports-Fourth-Quarter-and-Full-Year-2025-Results";
+const ALCOA_Q3="https://www.businesswire.com/news/home/20251020074565/en/Alcoa-Corporation-Reports-Third-Quarter-2025-Results";
+const RUSAL_TASS="https://tass.com/economy/2103419";
+const CHALCO="https://www.alcircle.com/press-release/chalco-s-2025-revenue-rises-1-7-per-cent-y-o-y-117883";
+const HONGQIAO="https://news.futunn.com/en/post/70417399/china-hongqiao-01378-hk-strong-full-year-2025-performance-with";
+const HYDRO_Q4="https://www.hydro.com/en/global/media/news/2026/hydros-fourth-quarter-2025-results-solid-upstream-performance-driving-strong-cash-flow-generation/";
+const IAI_TREND="https://www.alcircle.com/news/world-primary-aluminium-production-growth-hits-5-year-low-in-2025-as-gcc-output-weakens-and-china-nears-45mt-ceiling-117046";
+const USGS_MCS="https://www.usgs.gov/publications/mineral-commodity-summaries-2026";
+const BAUX_TOP="https://discoveryalert.com.au/news/bauxite-mines-2023-global-production-leaders/";
+const BAUX_CTY="https://measuredworld.com/categories/resources/bauxite-production";
+const LME_AL="http://www.worldal.com/market/lme/2026-09-15/178945956375075.shtml";
+const SHFE_AL="https://www.gate.com/news/detail/shfe-metal-futures-warehouse-inventories-decline-on-september-17-with-24337915";
+const ING_EGA="https://think.ing.com/articles/aluminium-retreats-as-middle-east-supply-risks-ease/";
+const YARWUN="https://www.riotinto.com/en/news/releases/2025/rio-tinto-to-reduce-production-at-yarwun-alumina-refinery";
+
+const CHANGES=[
+  {id:"ega",when:"2026-H2 进展",title:"EGA Al Taweelah 复产加速",desc:"冶炼槽重启推进；氧化铝炼厂目标年内满产。中东供给风险缓释。",tag:"复产",status:"ok",detail:"ING 2026-07：Al Taweelah 铝冶炼已有约 7% 槽重启；炼厂氧化铝目标年末满产；重启不完全依赖炼厂满产。",links:[{label:"ING Think",url:ING_EGA}]},
+  {id:"lme-draw",when:"2026-08/09",title:"LME 铝库存世纪低位附近",desc:"2026 年库存大幅去化；9/15 开市库存约 243.6 kt。",tag:"库存",status:"ok",detail:"LME Insight：8/28 约 244.5 kt，称世纪之交以来低位；Worldal 9/15 官方开市 243,600 t（−250）。",links:[{label:"Worldal 9/15",url:LME_AL},{label:"LME Insight 转述",url:"https://www.lmeinsight.com/lme-aluminium-stocks-hit-lowest-level-since-the-turn-of-the-century/"}]},
+  {id:"yarwun",when:"2025-11-18",title:"Rio 宣布 Yarwun 氧化铝减产 40%",desc:"自 2026-10 起减产约 40%，以延寿至约 2035。",tag:"炼厂",status:"ok",detail:"Rio：Yarwun 自 2026 年 10 月起产量下调约 40%，延长运营至 2035 并探索进一步延寿。",links:[{label:"Rio 公告页",url:YARWUN},{label:"Q4 产量包",url:RIO_Q4}]},
+  {id:"china-cap",when:"2025 全年",title:"中国原铝逼近 45 Mt 天花板",desc:"2025 产量约 44.3–45.0 Mt 量级，增速放缓；2026 增量空间受限。",tag:"政策",status:"warn",detail:"Rusal 转述中国 2025 约 44.3 Mt、运行产能约 44.6 Mt；IndexBox/NBS 口径有 45.02 Mt 说法——并列保留。",links:[{label:"Rusal/TASS",url:RUSAL_TASS},{label:"IndexBox",url:"https://www.indexbox.io/blog/chinas-2025-aluminium-output-hits-4502m-tons-growth-slows-to-24/"},{label:"IAI 趋势",url:IAI_TREND}]}
+];
+
+const INV=[
+  {id:"lme",ex:"LME Al",val:"243.6",unit:"kt",lbl:"官方开市库存（转载）",foot:"2026-09-15 · −0.25 kt",extra:"Worldal：ALUMINIUM 243,600 t。年内自高位大幅去化。",status:"ok",links:[{label:"Worldal 9/15",url:LME_AL}]},
+  {id:"shfe",ex:"SHFE Al",val:"189.895",unit:"kt",lbl:"期货仓存（转载）",foot:"2026-09-17 · 日 −5.325 kt",extra:"Gate/金十转上期所：铝 189,895 吨。仓单与总库存口径可能不同，点开核验。",status:"ok",links:[{label:"Gate/金十转述",url:SHFE_AL},{label:"9/16 仓单",url:"https://www.gate.com/news/detail/shfe-base-metal-warehouse-receipts-mixed-on-september-16-aluminum-down-6802-24309450"}]}
+];
+
+/* type: bauxite (Mt ore) | smelter (kt Al metal) — map size uses displayVal */
+const RANK=[
+  {n:1,name:"Weipa",country:"澳大利亚",region:"大洋洲",type:"bauxite",unit:"Mt",kt:35.13,status:"warn",note:"GlobalData 2023 产能量级 ~35.1 Mtpa；Rio 2025 集团铝土 62.4 Mt",href:BAUX_TOP,lat:-12.66,lon:141.87},
+  {n:2,name:"SMB-Winning Boké",country:"几内亚",region:"非洲",type:"bauxite",unit:"Mt",kt:32.02,status:"warn",note:"2023 ~32.0 Mtpa 量级；几内亚为全球第一铝土生产国",href:BAUX_TOP,lat:10.93,lon:-14.30},
+  {n:3,name:"Huntly",country:"澳大利亚",region:"大洋洲",type:"bauxite",unit:"Mt",kt:22.19,status:"warn",note:"Alcoa WA · 2023 ~22.2 Mtpa",href:BAUX_TOP,lat:-32.60,lon:116.20},
+  {n:4,name:"Sangarédi",country:"几内亚",region:"非洲",type:"bauxite",unit:"Mt",kt:14.28,status:"warn",note:"2023 ~14.3 Mtpa",href:BAUX_TOP,lat:11.10,lon:-13.80},
+  {n:5,name:"Boddington bauxite",country:"澳大利亚",region:"大洋洲",type:"bauxite",unit:"Mt",kt:13.66,status:"warn",note:"South32 · 2023 ~13.7 Mtpa",href:BAUX_TOP,lat:-32.75,lon:116.35},
+  {n:6,name:"Boffa (Chalco)",country:"几内亚",region:"非洲",type:"bauxite",unit:"Mt",kt:13.5,status:"warn",note:"中铝 · 2023 ~13.5 Mtpa",href:BAUX_TOP,lat:10.20,lon:-14.00},
+  {n:7,name:"GAC Boké (EGA)",country:"几内亚",region:"非洲",type:"bauxite",unit:"Mt",kt:11.97,status:"warn",note:"EGA · 2023 ~12.0 Mtpa",href:BAUX_TOP,lat:11.00,lon:-14.05},
+  {n:8,name:"Gove",country:"澳大利亚",region:"大洋洲",type:"bauxite",unit:"Mt",kt:11.57,status:"warn",note:"Rio NT · 2023 ~11.6 Mtpa",href:BAUX_TOP,lat:-12.25,lon:136.82},
+  {n:9,name:"MRN Trombetas",country:"巴西",region:"南美洲",type:"bauxite",unit:"Mt",kt:11.47,status:"warn",note:"Glencore 管理 · 2023 ~11.5 Mtpa",href:BAUX_TOP,lat:-1.40,lon:-56.40},
+  {n:10,name:"Paragominas",country:"巴西",region:"南美洲",type:"bauxite",unit:"Mt",kt:10.9,status:"warn",note:"Hydro · 2023 ~10.9 Mtpa",href:BAUX_TOP,lat:-3.00,lon:-47.40},
+  {n:11,name:"China Hongqiao（电解铝销售）",country:"中国",region:"亚洲",type:"smelter",unit:"kt",kt:5824,status:"ok",note:"2025 电解铝销售 5.824 Mt",href:HONGQIAO,lat:37.38,lon:118.02},
+  {n:12,name:"Chalco 原铝",country:"中国",region:"亚洲",type:"smelter",unit:"kt",kt:8080,status:"ok",note:"2025 原铝产量 8.08 Mt（+6.2%）",href:CHALCO,lat:39.90,lon:116.40},
+  {n:13,name:"Rusal 原铝",country:"俄罗斯",region:"欧洲",type:"smelter",unit:"kt",kt:3918,status:"ok",note:"2025 3.918 Mt（−1.9%）；铝土 18.453 Mt",href:RUSAL_TASS,lat:56.01,lon:92.87},
+  {n:14,name:"Rio Tinto 原铝（份额）",country:"全球",region:"大洋洲",type:"smelter",unit:"kt",kt:3380,status:"ok",note:"2025 3.38 Mt（+3%）；指引上沿达成",href:RIO_Q4,lat:-23.70,lon:133.88},
+  {n:15,name:"Alcoa 原铝（指引/产量带）",country:"全球",region:"北美洲",type:"smelter",unit:"kt",kt:2400,status:"ok",note:"2025 产量指引 2.3–2.5 Mt；2026 2.4–2.6 Mt",href:ALCOA_FY,lat:40.44,lon:-79.99},
+  {n:16,name:"Al Taweelah / EGA",country:"阿联酋",region:"亚洲",type:"smelter",unit:"kt",kt:0,status:"pend",note:"复产中；吨位随季报更新",href:ING_EGA,lat:24.30,lon:54.55,approx:true}
+];
+
+const TRACK=[
+  {name:"Rio Tinto — Bauxite",country:"澳大利亚等",region:"大洋洲",tag:"矿山",reserve:"—",reserveStatus:"pend",init:">61",initDate:"2025 指引",latest:"62.4 Mt 实际",latestNote:"2025 +6%",actual:62.4,actualAsOf:"FY2025",qNote:"Mt 铝土",trail:"Rio Q4",href:RIO_Q4,status:"ok"},
+  {name:"Rio Tinto — Alumina",country:"全球",region:"大洋洲",tag:"炼厂",reserve:"—",reserveStatus:"pend",init:"7.4–7.8",initDate:"2025",latest:"7.6 Mt",latestNote:"2025 +4%；Yarwun 将减产",actual:7.6,actualAsOf:"FY2025",qNote:"Mt 氧化铝",trail:"Rio Q4",href:RIO_Q4,status:"ok"},
+  {name:"Rio Tinto — Aluminium",country:"全球",region:"大洋洲",tag:"冶炼",reserve:"—",reserveStatus:"pend",init:"3.25–3.45",initDate:"2025",latest:"3.38 Mt",latestNote:"上沿；2026 指引约 3.2–3.4",actual:3.38,actualAsOf:"FY2025",qNote:"Mt 原铝",trail:"Rio Q4",href:RIO_Q4,status:"ok"},
+  {name:"Alcoa — Alumina",country:"全球",region:"北美洲",tag:"炼厂",reserve:"—",reserveStatus:"pend",init:"9.5–9.7",initDate:"2025",latest:"9.7–9.9",latestNote:"2026 指引",actual:null,actualAsOf:"",qNote:"Kwinana 已关停影响",trail:"Alcoa FY",href:ALCOA_FY,status:"ok"},
+  {name:"Alcoa — Aluminum",country:"全球",region:"北美洲",tag:"冶炼",reserve:"—",reserveStatus:"pend",init:"2.3–2.5",initDate:"2025",latest:"2.4–2.6",latestNote:"2026 因重启上调",actual:null,actualAsOf:"",qNote:"San Ciprián 等重启",trail:"Alcoa FY",href:ALCOA_FY,status:"ok"},
+  {name:"Rusal — Aluminium",country:"俄罗斯",region:"欧洲",tag:"冶炼",reserve:"—",reserveStatus:"pend",init:"—",latest:"3.918 Mt",latestNote:"−1.9% YoY",actual:3.918,actualAsOf:"FY2025",qNote:"销售 4.49 Mt",trail:"Rusal",href:RUSAL_TASS,status:"ok"},
+  {name:"Rusal — Bauxite",country:"多国",region:"欧洲",tag:"矿山",reserve:"—",reserveStatus:"pend",init:"—",latest:"18.453 Mt",latestNote:"+16.2% YoY",actual:18.453,actualAsOf:"FY2025",trail:"Rusal",href:RUSAL_TASS,status:"ok"},
+  {name:"Chalco — 原铝",country:"中国",region:"亚洲",tag:"冶炼",reserve:"—",reserveStatus:"pend",init:"—",latest:"8.08 Mt",latestNote:"+6.2%",actual:8.08,actualAsOf:"FY2025",trail:"Chalco/Mysteel",href:CHALCO,status:"ok"},
+  {name:"Chalco — 冶金级氧化铝",country:"中国",region:"亚洲",tag:"炼厂",reserve:"—",reserveStatus:"pend",init:"—",latest:"17.35 Mt",latestNote:"+2.9%；外销 6.42 Mt",actual:17.35,actualAsOf:"FY2025",trail:"Chalco",href:CHALCO,status:"ok"},
+  {name:"China Hongqiao — 电解铝销售",country:"中国",region:"亚洲",tag:"冶炼",reserve:"—",reserveStatus:"pend",init:"—",latest:"5.824 Mt",latestNote:"销售 −0.2% YoY",actual:5.824,actualAsOf:"FY2025",qNote:"氧化铝销售 13.397 Mt",trail:"Hongqiao",href:HONGQIAO,status:"ok"},
+  {name:"Hydro — Aluminium Metal",country:"挪威/全球",region:"欧洲",tag:"冶炼",reserve:"—",reserveStatus:"pend",init:"—",latest:"挪威槽重启中",latestNote:"Q4 产量 +2.5% YoY",actual:null,actualAsOf:"Q4 2025",trail:"Hydro Q4",href:HYDRO_Q4,status:"warn"},
+  {name:"Hydro — Alunorte",country:"巴西",region:"南美洲",tag:"炼厂",reserve:"—",reserveStatus:"pend",init:"nameplate",latest:"超名牌产能",latestNote:"Q4 2025 运营强",actual:null,actualAsOf:"Q4 2025",trail:"Hydro Q4",href:HYDRO_Q4,status:"ok"}
+];
+
+const SOURCES=[
+  {field:"全球原铝 2025",value:"73.784 Mt",align:"IAI（媒体转述）",status:"ok",detail:"Al Circle：IAI 世界原铝 2025 年 73.784 Mt，较 2024 的 73.009 Mt 约 +1.06%。",links:[{label:"Al Circle / IAI",url:IAI_TREND}]},
+  {field:"中国原铝 2025",value:"~44.3–45.0 Mt",align:"多源对照",status:"warn",detail:"Rusal：44.3 Mt；IndexBox 引 NBS：45.02 Mt。产能顶约 45 Mt。",links:[{label:"TASS/Rusal",url:RUSAL_TASS},{label:"IndexBox",url:"https://www.indexbox.io/blog/chinas-2025-aluminium-output-hits-4502m-tons-growth-slows-to-24/"}]},
+  {field:"铝土国别 2025e",value:"几内亚 150 / 澳 97 / 中 87 Mt… 世界~433",align:"USGS 转引",status:"warn",detail:"Measured World 称据 USGS；需对照 MCS 2026 铝土章原表。",links:[{label:"Measured World",url:BAUX_CTY},{label:"USGS MCS 2026",url:USGS_MCS}]},
+  {field:"Top 铝土矿山 2023 量级",value:"Weipa 等 Top10",align:"GlobalData 转述",status:"warn",detail:"Discovery Alert 转 GlobalData 2023 Mtpa，非 2025 实测吨——地图标口径注意。",links:[{label:"Discovery Alert",url:BAUX_TOP}]},
+  {field:"Rio 2025 铝链",value:"铝土 62.4 / 氧化铝 7.6 / 原铝 3.38 Mt",align:"Rio Q4",status:"ok",links:[{label:"Rio Q4 包",url:RIO_Q4}]},
+  {field:"Alcoa 2025–26 指引",value:"氧化铝/原铝产量带",align:"Alcoa",status:"ok",links:[{label:"FY2025",url:ALCOA_FY},{label:"Q3 2025",url:ALCOA_Q3}]},
+  {field:"Rusal 2025",value:"原铝 3.918 / 铝土 18.453 / 氧化铝 6.858 Mt",align:"Rusal",status:"ok",links:[{label:"TASS",url:RUSAL_TASS}]},
+  {field:"Chalco 2025",value:"原铝 8.08 / 氧化铝 17.35 Mt",align:"公司/媒体",status:"ok",links:[{label:"Al Circle",url:CHALCO}]},
+  {field:"Hongqiao 2025",value:"电解铝销售 5.824 Mt",align:"年报转述",status:"ok",links:[{label:"Futu 转述",url:HONGQIAO}]},
+  {field:"LME / SHFE 铝库存",value:"243.6 / 189.9 kt",align:"交易所转引",status:"ok",links:[{label:"LME",url:LME_AL},{label:"SHFE",url:SHFE_AL}]},
+  {field:"Yarwun 减产",value:"2026-10 起约 −40%",align:"Rio",status:"ok",links:[{label:"Rio",url:YARWUN}]},
+  {field:"EGA 复产",value:"进行中",align:"ING/公司更新",status:"ok",links:[{label:"ING",url:ING_EGA}]}
+];
+
+let region="全球", mode="project", sortKey="actual", mapFilter="all";
+let map, markerLayer, markersByN={};
+
+function chip(st){return st==="ok"?`<span class="chip ok">已核验</span>`:st==="warn"?`<span class="chip warn">口径注意</span>`:`<span class="chip pend">待核</span>`;}
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove("show"),2200);}
+async function copyText(text){try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(text);else{const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();}toast("已复制链接");}catch(e){toast("复制失败");}}
+function openUrl(url){if(!url){toast("暂无外链");return;}const w=window.open(url,"_blank","noopener,noreferrer");toast(w?"已尝试打开外链":"预览可能拦截弹窗 — 请复制链接");}
+
+function closeDrawer(){
+  document.getElementById("drawer").classList.remove("open");
+  document.getElementById("drawer").setAttribute("aria-hidden","true");
+  const bd=document.getElementById("backdrop");bd.classList.remove("open");
+  setTimeout(()=>{bd.hidden=true;},200);
+  document.querySelectorAll(".rank button.active, table.track tr.active, .sources tr.active").forEach(el=>el.classList.remove("active"));
+}
+function openDrawer({title,sub,status,blocks,links}){
+  document.getElementById("d-title").textContent=title||"详情";
+  document.getElementById("d-sub").innerHTML=`${sub||""} ${status?chip(status):""}`;
+  const body=document.getElementById("d-body");
+  body.innerHTML=(blocks||[]).map(b=>`<div class="block"><div class="label">${b.label}</div><div class="${b.big?"value":"note"}">${b.html||b.text||""}</div></div>`).join("")
+    +(links&&links.length?`<div class="block"><div class="label">来源 URL</div>${links.map(l=>`<div style="margin-bottom:10px"><div style="font-weight:700;font-size:12px;margin-bottom:4px">${l.label||"链接"}</div><div class="url-box">${l.url}</div><div style="display:flex;gap:8px;margin-top:8px"><button type="button" class="btn primary btn-open" data-u="${encodeURIComponent(l.url)}">尝试打开</button><button type="button" class="btn ghost btn-copy" data-u="${encodeURIComponent(l.url)}">复制</button></div></div>`).join("")}</div>`:`<div class="block"><div class="note">暂无公开 URL</div></div>`);
+  const ft=document.getElementById("d-ft");const p=links&&links[0];
+  ft.innerHTML=`${p?`<button type="button" class="btn primary" id="ft-o">打开主来源</button><button type="button" class="btn ghost" id="ft-c">复制主来源</button>`:""}<button type="button" class="btn" id="ft-x">关闭</button>`;
+  if(p){document.getElementById("ft-o").onclick=()=>openUrl(p.url);document.getElementById("ft-c").onclick=()=>copyText(p.url);}
+  document.getElementById("ft-x").onclick=closeDrawer;
+  body.querySelectorAll(".btn-open").forEach(b=>b.onclick=()=>openUrl(decodeURIComponent(b.dataset.u)));
+  body.querySelectorAll(".btn-copy").forEach(b=>b.onclick=()=>copyText(decodeURIComponent(b.dataset.u)));
+  const bd=document.getElementById("backdrop");bd.hidden=false;
+  requestAnimationFrame(()=>{bd.classList.add("open");document.getElementById("drawer").classList.add("open");document.getElementById("drawer").setAttribute("aria-hidden","false");});
+}
+
+function passFilter(r){
+  if(mapFilter==="all") return true;
+  if(mapFilter==="ok") return r.status==="ok";
+  if(mapFilter==="bauxite") return r.type==="bauxite";
+  if(mapFilter==="smelter") return r.type==="smelter";
+  return r.region===mapFilter;
+}
+function rPx(r){
+  if(r.type==="bauxite") return Math.max(10, Math.min(30, Math.sqrt(r.kt)*2.2));
+  if(!r.kt) return 12;
+  return Math.max(12, Math.min(32, Math.sqrt(r.kt)*0.35));
+}
+function colorOf(st){return st==="ok"?"#047857":st==="warn"?"#b45309":"#64748b";}
+function unitLabel(r){return r.unit|| (r.type==="bauxite"?"Mt":"kt");}
+
+function mineIcon(r){
+  const s=rPx(r), c=colorOf(r.status);
+  const ring=r.type==="smelter"?"2px dashed #fff":"2px solid #fff";
+  return L.divIcon({
+    className:"",
+    iconSize:[s,s],
+    iconAnchor:[s/2,s/2],
+    html:`<div style="width:${s}px;height:${s}px;border-radius:50%;background:${c};border:${ring};box-shadow:0 1px 6px rgba(0,0,0,.35);opacity:.92"></div>`
+  });
+}
+
+function openMine(r, fromRankEl){
+  document.querySelectorAll(".rank button.active").forEach(x=>x.classList.remove("active"));
+  if(fromRankEl) fromRankEl.classList.add("active");
+  if(map && r.lat!=null){
+    map.flyTo([r.lat,r.lon], Math.max(map.getZoom(),5), {duration:.6});
+    const m=markersByN[r.n];
+    if(m) m.openPopup();
+  }
+  openDrawer({
+    title:r.name, sub:`${r.country} · ${r.region} · ${r.type==="bauxite"?"铝土矿":"原铝/冶炼"} · #${r.n}`, status:r.status,
+    blocks:[
+      {label: r.type==="bauxite"?"产量/产能量级":"原铝产量/销售", big:true, text:`${r.approx?"≈":""}${r.kt?r.kt.toLocaleString():"—"} ${unitLabel(r)}`},
+      {label:"坐标（近似）", text:`${r.lat.toFixed(3)}, ${r.lon.toFixed(3)}`},
+      {label:"说明", text:r.note||""}
+    ],
+    links:r.href?[{label:"主来源",url:r.href}]:[]
+  });
+}
+
+function renderMapMarkers(){
+  if(!markerLayer) return;
+  markerLayer.clearLayers();
+  markersByN={};
+  const list=RANK.filter(passFilter);
+  list.forEach(r=>{
+    const m=L.marker([r.lat,r.lon],{icon:mineIcon(r),title:r.name});
+    const pop=`<div class="mine-pop"><h4>${r.name}</h4><p>${r.country} · ${r.approx?"≈":""}${r.kt?r.kt:"—"} ${unitLabel(r)}</p><p>${r.note||""}</p><div class="pop-actions"><button type="button" class="btn primary" style="padding:4px 8px;font-size:11px" data-n="${r.n}">打开来源</button></div></div>`;
+    m.bindPopup(pop,{maxWidth:280});
+    m.on("popupopen", e=>{
+      const btn=e.popup.getElement().querySelector("button[data-n]");
+      if(btn) btn.onclick=()=>openMine(r, document.querySelector(`#rank-list button[data-n="${r.n}"]`));
+    });
+    m.on("click", ()=>{
+      const b=document.querySelector(`#rank-list button[data-n="${r.n}"]`);
+      if(b) b.scrollIntoView({block:"nearest"});
+    });
+    m.addTo(markerLayer);
+    markersByN[r.n]=m;
+  });
+  document.getElementById("vis-count").textContent=list.length;
+  document.getElementById("vis-sum").textContent=list.reduce((s,r)=>s+(r.kt||0),0).toLocaleString(undefined,{maximumFractionDigits:0});
+  document.getElementById("mine-count").textContent=RANK.length;
+  if(list.length){
+    const g=L.featureGroup(Object.values(markersByN));
+    try{ map.fitBounds(g.getBounds().pad(0.18), {maxZoom:5}); }catch(e){}
+  }
+}
+
+function initMap(){
+  if(typeof L==="undefined"){
+    document.getElementById("leaflet-map").innerHTML=`<div style="padding:24px;color:#b91c1c;line-height:1.6"><strong>Leaflet 未加载</strong><br>请用系统浏览器打开；或检查 jsDelivr/bootcdn。</div>`;
+    return;
+  }
+  map=L.map("leaflet-map",{worldCopyJump:true, scrollWheelZoom:true, minZoom:2, maxZoom:12}).setView([10,20],2.2);
+  const bases=[
+{name:"Esri World Street",url:"https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",opts:{maxZoom:12, attribution:"Tiles &copy; Esri"}},
+{name:"Carto Positron",url:"https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",opts:{subdomains:"abcd", maxZoom:12, attribution:'&copy; OSM &copy; CARTO'}},
+{name:"Esri World Imagery",url:"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",opts:{maxZoom:12, attribution:"Tiles &copy; Esri"}},
+{name:"高德路网（国内）",url:"https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",opts:{subdomains:"1234", maxZoom:12, attribution:"&copy; 高德"}},
+{name:"OSM.org（可能需代理）",url:"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",opts:{maxZoom:12, attribution:'&copy; OpenStreetMap'}}
+  ];
+  let activeTile=null;
+  function setBase(i){
+    if(activeTile) map.removeLayer(activeTile);
+    const b=bases[i];
+    activeTile=L.tileLayer(b.url, b.opts).addTo(map);
+    const hint=document.getElementById("map-base-hint");
+    if(hint) hint.textContent="底图："+b.name+" · 实线=铝土 · 虚线边=冶炼";
+    const sel=document.getElementById("base-sel");
+    if(sel) sel.value=String(i);
+  }
+  setBase(0);
+  const foot=document.querySelector(".map-foot");
+  if(foot && !document.getElementById("base-sel")){
+    const wrap=document.createElement("label");
+    wrap.style.cssText="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)";
+    wrap.innerHTML=`底图 <select id="base-sel" style="border:1px solid var(--line);border-radius:8px;padding:4px 8px;background:#fff">${bases.map((b,i)=>`<option value="${i}">${b.name}</option>`).join("")}</select>`;
+    foot.appendChild(wrap);
+    document.getElementById("base-sel").onchange=e=>setBase(+e.target.value);
+  }
+  let failN=0;
+  map.on("tileerror", ()=>{
+    failN++;
+    if(failN===6){
+      toast("底图瓦片失败，切换下一源…");
+      const cur=+(document.getElementById("base-sel")?.value||0);
+      if(cur+1<bases.length) setBase(cur+1);
+      failN=0;
+    }
+  });
+  markerLayer=L.layerGroup().addTo(map);
+  renderMapMarkers();
+  setTimeout(()=>map.invalidateSize(), 200);
+  setTimeout(()=>map.invalidateSize(), 600);
+}
+
+document.getElementById("rank-list").innerHTML=RANK.map(r=>`
+  <button type="button" data-n="${r.n}">
+    <div class="n">${String(r.n).padStart(2,"0")}</div>
+    <div><div class="nm">${r.name}</div><div class="ct">${r.country} · ${r.type==="bauxite"?"铝土":"原铝"} · ${r.note||""}</div><div style="margin-top:4px">${chip(r.status)}</div></div>
+    <div class="kt">${r.kt?((r.approx?"≈":"")+r.kt.toLocaleString(undefined,{maximumFractionDigits:2})): "—"} <small>${unitLabel(r)}</small></div>
+    <div style="color:var(--accent);font-weight:800">›</div>
+  </button>`).join("");
+document.getElementById("rank-list").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-n]"); if(!b) return;
+  openMine(RANK.find(x=>String(x.n)===b.dataset.n), b);
+});
+
+document.getElementById("map-filters").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-f]"); if(!b) return;
+  document.querySelectorAll("#map-filters button").forEach(x=>x.classList.toggle("on",x===b));
+  mapFilter=b.dataset.f; renderMapMarkers();
+});
+
+document.getElementById("changes").innerHTML=CHANGES.map(c=>`
+  <button type="button" class="item" data-id="${c.id}">
+    <div><div class="when">${c.when}</div><div class="title">${c.title}</div><div class="desc">${c.desc}</div><div class="hint">打开来源 →</div></div>
+    <div class="tag">${c.tag}</div>
+  </button>`).join("");
+document.getElementById("changes").addEventListener("click",e=>{
+  const b=e.target.closest(".item"); if(!b) return;
+  const c=CHANGES.find(x=>x.id===b.dataset.id);
+  openDrawer({title:c.title,sub:c.when,status:c.status,blocks:[{label:"摘要",text:c.desc},{label:"核验",text:c.detail}],links:c.links});
+});
+
+document.getElementById("inv-list").innerHTML=INV.map(x=>`
+  <button type="button" data-id="${x.id}">
+    <div class="ex">${x.ex} <span class="chip ok">Al</span></div>
+    <div class="val">${x.val} <small>${x.unit}</small></div>
+    <div class="lbl">${x.lbl}</div>
+    <div class="lbl" style="margin-top:4px">${x.foot||""}</div>
+  </button>`).join("");
+document.getElementById("inv-list").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-id]"); if(!b) return;
+  const x=INV.find(i=>i.id===b.dataset.id);
+  openDrawer({title:x.ex+" 库存",sub:x.lbl,status:x.status,blocks:[{label:"数值",big:true,text:x.val+" "+x.unit},{label:"说明",text:x.extra}],links:x.links});
+});
+document.getElementById("bench").onclick=()=>openDrawer({title:"全球原铝 73.784 Mt",sub:"2025 · IAI",status:"ok",blocks:[{label:"数值",big:true,text:"73.784 Mt"},{label:"口径",text:"International Aluminium Institute 世界原铝产量；增速约 +1.06% 为近年低位。"}],links:[{label:"Al Circle / IAI",url:IAI_TREND}]});
+document.getElementById("bench2").onclick=()=>openDrawer({title:"中国原铝天花板",sub:"2025",status:"warn",blocks:[{label:"区间",big:true,text:"~44.3–45.0 Mt"},{label:"说明",text:"多源并存；政策产能顶约 45 Mt，2026 增量空间受限。"}],links:[{label:"Rusal/TASS",url:RUSAL_TASS},{label:"IAI 趋势",url:IAI_TREND}]});
+
+function filtered(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  let rows=TRACK.filter(r=>region==="全球"||r.region===region);
+  if(q) rows=rows.filter(r=>(r.name+r.country+r.region+r.tag).toLowerCase().includes(q));
+  rows=[...rows];
+  if(sortKey==="name") rows.sort((a,b)=>a.name.localeCompare(b.name));
+  else rows.sort((a,b)=>(b.actual||0)-(a.actual||0));
+  if(mode==="region") rows.sort((a,b)=>a.region.localeCompare(b.region)||a.name.localeCompare(b.name));
+  return rows;
+}
+function openTrack(r,tr){
+  document.querySelectorAll("table.track tr.active").forEach(x=>x.classList.remove("active"));
+  if(tr) tr.classList.add("active");
+  openDrawer({title:r.name,sub:`${r.country} · ${r.region} · ${r.tag}`,status:r.status,blocks:[
+    {label:"储量/资源",text:`${r.reserve||"—"}`},
+    {label:"指引",text:`${r.init||"—"} → ${r.latest||"—"} · ${r.latestNote||""}`},
+    {label:"实际",text:r.actual==null?"—":`${r.actual} · ${r.actualAsOf||""}`},
+    {label:"轨迹",text:r.trail||"—"}
+  ],links:r.href?[{label:r.trail||"来源",url:r.href}]:[]});
+}
+function render(){
+  const rows=filtered();
+  document.getElementById("track-n").textContent=TRACK.length;
+  document.getElementById("tbody").innerHTML=rows.map((r,i)=>`
+    <tr data-i="${i}" tabindex="0">
+      <td><div class="name">${r.name}</div><div class="meta">${r.country} · ${r.region} · ${r.tag||""}</div><div style="margin-top:4px">${chip(r.status)}</div></td>
+      <td><div class="num">${r.reserve||"—"}</div>${r.reserveStatus==="pend"?`<div style="margin-top:4px"><span class="chip pend">待储量</span></div>`:""}</td>
+      <td><div class="range">${r.init||"—"}</div><div class="meta">${r.initDate||""}</div></td>
+      <td><div class="range">${r.latest||"—"}</div><div class="badge">${r.latestNote||""}</div></td>
+      <td><div class="meta">—</div></td>
+      <td><div class="meta">—</div></td>
+      <td>${r.actual==null?`<div class="meta">—</div>`:`<div class="actual">${Number(r.actual).toLocaleString(undefined,{maximumFractionDigits:3})}</div><div class="meta">${r.actualAsOf||""}</div><div class="meta">${r.qNote||""}</div>`}</td>
+      <td style="color:var(--accent);font-weight:800">›</td>
+    </tr>`).join("")||`<tr><td colspan="8" class="meta" style="padding:20px">无匹配</td></tr>`;
+  document.querySelectorAll("#tbody tr[data-i]").forEach(tr=>{
+    const r=rows[+tr.dataset.i];
+    tr.onclick=()=>openTrack(r,tr);
+    tr.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openTrack(r,tr);}};
+  });
+}
+document.getElementById("q").oninput=render;
+document.getElementById("sort-key").onchange=e=>{sortKey=e.target.value;render();};
+document.querySelectorAll("#sort-mode button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#sort-mode button").forEach(x=>x.classList.toggle("active",x===b));mode=b.dataset.mode;render();});
+document.querySelectorAll("#regions button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#regions button").forEach(x=>x.classList.toggle("active",x===b));region=b.dataset.r;render();});
+document.getElementById("btn-export").onclick=()=>{
+  const rows=filtered();
+  const h="name,country,region,tag,init,latest,actual,source\n";
+  const body=rows.map(r=>[r.name,r.country,r.region,r.tag,r.init,r.latest,r.actual??"",r.href||""].map(v=>`"${v}"`).join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([h+body],{type:"text/csv"}));a.download="mine-desk-al-track.csv";a.click();
+};
+
+document.getElementById("src-body").innerHTML=SOURCES.map((s,i)=>`
+  <tr data-i="${i}"><td><strong>${s.field}</strong></td><td>${s.value}</td><td>${s.align}</td><td>${chip(s.status)} <span style="color:var(--accent);font-weight:800">›</span></td></tr>`).join("");
+document.getElementById("src-body").onclick=e=>{
+  const tr=e.target.closest("tr[data-i]"); if(!tr) return;
+  document.querySelectorAll(".sources tr.active").forEach(x=>x.classList.remove("active"));
+  tr.classList.add("active");
+  const s=SOURCES[+tr.dataset.i];
+  openDrawer({title:s.field,sub:s.align,status:s.status,blocks:[{label:"采用值",big:true,text:s.value},{label:"说明",text:s.detail||s.align}],links:s.links||[]});
+};
+
+document.getElementById("d-close").onclick=closeDrawer;
+document.getElementById("backdrop").onclick=closeDrawer;
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDrawer();});
+document.querySelectorAll(".rail nav a").forEach(a=>a.addEventListener("click",()=>{document.querySelectorAll(".rail nav a").forEach(x=>x.classList.remove("active"));a.classList.add("active");}));
+
+initMap();
+render();
+</script>
+</body>
+</html>
