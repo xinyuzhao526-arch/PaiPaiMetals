@@ -209,3 +209,11 @@
 6. ICSG *Directory of Copper Mines* / 月报（部分订阅）  
 
 *本文件为投研溯源笔记，不构成对 MetalsGoWhere 数据的背书或版权主张。*
+
+## 2026-09-18 扩展（矿山/公司）
+
+- RANK 扩至全球主要矿山 + Codelco 分部 + MMG Kinsevere/Khoemacau 等；点位增加 `company` 字段。
+- TRACK 增补 Freeport / Codelco / Glencore / Anglo / Antofagasta / MMG / FQML / BHP Escondida 集团或旗舰口径。
+- CHANGES：Grasberg 停产、ICSG 前10月、Codelco、MMG Bambas。
+- LME Cu 库存锚点更新为 2026-09-15 约 249.2 kt（Worldal 转）。
+- 注意：矿山 kt 与集团权益产量不可简单加总；Escondida 日历年 vs BHP 财年分列。
