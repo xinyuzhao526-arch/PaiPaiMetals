@@ -210,7 +210,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
     </div>
     <section class="section" id="track">
       <h2>公司 / 项目产量追踪</h2>
-      <p class="sub">优先公司公告与产量报告。</p>
+      <p class="sub">优先公司公告与产量报告；「项目」看单个主体，「区域」按区域聚合（仅同单位小计，不跨单位相加）。</p>
       <div class="kpis">
         <div class="card kpi"><label>追踪行数</label><strong id="track-n">—</strong></div>
         <div class="card kpi"><label>排序</label>
@@ -8128,7 +8128,7 @@ const METAL_LABEL = {Cu:'Cu', Al:'Al', PbZn:'Pb/Zn', Ni:'Ni', Sn:'Sn', Li:'Li', 
 let currentMetal = 'Cu'; try { currentMetal = (new URLSearchParams(location.search||'').get('metal')) || 'Cu'; } catch(e) { currentMetal='Cu'; }
 if (!METAL_DATA[currentMetal]) currentMetal = 'Cu';
 let CHANGES=[], INV=[], RANK=[], TRACK=[], SOURCES=[];
-let region='全球', mode='project', sortKey='actual', mapFilter='all';
+let region='全部', mode='project', sortKey='actual', mapFilter='all';
 let map, markerLayer, markersByN={}, mapReady=false, baseLayers={}, currentBase=null;
 
 function chip(st){
@@ -8261,7 +8261,7 @@ function renderMapMarkers(){
   if(!markerLayer || typeof L==='undefined') return;
   markerLayer.clearLayers(); markersByN={};
   let list=RANK.filter(r=>r.lat!=null && r.lon!=null && passFilter(r));
-  if(region && region!=='全球') list=list.filter(r=>(r.region||'')===region || (r.country||'')===region);
+  if(region && region!=='全部') list=list.filter(r=>(r.region||'')===region || (r.country||'')===region);
   list.forEach(r=>{
     try{
       const m=L.marker([r.lat,r.lon],{icon:mineIcon(r), title:r.name});
@@ -8283,25 +8283,34 @@ function buildFilters(){
   let btns=[{f:'all',l:'全部'},{f:'ok',l:'仅已核验'}];
   if(currentMetal==='Al') btns.splice(1,0,{f:'bauxite',l:'铝土矿'},{f:'smelter',l:'原铝枢纽'});
   if(currentMetal==='PbZn' || currentMetal==='Sn') btns.splice(1,0,{f:'mine',l:'矿山'},{f:'smelter',l:'精炼/公司'});
-  const regions=[{f:'南美洲',l:'南美'},{f:'北美洲',l:'北美'},{f:'非洲',l:'非洲'},{f:'亚洲',l:'亚洲'},{f:'大洋洲',l:'大洋洲'},{f:'欧洲',l:'欧洲'}];
-  // only add regions that appear
-  const have=new Set(RANK.map(r=>r.region).filter(Boolean));
-  regions.forEach(x=>{ if(have.has(x.f)) btns.push(x); });
+  // 区域筛选统一放在「产量追踪」上方一行（见 buildRegions），避免两处控件互相打架
   el.innerHTML=btns.map((b,i)=>`<button type="button" class="${i===0?'on':''}" data-f="${b.f}">${b.l}</button>`).join('');
   mapFilter='all';
 }
+function regionList(){
+  const s=new Set();
+  TRACK.forEach(r=>{ if(r.region) s.add(r.region); });
+  return ['全部', ...[...s].sort((a,b)=>a.localeCompare(b,'zh'))];
+}
+function syncRegionChips(){
+  const el=document.getElementById('regions'); if(!el) return;
+  el.querySelectorAll('button[data-region]').forEach(b=>b.classList.toggle('active', b.dataset.region===region));
+}
+function setMode(m){
+  mode=(m==='region')?'region':'project';
+  document.querySelectorAll('#sort-mode button').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+  renderTrack();
+}
 function buildRegions(){
   const el=document.getElementById('regions'); if(!el) return;
-  const set=new Set(['全球']);
-  RANK.forEach(r=>{ if(r.region) set.add(r.region); });
-  const arr=[...set];
+  region='全部';
+  const arr=regionList();
   el.innerHTML=arr.map((x,i)=>`<button type="button" class="${i===0?'on':''}" data-region="${x}">${x}</button>`).join('');
-  region='全球';
+  syncRegionChips();
   el.onclick=e=>{
     const b=e.target.closest('button[data-region]'); if(!b) return;
-    el.querySelectorAll('button').forEach(x=>x.classList.toggle('on', x===b));
     region=b.dataset.region;
-    renderMapMarkers();
+    syncRegionChips(); renderTrack(); renderMapMarkers();
   };
 }
 function renderPanels(){
@@ -8344,19 +8353,37 @@ function renderPanels(){
       <td style="color:var(--accent);font-weight:800">›</td>
     </tr>`).join('') || '<tr><td colspan="5" class="meta">暂无来源</td></tr>';
 }
-function filtered(){
+function baseRows(){
   const q=((document.getElementById('q')||{}).value||'').trim().toLowerCase();
   let rows=TRACK.slice();
-  if(q) rows=rows.filter(r=>[r.name,r.country,r.region,r.tag,r.latest,r.note].join(' ').toLowerCase().includes(q));
-  if(mode==='project'){
-    /* keep as-is */
-  }
+  if(q) rows=rows.filter(r=>[r.name,r.country,r.region,r.tag,r.latest,r.qNote,r.trail].join(' ').toLowerCase().includes(q));
+  if(region && region!=='全部') rows=rows.filter(r=>(r.region||'')===region || (r.country||'')===region);
+  return rows;
+}
+function unitOf(r){
+  const m=String(r.latest||'').match(/^\s*(?:约|~|≈)?\s*([\d,]+(?:\.\d+)?)\s*(kt\/月|kt|Mt|Gt|t)\b/);
+  return m ? {val:parseFloat(m[1].replace(/,/g,'')), unit:m[2]} : null;
+}
+function regionRows(){
+  const g={};
+  baseRows().forEach(r=>{ const k=r.region||'未标注'; (g[k]=g[k]||[]).push(r); });
+  return Object.keys(g).map(k=>{
+    const items=g[k]; const sums={};
+    items.forEach(r=>{ const u=unitOf(r); if(u){ sums[u.unit]=(sums[u.unit]||0)+u.val; } });
+    return {region:k, items, n:items.length,
+      sums:Object.keys(sums).map(u=>sums[u].toLocaleString(undefined,{maximumFractionDigits:3})+' '+u),
+      ok:items.filter(x=>x.status==='ok').length,
+      warn:items.filter(x=>x.status==='warn').length,
+      pend:items.filter(x=>x.status==='pend').length,
+      names:items.map(x=>x.name)};
+  }).sort((a,b)=>b.n-a.n);
+}
+function filtered(){
+  const rows=baseRows();
   rows.sort((a,b)=>{
     if(sortKey==='name') return (a.name||'').localeCompare(b.name||'','zh');
     if(sortKey==='latest') return String(b.latest||'').localeCompare(String(a.latest||''),'zh');
-    // actual numeric
-    const av=a.actual==null?-Infinity:Number(a.actual);
-    const bv=b.actual==null?-Infinity:Number(b.actual);
+    const av=a.actual==null?-Infinity:Number(a.actual), bv=b.actual==null?-Infinity:Number(b.actual);
     return bv-av;
   });
   return rows;
@@ -8381,9 +8408,35 @@ function openTrack(r, tr){
   });
 }
 function renderTrack(){
-  const rows=filtered();
-  const tn=document.getElementById('track-n'); if(tn) tn.textContent=TRACK.length;
   const tb=document.getElementById('tbody'); if(!tb) return;
+  const tn=document.getElementById('track-n');
+  if(mode==='region'){
+    const groups=regionRows();
+    const shown=groups.reduce((s,g)=>s+g.n,0);
+    if(tn) tn.textContent=groups.length+' 区 · '+shown+' 条';
+    tb.innerHTML=groups.map((g,i)=>`
+      <tr data-r="${i}" tabindex="0">
+        <td><div class="name">${g.region}</div><div class="meta">${g.n} 个主体 · 已核验 ${g.ok}${g.warn?' · 口径注意 '+g.warn:''}${g.pend?' · 待核 '+g.pend:''}</div></td>
+        <td><div class="meta">—</div></td>
+        <td><div class="meta">—</div></td>
+        <td><div class="range">${g.names.slice(0,3).join('、')}${g.names.length>3?' 等':''}</div><div class="meta">按区域聚合 · 点击展开明细</div></td>
+        <td><div class="meta">—</div></td>
+        <td><div class="meta">—</div></td>
+        <td>${g.sums.length
+          ? g.sums.map(s=>`<div class="actual">${s}</div>`).join('')+'<div class="meta">同单位小计（不跨单位相加）</div>'
+          : g.items.slice(0,3).map(x=>`<div class="range" style="font-size:12px">${x.latest||'—'}</div>`).join('')+'<div class="meta">口径不同不可加总，列出明细（点击展开）</div>'}</td>
+        <td style="color:var(--accent);font-weight:800">›</td>
+      </tr>`).join('') || '<tr><td colspan="8" class="meta" style="padding:20px">无匹配</td></tr>';
+    tb.querySelectorAll('tr[data-r]').forEach(tr=>{
+      const g=groups[+tr.dataset.r];
+      const go=()=>{ region=g.region; syncRegionChips(); setMode('project'); renderMapMarkers(); toast('已展开 '+g.region+' · 项目视图'); };
+      tr.onclick=go;
+      tr.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } };
+    });
+    return;
+  }
+  const rows=filtered();
+  if(tn) tn.textContent=rows.length+' / '+TRACK.length;
   tb.innerHTML = rows.map((r,i)=>`
     <tr data-i="${i}" tabindex="0">
       <td><div class="name">${r.name||''}</div><div class="meta">${r.country||''} · ${r.region||''} · ${r.tag||''}</div></td>
@@ -8513,12 +8566,21 @@ function bindUI(){
   });
   const exp=document.getElementById('btn-export');
   if(exp) exp.onclick=()=>{
-    const rows=filtered();
-    const h='name,country,region,tag,init,latest,actual,source\n';
-    const body=rows.map(r=>[r.name,r.country||'',r.region||'',r.tag||'',r.init||'',r.latest||'',r.actual??'',r.href||''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    let h, body, fname;
+    if(mode==='region'){
+      const g=regionRows();
+      h='region,count,ok,warn,pend,subtotal_same_unit,members\n';
+      body=g.map(x=>[x.region,x.n,x.ok,x.warn,x.pend,x.sums.join(' | '),x.names.join(' / ')].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+      fname=`mine-desk-${currentMetal}-region.csv`;
+    } else {
+      const rows=filtered();
+      h='name,country,region,tag,init,latest,actual,source\n';
+      body=rows.map(r=>[r.name,r.country||'',r.region||'',r.tag||'',r.init||'',r.latest||'',r.actual??'',r.href||''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+      fname=`mine-desk-${currentMetal}-track.csv`;
+    }
     const a=document.createElement('a');
     a.href=URL.createObjectURL(new Blob([h+body],{type:'text/csv'}));
-    a.download=`mine-desk-${currentMetal}-track.csv`;
+    a.download=fname;
     a.click();
   };
   const dc=document.getElementById('d-close'); if(dc) dc.onclick=closeDrawer;
