@@ -30,7 +30,7 @@ button,input,select{font:inherit}a{color:var(--accent);font-weight:600}
 .rail nav a{display:block;color:#cbd5e1;text-decoration:none;padding:9px 11px;border-radius:9px;font-weight:550}
 .rail nav a:hover,.rail nav a.active{background:rgba(255,255,255,.1);color:#fff}
 .rail .note{margin-top:20px;padding:11px;border-radius:10px;background:rgba(255,255,255,.04);font-size:11.5px;color:#94a3b8;line-height:1.55}
-.main{padding:18px 22px 48px;max-width:1320px}
+.main{padding:18px 22px 48px;max-width:min(1760px,100%)}
 .top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px}
 .kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 6px}
 h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
@@ -43,7 +43,13 @@ h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
 .chip.ok{background:#ecfdf5;border-color:#a7f3d0;color:var(--ok)}
 .chip.warn{background:#fffbeb;border-color:#fde68a;color:var(--warn)}
 .chip.pend{background:#f1f5f9;border-color:#cbd5e1;color:var(--pend)}
-.grid-2{display:grid;grid-template-columns:1.05fr 1fr;gap:14px}
+.grid-2{display:grid;grid-template-columns:1.05fr 1fr;gap:14px;align-items:start}
+/* 宽屏适配：内容随屏宽伸展，避免右侧留大片空白；事件卡片限高内部滚动，与库存卡片高度更平衡 */
+@media(min-width:1400px){
+  .grid-2{grid-template-columns:1.15fr 1fr}
+  .map-wrap{grid-template-columns:1.7fr .8fr}
+  #changes{max-height:640px;overflow:auto;padding-right:6px}
+}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
 .card h2{margin:0 0 10px;font-size:15px;display:flex;justify-content:space-between;gap:8px;align-items:center}
 .card h2 em{font-style:normal;font-size:11px;font-weight:600;color:var(--muted)}
@@ -149,8 +155,8 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
       <a href="#track">产量追踪</a>
       <a href="#sources">来源总表</a>
     </nav>
-    <div class="note" id="rail-note">侧栏切换 Cu/Al/Pb·Zn/Ni/Sn/Li/Fe<br>默认底图 Esri World Street<br>核验日 2026-09-18 · 七金属 RANK=35</div>
-    <div class="legacy">单品种页：
+    <div class="note" id="rail-note">品种：Cu/Fe/Al/Li/Ni/Pb·Zn/Sn<br>底图：Esri World Street<br>库存自动刷新 · 七金属 RANK=35</div>
+    <div class="legacy">单品种旧页（未同步 35 档，仅供对照）：
       <a href="metals-atlas-copper-loggedin.html">Cu</a> ·
       <a href="metals-atlas-aluminum-loggedin.html">Al</a> ·
       <a href="metals-atlas-pbzn-loggedin.html">Pb/Zn</a>
@@ -172,6 +178,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
       <div class="card"><h2>近期供给事件 <em>点击打开来源</em></h2><div id="changes"></div></div>
       <div class="card" id="inv">
         <h2>交易所库存 <em>kt</em></h2>
+        <div class="meta" id="inv-asof" style="margin:-4px 0 10px;font-size:11.5px;color:var(--muted)">数据时点：页面内置基线（正在尝试加载实时数据…）</div>
         <div class="inv" id="inv-list"></div>
         <div class="bench" id="bench" role="button" tabindex="0">
           <div>
@@ -273,14 +280,14 @@ const THEMES = {
     "active_row": "#dbeafe",
     "title": "铜 · 全球矿端公开核验",
     "kicker": "Public mine verification desk",
-    "lead": "多金属统一台：侧栏切换 Cu / Al / Pb·Zn。真实底图落点 + 可点开年报来源。",
+    "lead": "七金属统一页：侧栏切换 Cu / Fe / Al / Li / Ni / Pb·Zn / Sn；圆点=样本点，点击可打开公开来源。",
     "pills": "品种 <strong>Cu</strong> · 全球矿端 <strong>23.0 Mt</strong>",
-    "banner": "铜：矿山含铜为主。Leaflet 真底图；圆点=产量，颜色=核验。",
+    "banner": "铜：以矿山含铜为主；圆点=样本点，颜色=核验状态。",
     "rank_h": "样本产量榜 · kt 含铜",
     "bench1_lbl": "全球矿端 2025e · USGS",
     "bench1_val": "23.0 Mt",
     "bench1_sub": "MCS 2026 Copper",
-    "note": "当前：铜 Cu",
+    "note": "Cu 35 档",
     "inv_chip": "Cu"
   },
   "Al": {
@@ -335,7 +342,7 @@ const THEMES = {
     "title": "锡供给公开核验",
     "lead": "矿山 Sn / 精矿含锡 / 精锡 / 出口 / 库存分层，禁止混加。",
     "banner": "锡：USGS 矿山与云锡/Minsur/Timah/Alphamin 等精锡并列。",
-    "rank_h": "锡样本 RANK",
+    "rank_h": "锡样本榜 · 矿山/精锡分层",
     "bench1_lbl": "全球矿山锡 USGS 2025e",
     "bench1_val": "~290 kt",
     "bench1_sub": "MCS 2026",
@@ -357,10 +364,10 @@ const THEMES = {
     "title": "锂供给公开核验",
     "lead": "LCE / 锂盐 / SC / 金属锂分层，禁止混加。",
     "banner": "锂：盐湖与硬岩口径并列。",
-    "rank_h": "锂样本 RANK",
-    "bench1_lbl": "全球矿山锂 USGS",
-    "bench1_val": "见页内",
-    "bench1_sub": "MCS",
+    "rank_h": "锂样本榜 · LCE/SC 分层",
+    "bench1_lbl": "全球矿山锂 2025e · USGS",
+    "bench1_val": "~290 kt Li",
+    "bench1_sub": "MCS 2026 Lithium",
     "pills": "口径：LCE ≠ SC ≠ 盐",
     "note": "Li 35 档",
     "banner_bg": "#f5f3ff",
@@ -379,10 +386,10 @@ const THEMES = {
     "title": "铁矿公开核验",
     "lead": "可用矿 / 湿吨发运 / 球团 / 粗钢分层，禁止混加。",
     "banner": "铁：四大矿与港口库存。",
-    "rank_h": "铁样本 RANK",
-    "bench1_lbl": "全球可用矿 USGS",
-    "bench1_val": "见页内",
-    "bench1_sub": "MCS",
+    "rank_h": "铁样本榜 · 可用矿/发运分层",
+    "bench1_lbl": "全球可用矿 2025e · USGS",
+    "bench1_val": "~2.6 Gt",
+    "bench1_sub": "MCS 2026 Iron Ore",
     "pills": "口径：可用矿 ≠ 发运",
     "note": "Fe 35 档",
     "banner_bg": "#fffbeb",
@@ -401,10 +408,10 @@ const THEMES = {
     "title": "镍供给公开核验",
     "lead": "矿山 Ni / 原生 / Class1 / NPI 分层，禁止混加。",
     "banner": "镍：印尼与硫化镍体系并列。",
-    "rank_h": "镍样本 RANK",
-    "bench1_lbl": "全球矿山镍 USGS",
-    "bench1_val": "见页内",
-    "bench1_sub": "MCS",
+    "rank_h": "镍样本榜 · 矿山/原生/NPI 分层",
+    "bench1_lbl": "全球矿山镍 2025e · USGS",
+    "bench1_val": "~3.9 Mt",
+    "bench1_sub": "MCS 2026 Nickel",
     "pills": "口径：矿山 ≠ NPI ≠ Class1",
     "note": "Ni 35 档",
     "banner_bg": "#f0f9ff",
@@ -8204,7 +8211,7 @@ function applyTheme(m){
   set('bench1-val', th.bench1_val);
   set('bench1-sub', th.bench1_sub);
   set('meta-pills', `<span class="pill">${th.pills}</span><span class="pill">样本点 <strong id="mine-count">—</strong></span><span class="pill">底图 <strong>Esri</strong></span>`, true);
-  set('rail-note', `侧栏切换 Cu/Al/Pb·Zn/Ni/Sn/Li/Fe<br>默认底图 Esri World Street<br>核验日 2026-09-18 · <strong>${th.note||''}</strong>`, true);
+  set('rail-note', `品种：Cu/Fe/Al/Li/Ni/Pb·Zn/Sn<br>底图：Esri World Street<br>库存自动刷新 · <strong>${th.note||''}</strong>`, true);
   set('foot-left', '矿端公开核验台 · 统一页 · '+(th.note||m));
   document.title = '矿端公开核验台 · ' + (METAL_LABEL[m]||m);
 }
@@ -8523,21 +8530,82 @@ function bindUI(){
   }));
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{
+/* ===== 交易所库存自动刷新（路线 A）=====
+   页面打开时读取 data/stocks.json——该文件由 GitHub Actions 每交易日自动抓取并提交。
+   同源读取，无跳域问题；加载失败则保留页内基线，不影响其余功能。 */
+const STOCK_MAP = {
+  Cu:   {lme:'Cu', shfe:'Cu'},
+  Al:   {lme:'Al', shfe:'Al'},
+  PbZn: {lme:{'lme-zn':'Zn', 'lme-pb':'Pb'}, shfe:{'shfe-zn':'Zn'}},
+  Ni:   {lme:'Ni', shfe:'Ni'},
+  Sn:   {lme:'Sn', shfe:'Sn'}
+};
+function stockKey(conf, id){
+  if(typeof conf === 'string') return conf;
+  return (conf && conf[id]) || null;
+}
+function applyStocks(j){
+  if(!j) return;
+  const asof = j.as_of || '';
+  Object.keys(STOCK_MAP).forEach(metal=>{
+    const md = METAL_DATA[metal];
+    if(!md || !md.INV) return;
+    const conf = STOCK_MAP[metal];
+    md.INV.forEach(it=>{
+      const id = String(it.id || '');
+      if(id.indexOf('lme') === 0){
+        const k = stockKey(conf.lme, id);
+        const s = (k && j.LME) ? j.LME[k] : null;
+        if(s){
+          it.val = String(s.kt);
+          it.status = 'ok';
+          it.foot = s.date + ' · 自动刷新';
+          it.links = [{label:'westmetall · LME ' + k + ' 库存（公开镜像）', url:'https://www.westmetall.com/en/markdaten.php?action=table&field=LME_' + k + '_stock'}].concat(it.links || []);
+        }
+      } else if(id.indexOf('shfe') === 0){
+        const k = stockKey(conf.shfe, id);
+        const s = (k && j.SHFE) ? j.SHFE[k] : null;
+        if(s){
+          it.val = String(s.kt);
+          it.status = 'ok';
+          it.foot = s.date + ' · 自动刷新';
+          it.links = [{label:'上期所 每日仓单（' + s.date + '）', url:'https://www.shfe.com.cn/data/tradedata/future/stockdata/dailystock_' + String(s.date).replace(/-/g,'') + '/ZH/all.html'}].concat(it.links || []);
+        }
+      }
+    });
+  });
+  const el = document.getElementById('inv-asof');
+  if(el) el.innerHTML = '数据时点：<b>' + asof + '</b> · 自动刷新（LME 经公开镜像 / SHFE 官网仓单）';
+}
+async function loadLiveStocks(){
+  const el = document.getElementById('inv-asof');
+  try{
+    const r = await fetch('data/stocks.json', {cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    applyStocks(j);
+    renderPanels();
+  }catch(e){
+    if(el) el.textContent = '数据时点：页面内置基线（实时数据未加载成功，可能为本地文件打开或网络受限）';
+  }
+}
+function boot(){
   try{
     bindUI();
     initMap();
     loadMetal(currentMetal, false);
+    loadLiveStocks();
   }catch(err){
     console.error(err);
     const el=document.getElementById('page-lead');
     if(el) el.textContent='初始化失败：'+err.message;
     toast('初始化失败，请打开控制台查看');
   }
-});
-// also run immediately if DOM already ready
-if(document.readyState!=='loading'){
-  try{ bindUI(); initMap(); loadMetal(currentMetal, false); }catch(err){ console.error(err); }
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', boot);
+}else{
+  boot();
 }
 
 </script>
