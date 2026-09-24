@@ -1,6 +1,11 @@
-name: Update exchange stocks
+name: Update stocks & supply events
 
-# 交易所公开库存自动刷新（北京 08:30 ≈ UTC 00:30，周二至周六 UTC）
+# 公开数据自动刷新（每交易日 08:30 北京时间 run 一次，可用 Actions 手动触发）
+#   1) 交易所库存：LME 经 westmetall 公开镜像 + SHFE 官网每日仓单  -> data/stocks.json
+#   2) 供给事件池：公开 RSS 源（mining-technology / northernminer / australianmining /
+#                  im-mining / mining.com）标题级抓取，按品种关键词归类 -> data/events.json
+#                 新条目一律 status=pend（页面显示为黄底「自动抓取·待确认」），人工确认后改为 ok。
+# 合规：仅抓取公开页面与公开 RSS；不抓取任何会员制 / 付费内容。
 on:
   schedule:
     - cron: '30 0 * * 2-6'
@@ -10,7 +15,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-stocks
+  group: update-data
   cancel-in-progress: false
 
 jobs:
@@ -28,14 +33,18 @@ jobs:
       - name: Fetch LME / SHFE stocks
         run: python3 scripts/fetch_stocks.py --out data/stocks.json
 
+      - name: Fetch supply events (best effort)
+        run: python3 scripts/fetch_events.py --out data/events.json
+        continue-on-error: true
+
       - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/stocks.json
+          git add data/stocks.json data/events.json
           if git diff --staged --quiet; then
-            echo "库存无变化，跳过提交"
+            echo "无变化，跳过提交"
           else
-            git commit -m "chore(stocks): 自动更新交易所库存 $(date -u +%F)"
+            git commit -m "chore(data): 自动更新交易所库存 / 供给事件池 $(date -u +%F)"
             git push
           fi
