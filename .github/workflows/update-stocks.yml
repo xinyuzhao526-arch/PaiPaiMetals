@@ -41,7 +41,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/stocks.json data/events.json
+          # 分文件 add：任一文件缺失（例如事件抓取首次失败还未生成）都不影响另一个被提交
+          git add data/stocks.json || true
+          git add data/events.json || true
           if git diff --staged --quiet; then
             echo "无变化，跳过提交"
           else
