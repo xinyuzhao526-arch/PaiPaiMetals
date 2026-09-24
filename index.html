@@ -118,7 +118,10 @@ h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
 .rank .kt{font-weight:800;font-variant-numeric:tabular-nums;text-align:right}.rank .kt small{color:var(--muted);font-weight:600;font-size:11px}
 .mine-pop h4{margin:0 0 4px;font-size:14px}.mine-pop p{margin:0;font-size:12px;color:#475569;line-height:1.45}
 .section{margin-top:26px}.section h2{margin:0 0 6px;font-size:18px}.section p.sub{margin:0 0 12px;color:var(--muted);font-size:13px}
-.kpis{display:grid;grid-template-columns:1.2fr 1fr .7fr;gap:12px;margin-bottom:12px}
+.kpis{display:grid;grid-template-columns:minmax(150px,170px) minmax(260px,400px) auto;justify-content:space-between;gap:12px;margin-bottom:12px}
+/* 模式键从 2 个变 3 个后，原固定比例列（1.2fr 1fr .7fr）会把第三个键挤换行：
+   改成【窄计数列 + 弹性排序列 + 自适应模式列】，并让按钮不折行 */
+.seg button{white-space:nowrap}
 .kpi label{display:block;font-size:11px;color:var(--muted)}.kpi strong{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
 .toolbar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:8px 0 10px}
 .search{border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-width:220px;background:#fff}
