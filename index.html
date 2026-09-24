@@ -60,6 +60,9 @@ h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
 .item .hint{font-size:10px;color:var(--accent);margin-top:6px;font-weight:600}
 .item.pending{background:#fffbeb;border-color:#fde68a}.item.pending:hover{border-color:var(--warn)}
 .item.pending .tag{color:var(--warn)}
+.item.auto{background:#f6f9ff;border-color:#dbe6fb;border-left:3px solid #a8c2f2}
+.item.auto:hover{border-color:var(--accent)}
+.chip.auto{background:#eef4ff;border-color:#c9dbfb;color:#2a4f9b}
 .inv{display:grid;gap:8px}
 .inv button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px;text-align:left;cursor:pointer}
 .inv button:hover{border-color:var(--accent)}
@@ -438,8 +441,12 @@ const EVENT_METAL = {Cu:['Cu'], Al:['Al'], PbZn:['Zn','Pb','PbZn'], Ni:['Ni'], S
 function eventList(metal){
   const keys = EVENT_METAL[metal] || [metal];
   const pool = POOL.filter(e=>Array.isArray(e.metals) && e.metals.some(m=>keys.indexOf(m)>=0))
-    .map(e=>Object.assign({}, e, {tag:e.tag||'待确认', status:'pend', detail:e.detail||'', pending:true}));
-  return CHANGES.map(c=>Object.assign({}, c, {pending:false})).concat(pool)
+    .map(e=>{
+      const st = e.status==='pend' ? 'pend' : (e.status==='auto' ? 'auto' : 'ok');
+      return Object.assign({}, e, {tag:e.tag||'供给事件', status:st, detail:e.detail||'',
+        pending:st==='pend', auto:st==='auto'});
+    });
+  return CHANGES.map(c=>Object.assign({}, c, {pending:false, auto:false})).concat(pool)
     .sort((a,b)=>String(b.d||'').localeCompare(String(a.d||'')));
 }
 async function loadLiveEvents(){
@@ -457,6 +464,7 @@ let map, markerLayer, markersByN={}, mapReady=false, baseLayers={}, currentBase=
 function chip(st){
   return st==='ok' ? '<span class="chip ok">已核验</span>'
     : st==='warn' ? '<span class="chip warn">口径注意</span>'
+    : st==='auto' ? '<span class="chip auto">自动发布</span>'
     : '<span class="chip pend">待核</span>';
 }
 function toast(m){
@@ -641,11 +649,14 @@ function renderPanels(){
   const ch=document.getElementById('changes');
   if(ch){
     const evs = eventList(currentMetal);
+    const nauto = evs.filter(x=>x.auto).length;
     const pend = evs.filter(x=>x.pending).length;
-    const note = pend ? '<div class="meta" style="margin:0 0 8px;font-size:11px;color:var(--warn)">自动抓取待确认 '+pend+' 条（黄底）· 确认后转正式条目</div>' : '';
+    let note = '';
+    if(nauto) note += '<div class="meta" style="margin:0 0 8px;font-size:11px;color:#2a4f9b">自动发布 '+nauto+' 条（蓝底）· 按事件类型白名单入库，来源为公开媒体</div>';
+    if(pend) note += '<div class="meta" style="margin:0 0 8px;font-size:11px;color:var(--warn)">待确认 '+pend+' 条（黄底）</div>';
     ch.innerHTML = note + (evs.map(c=>`
-    <button type="button" class="item${c.pending?' pending':''}" data-id="${c.id}">
-      <div><div class="when">${c.when||''}${c.pending?' · 自动抓取':''}</div><div class="title">${c.title||''}</div><div class="desc">${c.desc||''}</div><div class="hint">打开来源 →</div></div>
+    <button type="button" class="item${c.pending?' pending':''}${c.auto?' auto':''}" data-id="${c.id}">
+      <div><div class="when">${c.when||''}${c.auto?' · 自动发布':''}${c.pending?' · 待确认':''}</div><div class="title">${c.title||''}</div><div class="desc">${c.desc||''}</div><div class="hint">打开来源 →</div></div>
       <div class="tag">${c.tag||''}</div>
     </button>`).join('') || '<div class="meta">暂无事件</div>');
   }

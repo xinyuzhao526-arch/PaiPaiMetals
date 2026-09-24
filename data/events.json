@@ -1,18 +1,18 @@
 {
- "generated_at": "2026-09-24T01:51:44+00:00",
- "note": "自动抓取的供给事件池；status=pend 表示待人工确认，确认后改为 ok 并补充口径。",
+ "generated_at": "2026-09-24T02:13:31+00:00",
+ "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_new": 0
+   "matched_new": 3
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_new": 0
+   "matched_new": 6
   },
   {
    "source": "australianmining",
@@ -24,17 +24,18 @@
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_new": 0
+   "matched_new": 4
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_new": 0
+   "matched_new": 4
   }
  ],
- "count": 17,
- "pending": 17,
+ "count": 6,
+ "pending": 0,
+ "auto": 6,
  "events": [
   {
    "id": "ff0a95ff642607e8",
@@ -45,8 +46,8 @@
    ],
    "title": "Nth Cycle signs $1bn recycled minerals supply deal with Glencore",
    "desc": "Nth Cycle, a US-based metals refining company, has entered into a $1bn offtake agreement with Glencore to supply lithium and other critical minerals recovered from recycled batteries, reported Reuters. The post Nth Cycle",
-   "tag": "合约",
-   "status": "pend",
+   "tag": "长协/包销",
+   "status": "auto",
    "src": "mining-technology",
    "links": [
     {
@@ -54,7 +55,10 @@
      "url": "https://www.mining-technology.com/news/nth-cycle-1bn-recycled-minerals-supply-glencore/"
     }
    ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
+   "first_seen": "2026-09-24T01:15:47+00:00",
+   "src_level": "media",
+   "confirmed": "user-2026-09-24",
+   "detail": "据报道，Nth Cycle（美国金属精炼企业）与嘉能可签订规模约 10 亿美元的包销协议，供应从退役电池中回收的锂及其他关键矿物。口径：协议金额约 10 亿美元；实物数量与交付周期未在报道中披露。"
   },
   {
    "id": "84b1f061562ff17b",
@@ -65,8 +69,8 @@
    ],
    "title": "Global Lithium signs $237m SID with Titan Australia Mining",
    "desc": "Global Lithium Resources and Titan Australia Mining have signed a binding scheme implementation deed (SID) for a proposed acquisition valued at approximately A$333m ($237m). The post Global Lithium signs $237m SID with T",
-   "tag": "并购",
-   "status": "pend",
+   "tag": "并购/股权",
+   "status": "auto",
    "src": "mining-technology",
    "links": [
     {
@@ -74,47 +78,10 @@
      "url": "https://www.mining-technology.com/news/global-lithium-237m-sid-titan-australia-mining/"
     }
    ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
-  },
-  {
-   "id": "e6f29187e98fae29",
-   "when": "2026-09-23",
-   "d": "2026-09-23",
-   "metals": [
-    "Cu"
-   ],
-   "title": "Higher Santa Cruz costs weigh on Ivanhoe Electric",
-   "desc": "A new prefeasibility study (PFS) shows Ivanhoe Electric’s (NYSE, TSX: IE) Santa Cruz copper project in Arizona has become more expensive to build while its economics improved modestly. The stock... The post Higher Santa ",
-   "tag": "项目",
-   "status": "pend",
-   "src": "northernminer",
-   "links": [
-    {
-     "label": "northernminer 原文",
-     "url": "https://www.northernminer.com/news/higher-santa-cruz-costs-weigh-on-ivanhoe-electric/1003895078/"
-    }
-   ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
-  },
-  {
-   "id": "58289a9f40959700",
-   "when": "2026-09-23",
-   "d": "2026-09-23",
-   "metals": [
-    "Cu"
-   ],
-   "title": "BHP, Amazon establish ‘industry-first’ pilot for lower emissions copper market",
-   "desc": "BHP and Amazon have established an industry-first copper pilot to buy and sell credits for lower greenhouse gas emissions associated with copper concentrate and cathodes produced at Escondida – the world’s largest copper",
-   "tag": "供给",
-   "status": "pend",
-   "src": "im-mining",
-   "links": [
-    {
-     "label": "im-mining 原文",
-     "url": "https://im-mining.com/2026/09/23/bhp-amazon-establish-industry-first-pilot-for-lower-emissions-copper-market/"
-    }
-   ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
+   "first_seen": "2026-09-24T01:15:47+00:00",
+   "src_level": "media",
+   "confirmed": "user-2026-09-24",
+   "detail": "Global Lithium Resources 与 Titan Australia Mining 签署约束性安排协议（SID），拟议收购对价约 A$333m。口径：交易金额约 A$333m；标的为公司控制权变更，影响其锂项目推进节奏。"
   },
   {
    "id": "cbc51741daf06fae",
@@ -126,7 +93,7 @@
    "title": "BHP halts operations at Escondida following fatal accident",
    "desc": "Chile’s Sernageomin confirmed the fatal accident, and deployed a regional team to investigate.",
    "tag": "供给扰动",
-   "status": "pend",
+   "status": "auto",
    "src": "mining.com",
    "links": [
     {
@@ -134,27 +101,10 @@
      "url": "https://www.mining.com/fatal-accident-reported-at-bhps-escondida-mine/"
     }
    ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
-  },
-  {
-   "id": "e038f21f423fca46",
-   "when": "2026-09-23",
-   "d": "2026-09-23",
-   "metals": [
-    "Li"
-   ],
-   "title": "Savannah raises $30M to advance Barroso lithium project",
-   "desc": "Fresh funding will push Barroso through engineering, permitting and early works as Savannah moves towards development.",
-   "tag": "项目",
-   "status": "pend",
-   "src": "mining.com",
-   "links": [
-    {
-     "label": "mining.com 原文",
-     "url": "https://www.mining.com/savannah-raises-30m-to-advance-barroso-lithium-project/"
-    }
-   ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
+   "first_seen": "2026-09-24T01:15:47+00:00",
+   "src_level": "media",
+   "confirmed": "user-2026-09-24",
+   "detail": "智利矿业监管机构 Sernageomin 确认 Escondida 发生致命事故，BHP 已暂停作业并派出区域团队调查。口径：停产起止时间与影响产量尚未由公司披露，需待 BHP 官方说明。"
   },
   {
    "id": "31c1e5f51f6d275c",
@@ -165,8 +115,8 @@
    ],
    "title": "Bridge Green, Hartree sign eight-year lithium agreement",
    "desc": "Bridge Green Upcycle and Hartree Partners have signed an eight-year commercial agreement for the purchase and marketing of lithium carbonate produced from recycled batteries, with a value between $500m and $1bn at curren",
-   "tag": "合约",
-   "status": "pend",
+   "tag": "长协/包销",
+   "status": "auto",
    "src": "mining-technology",
    "links": [
     {
@@ -174,67 +124,10 @@
      "url": "https://www.mining-technology.com/news/bridge-green-hartree-eight-year-lithium-agreement/"
     }
    ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
-  },
-  {
-   "id": "ec65bf4a0011836a",
-   "when": "2026-09-22",
-   "d": "2026-09-22",
-   "metals": [
-    "Li"
-   ],
-   "title": "Global Lithium soars 50% on A$333M Titan takeover",
-   "desc": "Global Lithium Resources (ASX: GL1) shares soared nearly 50% on Tuesday after the Australian developer agreed to a A$333-million ($237-million) cash takeover by UAE-headquartered Titan Australia Mining. The stock jumped.",
-   "tag": "并购",
-   "status": "pend",
-   "src": "northernminer",
-   "links": [
-    {
-     "label": "northernminer 原文",
-     "url": "https://www.northernminer.com/news/global-lithium-soars-50-on-a333m-titan-takeover/1003895024/"
-    }
-   ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
-  },
-  {
-   "id": "fa94b5afae78ec23",
-   "when": "2026-09-22",
-   "d": "2026-09-22",
-   "metals": [
-    "Cu"
-   ],
-   "title": "Meridian’s Cabaçal value doubles on higher prices",
-   "desc": "Meridian Mining (TSX, LSE: MNO; US-OTC: MRRDF) has more than doubled the estimated value of its Cabaçal gold-copper project in Brazil in a new feasibility study, although the gain rests... The post Meridian’s Cabaçal val",
-   "tag": "项目",
-   "status": "pend",
-   "src": "northernminer",
-   "links": [
-    {
-     "label": "northernminer 原文",
-     "url": "https://www.northernminer.com/news/meridians-cabacal-value-doubles-on-higher-prices/1003895043/"
-    }
-   ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
-  },
-  {
-   "id": "6e004f68dc43ad77",
-   "when": "2026-09-22",
-   "d": "2026-09-22",
-   "metals": [
-    "Cu"
-   ],
-   "title": "Selkirk Copper’s Minto posts $494M value, nearly triple its build costs",
-   "desc": "A preliminary economic assessment (PEA) for Selkirk Copper Mines’ (TSXV: SCMI; US-OTC: SKRKF) brownfield Minto project in Yukon gives it a $494 million (US$353 million) value, almost three times higher... The post Selkir",
-   "tag": "供给",
-   "status": "pend",
-   "src": "northernminer",
-   "links": [
-    {
-     "label": "northernminer 原文",
-     "url": "https://www.northernminer.com/news/selkirk-coppers-494m-value-for-minto-mine-nearly-triple-its-costs/1003895034/"
-    }
-   ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
+   "first_seen": "2026-09-24T01:15:47+00:00",
+   "src_level": "media",
+   "confirmed": "user-2026-09-24",
+   "detail": "Bridge Green Upcycle 与 Hartree Partners 签署八年期商业协议，涉及从退役电池回收的碳酸锂的采购与销售。口径：协议期限八年，报道称协议价值在 5 亿–10 亿美元区间；实物数量未披露。"
   },
   {
    "id": "1f338c2a36be4680",
@@ -245,8 +138,8 @@
    ],
    "title": "Vale buys Ligga iron ore stake for $190M",
    "desc": "Vale (NYSE: VALE) confirmed it’s acquiring a 30% interest in Ligga to increase iron ore production, after the country’s stock exchange questioned why the deal hadn’t been disclosed to investors.... The post Vale buys Lig",
-   "tag": "合约",
-   "status": "pend",
+   "tag": "并购/股权",
+   "status": "auto",
    "src": "northernminer",
    "links": [
     {
@@ -254,87 +147,10 @@
      "url": "https://www.northernminer.com/news/vale-buys-ligga-iron-ore-stake-for-190m/1003895046/"
     }
    ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
-  },
-  {
-   "id": "b093fa15181b71af",
-   "when": "2026-09-22",
-   "d": "2026-09-22",
-   "metals": [
-    "Cu"
-   ],
-   "title": "Ok Tedi introduces world’s first ArcSAR Neo radar systems from IDS GeoRadar",
-   "desc": "PNG copper and gold mining major Ok Tedi Mining has announced the successful deployment and commissioning of the ArcSAR Neo slope stability monitoring radar system, it says marking an important advance in how mine slopes",
-   "tag": "并购",
-   "status": "pend",
-   "src": "im-mining",
-   "links": [
-    {
-     "label": "im-mining 原文",
-     "url": "https://im-mining.com/2026/09/22/ok-tedi-introduces-worlds-first-arcsar-neo-radar-systems-from-ids-georadar/"
-    }
-   ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
-  },
-  {
-   "id": "bdf0d3af0a144876",
-   "when": "2026-09-22",
-   "d": "2026-09-22",
-   "metals": [
-    "Cu"
-   ],
-   "title": "Metso banks largest LCS analyser order to date",
-   "desc": "Metso has secured what it says is its largest analyser Life Cycle Services (LCS) agreement to date with a major copper producer in South America. The five-year agreement represents an important milestone in the developme",
-   "tag": "合约",
-   "status": "pend",
-   "src": "im-mining",
-   "links": [
-    {
-     "label": "im-mining 原文",
-     "url": "https://im-mining.com/2026/09/22/metso-banks-largest-lcs-analyser-order-to-date/"
-    }
-   ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
-  },
-  {
-   "id": "ca2b03e7692d3f0b",
-   "when": "2026-09-22",
-   "d": "2026-09-22",
-   "metals": [
-    "Fe"
-   ],
-   "title": "Wabtec wins plus-$700 million services order for Simandou",
-   "desc": "Wabtec Corporation has announced a more than $700 million long-term services agreement with La Compagnie du TransGuinéen (CTG) to support its fleet of new Evolution Series locomotives in Guinea. The agreement is Wabtec’s",
-   "tag": "合约",
-   "status": "pend",
-   "src": "im-mining",
-   "links": [
-    {
-     "label": "im-mining 原文",
-     "url": "https://im-mining.com/2026/09/22/wabtec-wins-plus-700-million-services-order-for-simandou/"
-    }
-   ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
-  },
-  {
-   "id": "4a9963cddf6cdf24",
-   "when": "2026-09-22",
-   "d": "2026-09-22",
-   "metals": [
-    "Cu"
-   ],
-   "title": "Copper price closes in on new record as Shanghai, London warehouses empty out",
-   "desc": "Imported copper landing in China is going straight to fabricators and skipping warehouses with Shanghai stocks dropping 70% since June.",
-   "tag": "供给",
-   "status": "pend",
-   "src": "mining.com",
-   "links": [
-    {
-     "label": "mining.com 原文",
-     "url": "https://www.mining.com/copper-price-closes-in-on-new-record-as-shanghai-london-warehouses-empty-out/"
-    }
-   ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
+   "first_seen": "2026-09-24T01:15:47+00:00",
+   "src_level": "media",
+   "confirmed": "user-2026-09-24",
+   "detail": "Vale 确认收购 Ligga 30% 权益，公司称此举用于提升铁矿石产量；当地交易所曾就该交易未向投资者披露提出问询。口径：收购比例 30%，对价约 1.9 亿美元；标的权益对应的新增产能与产出时点未在报道中披露。"
   },
   {
    "id": "64cb528a12de2d5c",
@@ -346,8 +162,8 @@
    ],
    "title": "Capstone sells Mexican mine to Luca for up to $385M",
    "desc": "Capstone Copper (TSX: CS; ASX: CSC) is selling its Cozamin copper-silver-zinc-lead mine in Mexico to Luca Mining (TSXV: LUCA) for up to $385 million (C$540 million) as it redirects capital... The post Capstone sells Mexi",
-   "tag": "供给",
-   "status": "pend",
+   "tag": "并购/股权",
+   "status": "auto",
    "src": "northernminer",
    "links": [
     {
@@ -355,27 +171,10 @@
      "url": "https://www.northernminer.com/news/capstone-sells-mexican-mine-to-luca-for-up-to-385m/1003894997/"
     }
    ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
-  },
-  {
-   "id": "9e75d949a5f9a496",
-   "when": "2026-09-21",
-   "d": "2026-09-21",
-   "metals": [
-    "Cu"
-   ],
-   "title": "Copper prices bounce as US runs out of warehouse space",
-   "desc": "US warehouses close to full with another 100,000 tonnes expected within weeks, Shanghai premiums rise to four-year high and London flips back into backwardation.",
-   "tag": "供给",
-   "status": "pend",
-   "src": "mining.com",
-   "links": [
-    {
-     "label": "mining.com 原文",
-     "url": "https://www.mining.com/copper-prices-bounce-as-us-runs-out-of-warehouse-space/"
-    }
-   ],
-   "first_seen": "2026-09-24T01:15:47+00:00"
+   "first_seen": "2026-09-24T01:15:47+00:00",
+   "src_level": "media",
+   "confirmed": "user-2026-09-24",
+   "detail": "Capstone Copper（TSX: CS；ASX: CSC）将其位于墨西哥的 Cozamin 铜-银-锌-铅矿出售给Luca Mining（TSXV: LUCA），对价最高 3.85 亿美元（约 5.4 亿加元），资金将转向其他项目。口径：交易对价最高 US$385m；标的为 Cozamin 矿，涉及铜、锌、铅。"
   }
  ]
 }
