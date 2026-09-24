@@ -58,6 +58,8 @@ h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
 .item .when{font-size:11px;color:var(--muted)}.item .title{font-weight:700;margin-top:2px}
 .item .desc{font-size:12.5px;color:#475569;margin-top:4px}.item .tag{font-weight:800;color:var(--accent-2);font-size:13px;text-align:right}
 .item .hint{font-size:10px;color:var(--accent);margin-top:6px;font-weight:600}
+.item.pending{background:#fffbeb;border-color:#fde68a}.item.pending:hover{border-color:var(--warn)}
+.item.pending .tag{color:var(--warn)}
 .inv{display:grid;gap:8px}
 .inv button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px;text-align:left;cursor:pointer}
 .inv button:hover{border-color:var(--accent)}
@@ -431,6 +433,24 @@ const METAL_LABEL = {Cu:'Cu', Al:'Al', PbZn:'Pb/Zn', Ni:'Ni', Sn:'Sn', Li:'Li', 
 let currentMetal = 'Cu'; try { currentMetal = (new URLSearchParams(location.search||'').get('metal')) || 'Cu'; } catch(e) { currentMetal='Cu'; }
 if (!METAL_DATA[currentMetal]) currentMetal = 'Cu';
 let CHANGES=[], INV=[], RANK=[], TRACK=[], SOURCES=[];
+let POOL=[];  /* data/events.json：自动抓取的供给事件池，默认「待确认」 */
+const EVENT_METAL = {Cu:['Cu'], Al:['Al'], PbZn:['Zn','Pb','PbZn'], Ni:['Ni'], Sn:['Sn'], Li:['Li'], Fe:['Fe']};
+function eventList(metal){
+  const keys = EVENT_METAL[metal] || [metal];
+  const pool = POOL.filter(e=>Array.isArray(e.metals) && e.metals.some(m=>keys.indexOf(m)>=0))
+    .map(e=>Object.assign({}, e, {tag:e.tag||'待确认', status:'pend', detail:e.detail||'', pending:true}));
+  return CHANGES.map(c=>Object.assign({}, c, {pending:false})).concat(pool)
+    .sort((a,b)=>String(b.d||'').localeCompare(String(a.d||'')));
+}
+async function loadLiveEvents(){
+  try{
+    const r = await fetch('data/events.json', {cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    POOL = (j.events||[]).filter(e=>e && e.id && e.title);
+    renderPanels();
+  }catch(e){ /* 静默：保留页内基线事件，不影响其余功能 */ }
+}
 let region='全部', mode='project', sortKey='actual', mapFilter='all';
 let map, markerLayer, markersByN={}, mapReady=false, baseLayers={}, currentBase=null;
 
@@ -619,11 +639,16 @@ function buildRegions(){
 function renderPanels(){
   const th=THEMES[currentMetal]||THEMES.Cu;
   const ch=document.getElementById('changes');
-  if(ch) ch.innerHTML = CHANGES.slice().sort((a,b)=>String(b.d||'').localeCompare(String(a.d||''))).map(c=>`
-    <button type="button" class="item" data-id="${c.id}">
-      <div><div class="when">${c.when||''}</div><div class="title">${c.title||''}</div><div class="desc">${c.desc||''}</div><div class="hint">打开来源 →</div></div>
+  if(ch){
+    const evs = eventList(currentMetal);
+    const pend = evs.filter(x=>x.pending).length;
+    const note = pend ? '<div class="meta" style="margin:0 0 8px;font-size:11px;color:var(--warn)">自动抓取待确认 '+pend+' 条（黄底）· 确认后转正式条目</div>' : '';
+    ch.innerHTML = note + (evs.map(c=>`
+    <button type="button" class="item${c.pending?' pending':''}" data-id="${c.id}">
+      <div><div class="when">${c.when||''}${c.pending?' · 自动抓取':''}</div><div class="title">${c.title||''}</div><div class="desc">${c.desc||''}</div><div class="hint">打开来源 →</div></div>
       <div class="tag">${c.tag||''}</div>
-    </button>`).join('') || '<div class="meta">暂无事件</div>';
+    </button>`).join('') || '<div class="meta">暂无事件</div>');
+  }
 
   const inv=document.getElementById('inv-list');
   if(inv) inv.innerHTML = INV.map(x=>`
@@ -853,7 +878,7 @@ function bindUI(){
   const ch=document.getElementById('changes');
   if(ch) ch.addEventListener('click', e=>{
     const b=e.target.closest('.item'); if(!b) return;
-    const c=CHANGES.find(x=>x.id===b.dataset.id); if(!c) return;
+    const c=eventList(currentMetal).find(x=>x.id===b.dataset.id); if(!c) return;
     openDrawer({title:c.title, sub:c.when, status:c.status, blocks:[{label:'摘要',text:c.desc},{label:'核验',text:c.detail||c.desc}], links:c.links||[]});
   });
   const inv=document.getElementById('inv-list');
@@ -977,6 +1002,7 @@ function boot(){
     initMap();
     loadMetal(currentMetal, false);
     loadLiveStocks();
+    loadLiveEvents();
   }catch(err){
     console.error(err);
     const el=document.getElementById('page-lead');
