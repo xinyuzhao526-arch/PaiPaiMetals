@@ -85,6 +85,11 @@ INCLUDE = [
         "curtail", "curtailment", "idle", "idled", "accident", "fatal", "collapse",
         "fire", "flood", "blockade", "landslide", "disruption", "outage",
         "mine closure", "closure of", "resumes operations", "restart", "restarted",
+        "output guidance", "guidance cut", "cuts output", "cut output",
+        "output cut", "output cuts", "cuts production", "cut production",
+        "production cut", "production cuts", "reduces output", "reduce output",
+        "lower output", "trims output", "slashes output", "reduces production",
+        "lower production", "output reduction",
         "停产", "停工", "罢工", "事故", "减产", "扰动", "复产",
     ]),
     ("扩产", [
@@ -128,10 +133,12 @@ EXCLUDE = [
         "可研", "估值", "钻探", "资源量", "储量更新", "成本",
     ]),
     ("融资类", [
-        "raises", "raise", "raising", "raised", "placement", "private placement",
-        "funding round", "funding", "financing", "finance package", "loan facility",
-        "credit facility", "debt facility", "capital raise", "share purchase plan",
-        "rights issue", "ipo", "listing",
+        # 注意：不收录裸词 raise / raises / raising——“Chile raises copper royalty”
+        # 这类政策新闻会被误判为融资，故只保留带有融资语境的表达。
+        "placement", "private placement", "share placement", "funding round",
+        "funding", "financing", "finance package", "loan facility",
+        "credit facility", "debt facility", "capital raise", "equity raise",
+        "share purchase plan", "rights issue", "ipo", "listing",
         "融资", "募资", "定增", "配股",
     ]),
     ("设备/服务订单", [
@@ -265,16 +272,31 @@ def first_match(text, rules):
     return None, ""
 
 
+# 强信号：停产/事故类与政策监管类事件，即使稿子里同时出现「成本」「价格」等
+# 软性排除词（多数是顺手提一句的背景），也应保留——否则会误杀真正的供给扰动。
+STRONG_INCLUDE = {"供给扰动", "政策/监管"}
+# 硬排除：无论白名单命中什么，都一票否决（这些词一出现，事件主体就不是供给变化）
+HARD_EXCLUDE = {"设备/服务订单", "融资类", "非供给主题"}
+
+
 def screen(text):
     """事件类型过滤。返回 (是否入库, 事件标签, 说明)
 
-    黑名单优先：只要命中「估值/可研、融资、设备订单、价格行情、非供给主题」，
-    无论是否命中白名单都丢弃。
+    规则：
+      1. 命中硬排除（设备订单/融资/非供给主题）→ 一律丢弃。
+      2. 命中强信号白名单（供给扰动/政策监管）→ 保留，不受「估值可研」「价格行情」干扰。
+      3. 其余情况命中软排除（估值可研/价格行情）→ 丢弃。
+      4. 未命中任何白名单 → 丢弃。
     """
     bad, bad_kw = first_match(text, EXCLUDE)
+    good, good_kw = first_match(text, INCLUDE)
+
+    if bad in HARD_EXCLUDE:
+        return False, None, f"{bad}:{bad_kw}"
+    if good and (not bad or good in STRONG_INCLUDE):
+        return True, good, f"{good}:{good_kw}"
     if bad:
         return False, None, f"{bad}:{bad_kw}"
-    good, good_kw = first_match(text, INCLUDE)
     if good:
         return True, good, f"{good}:{good_kw}"
     return False, None, "不在供给事件类型内"
