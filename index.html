@@ -43,6 +43,31 @@ h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
 .chip.ok{background:#ecfdf5;border-color:#a7f3d0;color:var(--ok)}
 .chip.warn{background:#fffbeb;border-color:#fde68a;color:var(--warn)}
 .chip.pend{background:#f1f5f9;border-color:#cbd5e1;color:var(--pend)}
+/* ===== 口径分层：层级徽章 + 「总量与格局」视图 ===== */
+.chip.lv-asset{background:#ecfdf5;border-color:#a7f3d0;color:#047857}
+.chip.lv-entity{background:#f1f5f9;border-color:#cbd5e1;color:#475569}
+.chip.lv-region{background:#fffbeb;border-color:#fde68a;color:#b45309}
+.chip.lv-world{background:#fff7ed;border-color:#fdba74;color:#9a3412}
+.chip.lv-stock{background:#eef2ff;border-color:#c7d2fe;color:#3730a3}
+.chip.lv-balance,.chip.lv-policy,.chip.lv-trade,.chip.lv-demand{background:#f8fafc;border-color:#e2e8f0;color:#64748b}
+.track-note{font-size:12px;color:var(--muted);margin:0 0 10px;line-height:1.75}
+.track-note b{color:var(--ink)}
+#totals-view .grp{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 12px;background:#fff}
+#totals-view .grp h3{margin:0;font-size:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#totals-view .gh{font-size:11.5px;color:var(--muted);margin:6px 0 8px;line-height:1.65}
+#totals-view .gh b{color:var(--ink)}
+#totals-view .r{display:grid;grid-template-columns:212px minmax(80px,1fr) 118px 72px;gap:10px;align-items:center;padding:5px 0;border-top:1px dashed var(--line);font-size:12.5px}
+#totals-view .r.head{border-top:0;font-size:10.5px;color:var(--muted);font-weight:700;padding-bottom:2px}
+#totals-view .nm{font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+#totals-view .nm .ct{font-weight:400;color:var(--muted);font-size:11px;width:100%}
+#totals-view .bar{height:13px;border-radius:4px;background:linear-gradient(90deg,#1e3a8a,#3b82f6);min-width:3px}
+#totals-view .bar.lv-world{background:linear-gradient(90deg,#9a3412,#f97316)}
+#totals-view .bar.lv-region{background:linear-gradient(90deg,#b45309,#fbbf24)}
+#totals-view .bar.lv-entity{background:linear-gradient(90deg,#334155,#94a3b8)}
+#totals-view .val{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;font-size:12px}
+#totals-view .sh{font-size:11px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+#totals-view .oth{border:1px dashed var(--line);border-radius:12px;padding:12px 14px;background:#fcfdfe}
+#totals-view .oth .o{display:grid;grid-template-columns:132px 210px 1fr;gap:10px;align-items:center;padding:5px 0;border-top:1px dashed var(--line);font-size:12px}
 .grid-2{display:grid;grid-template-columns:1.05fr 1fr;gap:14px;align-items:start}
 /* 宽屏适配：内容随屏宽伸展，避免右侧留大片空白；事件卡片限高内部滚动，与库存卡片高度更平衡 */
 @media(min-width:1400px){
@@ -231,7 +256,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
     </div>
     <section class="section" id="track">
       <h2>公司 / 项目产量追踪</h2>
-      <p class="sub">优先公司公告与产量报告；「项目」看单个主体，「区域」按区域聚合（仅同单位小计，不跨单位相加）。</p>
+      <p class="sub">优先公司公告与产量报告。<b>「单点资产」只列能落到单一厂矿/项目的产量，「总量与格局」放全球·国家·企业合计</b>——两者层级不同、不可相加；「区域」按区域聚合（仅同单位小计，不跨单位相加）。</p>
       <div class="kpis">
         <div class="card kpi"><label>追踪行数</label><strong id="track-n">—</strong></div>
         <div class="card kpi"><label>排序</label>
@@ -242,8 +267,9 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
         </div>
         <div class="card kpi"><label>模式</label>
           <div class="seg" id="sort-mode" style="margin-top:6px">
-            <button type="button" class="active" data-mode="project">项目</button>
+            <button type="button" class="active" data-mode="project">单点资产</button>
             <button type="button" data-mode="region">区域</button>
+            <button type="button" data-mode="totals">总量与格局</button>
           </div>
         </div>
       </div>
@@ -252,6 +278,8 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
         <button type="button" class="btn" id="btn-export">导出 CSV</button>
       </div>
       <div class="regions" id="regions"></div>
+      <div class="track-note" id="track-note"></div>
+      <div id="totals-view" style="display:none"></div>
       <div class="table-wrap">
         <table class="track">
           <thead><tr>
@@ -460,6 +488,138 @@ var METAL_DATA = {"Cu":{"CHANGES":[{"id":"grasberg-2025","when":"2025-09 起","t
    最后一次逐条核对的日期。这些都是人工核验的**快照**数据，不会自动更新；
    每次改动研究内容（新增点数、修订吨位、换来源）务必同步 bump 这里的日期。 */
 const DATA_BASELINE = '2026-09-24';
+
+/* ===== 口径分层注记层（人工核对）=====
+   TRACK 原表把四种层级混在同一张表里：单点资产 / 企业合计 / 国家·地区 / 全球总量，
+   另有库存·平衡·政策·贸易等非产量口径。本表只补三项标注，不改动任何原始数值：
+     层级 lvl   asset 单点资产 / entity 企业合计 / region 国家·地区 / world 全球总量
+                stock 显性库存 / balance 供需平衡 / policy 政策 / trade 贸易量 / demand 需求
+     基别 basis 产品形态（原铝 / 氧化铝 / 矿山含锡量 / 精炼锡 / LCE / 铁矿石 …）
+     吨位 ktv   已统一换算为 kt 的实物吨位（null = 不参与条形：双基别 / 平衡 / 政策 / 未披露）
+   为什么必须分层：企业合计已包含其下属项目，国家是全球总量的一部分，
+   同列并列会被读成「可相加」——而相加即重复计算（页脚旧版「产量示意合计」被撤掉就是这个原因）。
+   与地图同一把尺子：地图上也只有【单点资产】按产量缩放圆点，其余一律等大空心点。
+   修改本表须同步 bump DATA_BASELINE。 */
+const TRACK_META = {
+"Cu|Kamoa-Kakula":["asset", "矿山铜", 135.75],
+"Cu|Las Bambas":["asset", "矿山铜", 410.834],
+"Cu|Kansanshi":["asset", "矿山铜", 89.342],
+"Cu|Sentinel":["asset", "矿山铜", 95.587],
+"Cu|Escondida":["asset", "矿山铜", 1261.2],
+"Cu|Spence":["asset", "矿山铜", 212.6],
+"Cu|Oyu Tolgoi":["asset", "矿山铜", 345],
+"Cu|Quellaveco":["asset", "矿山铜", 310.2],
+"Cu|Centinela":["asset", "矿山铜", 240.4],
+"Cu|Freeport 合并铜":["entity", "矿山铜", 1542.0],
+"Cu|Codelco 自有+权益":["entity", "矿山铜", 1412.0],
+"Cu|Glencore 自有源铜":["entity", "矿山铜", 851.6],
+"Cu|Anglo American 铜":["entity", "矿山铜", 695.2],
+"Cu|Antofagasta 铜":["entity", "矿山铜", 653.7],
+"Cu|MMG 铜合计":["entity", "矿山铜", 506.9],
+"Cu|First Quantum 铜":["entity", "矿山铜", 396.0],
+"Cu|BHP Escondida 100%":["asset", "矿山铜", 1261.0],
+"Al|IAI 全球原铝":["world", "原铝", 73780.0],
+"Al|中国原铝 NBS":["region", "原铝", 45020.0],
+"Al|USGS 全球铝土":["world", "铝土矿", 440000.0],
+"Al|USGS 全球氧化铝":["world", "氧化铝", 150000.0],
+"Al|Rio 铝土":["entity", "铝土矿", 62400.0],
+"Al|Rio 氧化铝":["entity", "氧化铝", 7600.0],
+"Al|Rio 原铝":["entity", "原铝", 3380.0],
+"Al|Alcoa 氧化铝":["entity", "氧化铝", 9640.0],
+"Al|Alcoa 原铝":["entity", "原铝", 2319.0],
+"Al|Rusal 原铝":["entity", "原铝", 3918.0],
+"Al|Chalco 原铝":["entity", "原铝", 8080.0],
+"Al|Hongqiao 电解铝销售":["entity", "原铝", 5824.0],
+"Al|EGA 铸造金属":["entity", "原铝", 2840.0],
+"Al|Alba 成品":["entity", "原铝", 1623.0],
+"Al|Worsley 氧化铝 S32":["entity", "氧化铝", 3727.0],
+"Al|LME 铝库存":["stock", "原铝", 243.6],
+"Al|SHFE 铝仓存":["stock", "原铝", 189.895],
+"PbZn|USGS 全球矿山锌":["world", "矿山锌", 13000.0],
+"PbZn|Glencore 自有锌":["entity", "矿山锌", 969.4],
+"PbZn|HZL 矿端金属":["entity", "矿山锌", 1095.0],
+"PbZn|Teck 锌精矿":["entity", "锌精矿", 565.0],
+"PbZn|Trail 精炼锌":["asset", "精炼锌", 229.9],
+"PbZn|Boliden 矿山/精炼锌":["entity", "矿山锌/精炼锌（双基别）", null],
+"PbZn|MMG 锌":["entity", "矿山锌", 232.06],
+"PbZn|中国精炼锌样本":["region", "精炼锌", 6204.0],
+"PbZn|中国精炼铅样本":["region", "精炼铅", 4082.0],
+"PbZn|Antamina Zn Teck 权益":["asset", "锌精矿", 40.0],
+"PbZn|ILZSG 平衡":["balance", "—", null],
+"PbZn|LME Zn 库存":["stock", "锌", 112.675],
+"PbZn|LME Pb 库存":["stock", "铅", 375.6],
+"PbZn|SHFE Zn 仓单":["stock", "锌", 94.053],
+"PbZn|Nyrstar Hobart":["asset", "精炼锌", null],
+"Ni|INSG 原生镍平衡":["balance", "—", null],
+"Ni|USGS 全球矿山":["world", "矿山镍", 3900.0],
+"Ni|Nornickel":["entity", "Class1 镍", 199.0],
+"Ni|Vale 镍":["entity", "Class1 镍", 177.2],
+"Ni|PT Vale matte":["entity", "镍锍", 72.027],
+"Ni|Glencore 自有镍":["entity", "镍（自有矿）", 71.9],
+"Ni|BHP WAN":["entity", "镍", 30.0],
+"Ni|Ambatovy":["asset", "镍（HPAL）", 28.0],
+"Ni|ANTAM 镍铁":["entity", "镍铁", 16.064],
+"Ni|WBN NPI H1":["asset", "NPI", 17.0],
+"Ni|印尼原生镍（行业）":["region", "原生镍", 1890.0],
+"Ni|中印 NPI":["region", "NPI", 2020.0],
+"Ni|LME Ni 库存":["stock", "镍", 278.58],
+"Ni|SHFE Ni 仓单":["stock", "镍", 93.931],
+"Ni|印尼 RKAB 配额":["policy", "—", null],
+"Sn|全球矿山锡 USGS":["world", "矿山含锡量", 290.0],
+"Sn|中国矿山锡":["region", "矿山含锡量", 71.0],
+"Sn|印尼矿山锡":["region", "矿山含锡量", 61.0],
+"Sn|云锡精锡":["entity", "精炼锡", 86.233],
+"Sn|云锡自产矿锡":["entity", "矿山含锡量", 31.788],
+"Sn|Minsur 精锡":["entity", "精炼锡", 32.981],
+"Sn|PT Timah 精锡":["entity", "精炼锡", 17.815],
+"Sn|Alphamin Bisie":["asset", "矿山含锡量", 18.576],
+"Sn|MSC 精锡":["entity", "精炼锡", 14.224],
+"Sn|Renison 含锡 100%":["asset", "矿山含锡量", 10.748],
+"Sn|印尼精锡出口":["trade", "精炼锡", 53.05],
+"Sn|中国样本精锡":["region", "精炼锡", 208.0],
+"Sn|全球精锡 · CRU":["world", "精炼锡", 371.369],
+"Sn|ITA 精锡平衡 2025f":["balance", "—", null],
+"Sn|LME 锡库存":["stock", "锡", 4.965],
+"Li|SQM 锂销售":["entity", "LCE", 258.0],
+"Li|Greenbushes SC":["asset", "锂精矿（100%）", 1350.0],
+"Li|Pilgangoora SC":["asset", "锂精矿（100%）", 879.5],
+"Li|Wodgina+Marion 权益":["entity", "锂精矿（权益）", 417.0],
+"Li|赣锋锂盐":["entity", "锂盐", 182.0],
+"Li|天齐锂盐":["entity", "锂盐", 73.0],
+"Li|Cauchari-Olaroz LC":["asset", "LCE（盐湖）", 34.1],
+"Li|Goulamina SC":["asset", "锂精矿（100%）", 337.0],
+"Li|Rio Lithium":["entity", "LCE", 57.0],
+"Li|Albemarle ES":["entity", "LCE", null],
+"Li|中国 LC 月产":["region", "LCE（月度流量）", 116.4],
+"Li|中国 LC 社库":["stock", "LCE", 175.0],
+"Li|USGS 全球锂矿山":["world", "矿山锂（Li 含量）", 290.0],
+"Li|全球平衡（宽）":["balance", "—", null],
+"Li|全球平衡（紧）":["balance", "—", null],
+"Fe|Vale 铁矿":["entity", "铁矿石", 336100.0],
+"Fe|Rio Pilbara 100%":["entity", "铁矿石", 327300.0],
+"Fe|BHP 铁矿合计":["entity", "铁矿石", 264700.0],
+"Fe|BHP WAIO 100%":["entity", "铁矿石", 291200.0],
+"Fe|Fortescue 发运":["entity", "铁矿石", 198400.0],
+"Fe|Roy Hill":["asset", "铁矿石", 61600.0],
+"Fe|Kumba":["entity", "铁矿石", 36100.0],
+"Fe|Minas-Rio":["asset", "铁矿石", 24800.0],
+"Fe|NMDC YTD":["entity", "铁矿石", 36890.0],
+"Fe|Simandou":["asset", "铁矿石", 2300.0],
+"Fe|IOC":["asset", "球团+精矿", 9300.0],
+"Fe|全球粗钢":["world", "粗钢（需求口径）", 1849400.0],
+"Fe|中国 47 港进口矿":["stock", "铁矿石", 171360.0],
+"Fe|USGS 全球可用矿":["world", "铁矿石", 2600000.0],
+"Fe|Vale 球团":["entity", "球团", 31400.0],
+};
+(function(){
+  Object.keys(METAL_DATA).forEach(m=>{
+    (METAL_DATA[m].TRACK||[]).forEach(r=>{
+      const v=TRACK_META[m+'|'+r.name];
+      if(v){ r.lvl=v[0]; r.basis=v[1]; r.ktv=v[2]; }
+      else { r.lvl='asset'; r.basis='未标基别'; r.ktv=null; }
+    });
+  });
+})();
 
 const METAL_LABEL = {Cu:'Cu', Al:'Al', PbZn:'Pb/Zn', Ni:'Ni', Sn:'Sn', Li:'Li', Fe:'Fe'};
 let currentMetal = 'Cu'; try { currentMetal = (new URLSearchParams(location.search||'').get('metal')) || 'Cu'; } catch(e) { currentMetal='Cu'; }
@@ -770,7 +930,7 @@ function syncRegionChips(){
   el.querySelectorAll('button[data-region]').forEach(b=>b.classList.toggle('active', b.dataset.region===region));
 }
 function setMode(m){
-  mode=(m==='region')?'region':'project';
+  mode=(m==='region'||m==='totals')?m:'project';
   document.querySelectorAll('#sort-mode button').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
   renderTrack();
 }
@@ -836,7 +996,7 @@ function renderPanels(){
 }
 function baseRows(){
   const q=((document.getElementById('q')||{}).value||'').trim().toLowerCase();
-  let rows=TRACK.slice();
+  let rows=(mode==='totals'?totalRows():assetRows()).slice();
   if(q) rows=rows.filter(r=>[r.name,r.country,r.region,r.tag,r.owner,r.latest,r.qNote,r.trail].join(' ').toLowerCase().includes(q));
   if(region && region!=='全部') rows=rows.filter(r=>(r.region||'')===region || (r.country||'')===region);
   return rows;
@@ -870,6 +1030,80 @@ function filtered(){
     return bv-av;
   });
   return rows;
+}
+/* ===== 口径分层：把「单点资产」与「汇总口径」分开 =====
+   层级来自 TRACK_META 注记层（lvl）：
+     asset 单点资产 · entity 企业合计 · region 国家/地区 · world 全球总量
+   非产量口径：stock 显性库存 · balance 供需平衡 · policy 政策 · trade 贸易量 · demand 需求
+   分开的原因不是排版好看，而是算术：企业合计已含其下属项目，国家是全球总量的一部分，
+   同表并列会被当成可加总。条形只画已统一换算为 kt 的行。 */
+const LVL_LABEL={asset:'单点资产',entity:'企业合计',region:'国家/地区',world:'全球总量',
+  stock:'显性库存',balance:'供需平衡',policy:'政策',trade:'贸易量',demand:'需求/下游'};
+const LVL_RANK={world:0,region:1,entity:2};
+const OTHER_ORDER=['stock','balance','policy','trade','demand'];
+function assetRows(){ return TRACK.filter(r=>(r.lvl||'asset')==='asset'); }
+function totalRows(){ return TRACK.filter(r=>LVL_RANK[r.lvl]!=null); }
+function otherRows(){ return TRACK.filter(r=>OTHER_ORDER.indexOf(r.lvl||'')>=0); }
+function lvlChip(l){ return '<span class="chip lv-'+(l||'asset')+'">'+(LVL_LABEL[l]||l||'')+'</span>'; }
+/* 组内统一展示单位：按组内最大吨位在 kt / Mt 之间二选一（只差 1000×，换算精确） */
+function grpUnit(maxKt){ return maxKt>=10000 ? {u:'Mt',f:1000} : {u:'kt',f:1}; }
+function fmtKtv(kt,G){
+  const v=kt/G.f;
+  const s = G.u==='Mt' ? (v>=100?v.toFixed(0):v.toFixed(2)) : (v>=100?v.toFixed(0):v.toFixed(1));
+  return Number(s).toLocaleString(undefined,{maximumFractionDigits:3})+' '+G.u;
+}
+function renderTotals(){
+  const el=document.getElementById('totals-view'); if(!el) return;
+  const q=((document.getElementById('q')||{}).value||'').trim().toLowerCase();
+  const hit=r=>!q || [r.name,r.country,r.owner,r.basis,r.latest,r.tag].join(' ').toLowerCase().includes(q);
+  const rows=totalRows().filter(hit);
+  const g={};
+  rows.forEach(r=>{ const k=r.basis||'未标基别'; (g[k]=g[k]||[]).push(r); });
+  const keys=Object.keys(g).sort((a,b)=>{
+    const wa=g[a].some(x=>x.lvl==='world')?0:1, wb=g[b].some(x=>x.lvl==='world')?0:1;
+    return (wa-wb) || (g[b].length-g[a].length) || a.localeCompare(b,'zh');
+  });
+  const cards=keys.map(k=>{
+    const rs=g[k].slice().sort((a,b)=>{
+      if(LVL_RANK[a.lvl]!==LVL_RANK[b.lvl]) return LVL_RANK[a.lvl]-LVL_RANK[b.lvl];
+      return (b.ktv||-1)-(a.ktv||-1);
+    });
+    const withV=rs.filter(r=>r.ktv>0);
+    const maxKt=withV.length?Math.max.apply(null,withV.map(r=>r.ktv)):1;
+    const refRow=withV.find(r=>r.lvl==='world') || withV.find(r=>r.lvl==='region') || withV[0] || null;
+    const G=grpUnit(maxKt);
+    const body=rs.map(r=>{
+      const has=!(r.ktv>0);
+      const w=has?0:Math.max(2,Math.round(r.ktv/maxKt*100));
+      const share=(refRow && r.ktv>0) ? (r.ktv/refRow.ktv*100) : null;
+      const src=r.href?'<a href="'+r.href+'" target="_blank" rel="noopener">来源</a>':'';
+      const ct=[r.country,(r.basis==='—'?'':r.basis),r.tag].filter(Boolean).join(' · ')
+        +(r.ktv>0 && r.latest ? ' · 原值 '+r.latest : '')+' '+src;
+      return '<div class="r">'
+        +'<div class="nm">'+lvlChip(r.lvl)+'<span>'+r.name+'</span><span class="ct">'+ct+'</span></div>'
+        +'<div>'+(has?'':'<div class="bar lv-'+r.lvl+'" style="width:'+w+'%"></div>')+'</div>'
+        +'<div class="val">'+(r.ktv>0?fmtKtv(r.ktv,G):(r.latest||'—'))+'</div>'
+        +'<div class="sh">'+(share!=null?share.toFixed(share>=10?0:1)+'%':'—')+'</div>'
+        +'</div>';
+    }).join('');
+    const gh=refRow
+      ? '参照：<b>'+refRow.name+'</b>（'+LVL_LABEL[refRow.lvl]+' · '+fmtKtv(refRow.ktv,G)+'）· 共 '+rs.length+' 条 · 条宽 = 该行吨位 ÷ 组内最大'
+        +(refRow.lvl==='world'?'':' · <b>本组无全球总量行</b>，百分比以参照项为分母')
+      : '本组无数值可画条形，仅列出原文';
+    return '<div class="grp"><h3>'+k+'<span class="chip">'+(G.u==='Mt'?'吨位：Mt':'吨位：kt')+'</span>'
+      +'<span class="chip">'+rs.length+' 条</span></h3>'
+      +'<div class="gh">'+gh+'</div>'
+      +'<div class="r head"><div>主体</div><div>相对吨位</div><div style="text-align:right">数值</div><div style="text-align:right">占参照</div></div>'
+      +body
+      +'<div class="gh" style="margin:8px 0 0">同组条目可能互相包含（企业 ⊂ 国家 ⊂ 全球），<b>不做加总</b>；跨基别不可比较。</div>'
+      +'</div>';
+  }).join('');
+  const oth=otherRows();
+  const og = oth.length ? ('<div class="oth"><div style="font-weight:800;margin-bottom:4px">非产量口径参考 <span class="chip">不参与条形</span></div>'
+      +'<div class="gh" style="margin:0 0 6px">供需平衡 / 政策配额 / 贸易量 / 库存与「产量」不同量纲，仅列原文数值，不换算、不比较、不排序。</div>'
+      +oth.map(r=>'<div class="o">'+lvlChip(r.lvl)+'<div>'+r.name+'</div><div class="gh" style="margin:0">'+(r.latest||'—')+(r.actualAsOf?' · '+r.actualAsOf:'')+'</div></div>').join('')
+      +'</div>') : '';
+  el.innerHTML = (cards||'<div class="meta" style="padding:14px">本品种暂无汇总口径行</div>') + og;
 }
 function trackBlocks(r){
   const b=[
@@ -921,6 +1155,22 @@ function reserveCell(r){
 function renderTrack(){
   const tb=document.getElementById('tbody'); if(!tb) return;
   const tn=document.getElementById('track-n');
+  const twrap=document.querySelector('#track .table-wrap');
+  const tv=document.getElementById('totals-view');
+  const tnote=document.getElementById('track-note');
+  const rg=document.getElementById('regions');
+  if(mode==='totals'){
+    if(twrap) twrap.style.display='none';
+    if(tv) tv.style.display='';
+    if(rg) rg.style.display='none';
+    if(tn) tn.textContent=totalRows().length+' 汇总口径';
+    if(tnote) tnote.innerHTML='本视图只放<b>全球总量 / 国家·地区 / 企业合计</b>三类汇总口径，按产品基别分组。'
+      +'层级之间<b>不可相加</b>——企业合计含其下属项目、国家是全球的一部分；吨位已统一换算，条形只表示相对大小。';
+    renderTotals(); return;
+  }
+  if(twrap) twrap.style.display='';
+  if(tv) tv.style.display='none';
+  if(rg) rg.style.display='';
   if(mode==='region'){
     const groups=regionRows();
     const shown=groups.reduce((s,g)=>s+g.n,0);
@@ -949,6 +1199,17 @@ function renderTrack(){
   }
   const rows=filtered();
   if(tn) tn.textContent=rows.length+' / '+TRACK.length;
+  if(tnote){
+    const nT=totalRows().length, nA=assetRows().length;
+    tnote.innerHTML='本表只列<b>单点资产</b>（能落到单一厂矿/项目的产量），与地图上「按产量缩放」同一口径。'
+      +'另有 <b>'+nT+'</b> 条企业合计 / 国家·全球总量，已移到 <a href="#track" id="goto-totals">总量与格局</a>。'
+      +(nA?'':' <span class="chip warn">本品种暂无单点资产级产量，请直接看「总量与格局」</span>');
+    const gl=document.getElementById('goto-totals');
+    if(gl) gl.onclick=ev=>{ ev.preventDefault();
+      setMode('totals');
+      const sec=document.getElementById('track'); if(sec && sec.scrollIntoView) sec.scrollIntoView({behavior:'smooth',block:'start'});
+    };
+  }
   tb.innerHTML = rows.map((r,i)=>`
     <tr data-i="${i}" tabindex="0">
       <td><div class="name">${r.name||''}</div><div class="meta">${r.country||''} · ${r.region||''} · ${r.tag||''}</div></td>
@@ -960,7 +1221,7 @@ function renderTrack(){
       <td><div class="range">${r.adjVal||'—'}</div><div class="meta">${r.adjNote||''}</div></td>
       <td>${r.actual==null?'<div class="meta">—</div>':`<div class="actual">${Number(r.actual).toLocaleString(undefined,{maximumFractionDigits:3})}</div><div class="meta">${r.actualAsOf||''}</div>`}</td>
       <td style="color:var(--accent);font-weight:800">›</td>
-    </tr>`).join('') || '<tr><td colspan="9" class="meta" style="padding:20px">无匹配</td></tr>';
+    </tr>`).join('') || '<tr><td colspan="9" class="meta" style="padding:20px">'+(assetRows().length?'无匹配':'本品种未收录单点资产级产量（现有 '+TRACK.length+' 条均为企业 / 国家 / 全球口径）——请切到上方「总量与格局」')+'</td></tr>';
   tb.querySelectorAll('tr[data-i]').forEach(tr=>{
     const r=rows[+tr.dataset.i];
     tr.onclick=()=>openTrack(r,tr);
@@ -1088,7 +1349,12 @@ function bindUI(){
   const exp=document.getElementById('btn-export');
   if(exp) exp.onclick=()=>{
     let h, body, fname;
-    if(mode==='region'){
+    if(mode==='totals'){
+      const rows=totalRows();
+      h='metal,name,level,basis,tonnes_kt_unified,latest_raw,asof,source\n';
+      body=rows.map(r=>[currentMetal,r.name,r.lvl||'',r.basis||'',r.ktv==null?'':r.ktv,r.latest||'',r.actualAsOf||'',r.href||''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+      fname=`mine-desk-${currentMetal}-totals.csv`;
+    } else if(mode==='region'){
       const g=regionRows();
       h='region,count,ok,warn,pend,subtotal_same_unit,members\n';
       body=g.map(x=>[x.region,x.n,x.ok,x.warn,x.pend,x.sums.join(' | '),x.names.join(' / ')].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
