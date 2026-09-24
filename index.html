@@ -131,8 +131,16 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
 .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(16px);background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:12.5px;z-index:6000;opacity:0;pointer-events:none;transition:.2s}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .legacy{font-size:11px;margin-top:12px;line-height:1.5}.legacy a{color:#93c5fd}
-@media(max-width:1100px){.shell{grid-template-columns:1fr}.rail{position:relative;height:auto}.grid-2,.map-wrap,.kpis{grid-template-columns:1fr}#leaflet-map{min-height:360px}
+@media(max-width:1100px){.shell{grid-template-columns:1fr}.rail{position:relative;height:auto}.grid-2,.map-wrap,.kpis{grid-template-columns:1fr}#leaflet-map{min-height:360px}}
 
+[hidden]{display:none!important}
+.fold{display:inline-flex;align-items:center;gap:8px;background:none;border:0;padding:0;font:inherit;font-size:18px;font-weight:700;color:inherit;cursor:pointer;text-align:left}
+.fold:hover{color:var(--accent)}
+.fold:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.fold-caret{flex:0 0 auto;width:0;height:0;border-left:7px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent;transition:transform .18s ease}
+.fold[aria-expanded="true"] .fold-caret{transform:rotate(90deg)}
+.fold-n{font-size:12px;font-weight:600;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.fold-caret{transition:none}}
 </style>
 </head>
 <body>
@@ -247,12 +255,20 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
       </div>
     </section>
     <section class="sources" id="sources">
-      <h2 style="font-size:18px;margin:0 0 8px">来源总表</h2>
-      <p class="sub" style="margin-top:0">随品种切换。可点开复制 URL。</p>
-      <table>
-        <thead><tr><th>字段 / 来源</th><th>采用值</th><th>状态</th><th>说明</th><th></th></tr></thead>
-        <tbody id="src-body"></tbody>
-      </table>
+      <h2 style="font-size:18px;margin:0 0 8px">
+        <button type="button" class="fold" id="src-toggle" aria-expanded="false" aria-controls="src-panel">
+          <span class="fold-caret" aria-hidden="true"></span>
+          <span>来源总表</span>
+          <span class="fold-n" id="src-n"></span>
+        </button>
+      </h2>
+      <p class="sub" style="margin-top:0">随品种切换。展开后可点开复制 URL。</p>
+      <div id="src-panel" hidden>
+        <table>
+          <thead><tr><th>字段 / 来源</th><th>采用值</th><th>状态</th><th>说明</th><th></th></tr></thead>
+          <tbody id="src-body"></tbody>
+        </table>
+      </div>
     </section>
     <footer>
       <span id="foot-left">矿端公开核验台 · 多金属统一页</span>
@@ -1027,6 +1043,39 @@ if(document.readyState === 'loading'){
   boot();
 }
 
+</script>
+<script>
+/* 来源总表：折叠开关（独立于主脚本，靠 DOM 计数，不需要跨作用域通信）*/
+(() => {
+  "use strict";
+  const btn = document.getElementById('src-toggle');
+  const panel = document.getElementById('src-panel');
+  const num = document.getElementById('src-n');
+  if (!btn || !panel) return;
+
+  const count = () => document.querySelectorAll('#src-body tr[data-i]').length;
+  const label = () => {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    if (num) num.textContent = '（' + count() + ' 条 · ' + (open ? '点击收起' : '点击展开') + '）';
+  };
+  const set = (open) => {
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    panel.hidden = !open;
+    label();
+  };
+
+  btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+
+  /* 从左侧导航点「来源总表」时自动展开 */
+  document.querySelectorAll('a[href="#sources"]').forEach((a) => {
+    a.addEventListener('click', () => set(true));
+  });
+
+  const body = document.getElementById('src-body');
+  if (body && window.MutationObserver) new MutationObserver(label).observe(body, { childList: true });
+
+  label();
+})();
 </script>
 </body>
 </html>
