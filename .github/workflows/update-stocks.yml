@@ -4,7 +4,12 @@ name: Update stocks & supply events
 #   1) 交易所库存：LME 经 westmetall 公开镜像 + SHFE 官网每日仓单  -> data/stocks.json
 #   2) 供给事件池：公开 RSS 源（mining-technology / northernminer / australianmining /
 #                  im-mining / mining.com）标题级抓取，按品种关键词归类 -> data/events.json
-#                 新条目一律 status=pend（页面显示为黄底「自动抓取·待确认」），人工确认后改为 ok。
+#                 新条目经两层漏斗（品种归类 + 事件类型白名单，见 scripts/fetch_events.py）
+#                 过滤后入库：status=auto / src_level=media，页面显示蓝底「自动发布」，
+#                 无需人工逐条确认；已回溯一手来源的条目为 status=ok（页面「已核验」）。
+#                 改关键词后务必跑回归：python3 scripts/test_screen.py
+# 未覆盖：GFEX / DCE 官网对自动化请求有反爬（JS 挑战 / HTTP 412），锂与铁的交易所仓单
+#         目前为页面内的核验基线，不参与自动刷新。
 # 合规：仅抓取公开页面与公开 RSS；不抓取任何会员制 / 付费内容。
 on:
   schedule:
