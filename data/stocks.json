@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "as_of": "2026-09-23",
-  "generated_at": "2026-09-24T00:48:05+00:00",
+  "generated_at": "2026-09-24T01:51:44+00:00",
   "note": "交易所公开库存：LME 经 westmetall 公开镜像；SHFE 取官网每日仓单。仅公开数据。",
   "sources": {
     "LME": "https://www.westmetall.com/en/markdaten.php?action=table&field=LME_{M}_stock",

@@ -1,18 +1,18 @@
 {
- "generated_at": "2026-09-24T01:15:47+00:00",
+ "generated_at": "2026-09-24T01:51:44+00:00",
  "note": "自动抓取的供给事件池；status=pend 表示待人工确认，确认后改为 ok 并补充口径。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_new": 3
+   "matched_new": 0
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_new": 6
+   "matched_new": 0
   },
   {
    "source": "australianmining",
@@ -24,13 +24,13 @@
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_new": 4
+   "matched_new": 0
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_new": 4
+   "matched_new": 0
   }
  ],
  "count": 17,
