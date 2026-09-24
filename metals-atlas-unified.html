@@ -73,8 +73,20 @@ h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
 @media(min-width:1400px){
   .grid-2{grid-template-columns:1.15fr 1fr}
   .map-wrap{grid-template-columns:1.7fr .8fr}
-  #changes{max-height:640px;overflow:auto;padding-right:6px}
 }
+/* 事件卡片：固定高度 + 内部滚动，一屏约 3 条，向下滚动翻页 */
+.ev-wrap{position:relative}
+#changes{max-height:520px;overflow-y:auto;overscroll-behavior:contain;padding-right:8px;scroll-behavior:smooth;scroll-snap-type:y proximity;scrollbar-width:thin;scrollbar-color:#cbd5e1 transparent}
+#changes::-webkit-scrollbar{width:8px}
+#changes::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px}
+#changes::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+#changes::-webkit-scrollbar-track{background:transparent}
+#changes .item{scroll-snap-align:start}
+#changes .item:last-child{margin-bottom:0}
+.ev-wrap::after{content:'';position:absolute;left:0;right:8px;bottom:0;height:52px;background:linear-gradient(180deg,rgba(255,255,255,0),var(--paper));pointer-events:none;transition:opacity .25s}
+.ev-more{position:absolute;left:0;right:8px;bottom:8px;text-align:center;pointer-events:none;transition:opacity .25s}
+.ev-more span{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:999px;padding:2px 11px;font-size:10.5px;font-weight:700;color:var(--accent);box-shadow:0 1px 5px rgba(15,23,42,.08)}
+.ev-wrap.at-end::after,.ev-wrap.at-end .ev-more{opacity:0}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
 .card h2{margin:0 0 10px;font-size:15px;display:flex;justify-content:space-between;gap:8px;align-items:center}
 .card h2 em{font-style:normal;font-size:11px;font-weight:600;color:var(--muted)}
@@ -215,7 +227,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
       <span class="chip ok">已核验</span><span class="chip warn">口径注意</span><span class="chip pend">待核/待补</span><span class="chip">不适用</span>
     </div>
     <div class="grid-2" id="events">
-      <div class="card"><h2>近期供给事件 <em>最新在前 · 点击打开来源</em></h2><div class="meta" style="margin:-4px 0 8px;font-size:11.5px;color:var(--muted)">按事件时点倒序（年度/财年取期末，区间取末段）</div><div id="changes"></div></div>
+      <div class="card"><h2>近期供给事件 <em>最新在前 · 点击打开来源</em></h2><div class="meta" id="ev-meta" style="margin:-4px 0 8px;font-size:11.5px;color:var(--muted)">按事件时点倒序（年度/财年取期末，区间取末段）</div><div class="ev-wrap"><div id="changes"></div><div class="ev-more"><span>向下滚动查看更早事件 ↓</span></div></div></div>
       <div class="card" id="inv">
         <h2>库存与显性供给 <em>单位见各卡</em></h2>
         <div class="meta" id="inv-asof" style="margin:-4px 0 10px;font-size:11.5px;color:var(--muted)">数据时点：页面内置核验基线（正在尝试加载实时数据…）</div>
@@ -964,6 +976,15 @@ function renderPanels(){
       <div><div class="when">${c.when||''}${c.auto?' · 自动发布':''}${c.pending?' · 待确认':''}</div><div class="title">${c.title||''}</div><div class="desc">${c.desc||''}</div><div class="hint">打开来源 →</div></div>
       <div class="tag">${c.tag||''}</div>
     </button>`).join('') || '<div class="meta">暂无事件</div>');
+
+    const m=document.getElementById('ev-meta');
+    if(m) m.innerHTML = '按事件时点倒序（年度/财年取期末，区间取末段）· 共 <strong>'+evs.length+'</strong> 条，滚动查看更早';
+    const wrap=ch.closest('.ev-wrap');
+    if(wrap){
+      const syncEnd=()=>wrap.classList.toggle('at-end', ch.scrollTop+ch.clientHeight >= ch.scrollHeight-4);
+      ch.onscroll=syncEnd;
+      requestAnimationFrame(syncEnd);
+    }
   }
 
   const inv=document.getElementById('inv-list');
