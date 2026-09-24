@@ -370,6 +370,8 @@ def main():
             raw = get(url)
             items = parse_rss(raw)
             n_new = 0
+            n_metal = 0
+            n_drop = 0
             for title, link, pub, desc in items:
                 if not title or not link:
                     continue
@@ -380,9 +382,11 @@ def main():
                 metals = classify(text)
                 if not metals:
                     continue
+                n_metal += 1
                 # —— 事件类型白名单 / 黑名单 ——
                 ok, tag, why = screen(text)
                 if not ok:
+                    n_drop += 1
                     key = why.split(":")[0]
                     dropped[key] = dropped.get(key, 0) + 1
                     continue
@@ -414,8 +418,8 @@ def main():
                 })
                 n_new += 1
             sources.append({"source": name, "ok": True, "items": len(items),
-                            "matched_new": n_new, "passed_screen": sum(1 for t in items)})
-            log(f"[OK]   {name:18s} items={len(items):3d} new={n_new}")
+                            "matched_metal": n_metal, "dropped_screen": n_drop, "new": n_new})
+            log(f"[OK]   {name:18s} items={len(items):3d} 品种命中={n_metal:3d} 类型剔除={n_drop:3d} new={n_new}")
         except Exception as ex:  # noqa: BLE001
             sources.append({"source": name, "ok": False, "error": str(ex)[:120]})
             log(f"[FAIL] {name:18s} {str(ex)[:90]}")
