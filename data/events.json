@@ -1,42 +1,199 @@
 {
- "generated_at": "2026-09-24T02:13:31+00:00",
+ "generated_at": "2026-09-25T00:47:06+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_new": 3
+   "matched_metal": 5,
+   "dropped_screen": 0,
+   "new": 3
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_new": 6
+   "matched_metal": 3,
+   "dropped_screen": 2,
+   "new": 1
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_new": 0
+   "matched_metal": 4,
+   "dropped_screen": 1,
+   "new": 3
   },
   {
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_new": 4
+   "matched_metal": 3,
+   "dropped_screen": 3,
+   "new": 0
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_new": 4
+   "matched_metal": 9,
+   "dropped_screen": 7,
+   "new": 0
   }
  ],
- "count": 6,
+ "count": 13,
  "pending": 0,
- "auto": 6,
+ "auto": 13,
  "events": [
+  {
+   "id": "e2cb403f5d9d3bc7",
+   "when": "2026-09-24",
+   "d": "2026-09-24",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Talisman Metals acquires three new licences at Tirzzit Copper Project",
+   "desc": "Talisman Metals has acquired three new exploration licences adjacent to its existing Tirzzit Copper Project in Morocco. The post Talisman Metals acquires three new licences at Tirzzit Copper Project appeared first on Min",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/talisman-acquires-licences-tirzzit-project/"
+    }
+   ],
+   "first_seen": "2026-09-25T00:47:06+00:00"
+  },
+  {
+   "id": "cc462d2df816bc52",
+   "when": "2026-09-24",
+   "d": "2026-09-24",
+   "metals": [
+    "Cu"
+   ],
+   "title": "BHP suspends activities at Escondida mine after maintenance accident",
+   "desc": "BHP has announced the suspension of operations at the Escondida copper mine located in northern Chile, following the death of a worker during maintenance activities, reported Reuters. The post BHP suspends activities at ",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/bhp-suspends-activities-escondida-mine/"
+    }
+   ],
+   "first_seen": "2026-09-25T00:47:06+00:00"
+  },
+  {
+   "id": "c72f5cba5240ad13",
+   "when": "2026-09-24",
+   "d": "2026-09-24",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Blue Moon Metals to acquire Turner deposit from Gold Coast Mining",
+   "desc": "Blue Moon Metals has agreed to acquire full ownership of the Turner copper-gold volcanic massive sulphide (VMS) deposit from Gold Coast Mining. The post Blue Moon Metals to acquire Turner deposit from Gold Coast Mining a",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/blue-moon-to-acquire-turner-deposit/"
+    }
+   ],
+   "first_seen": "2026-09-25T00:47:06+00:00"
+  },
+  {
+   "id": "ed8dc800f3538d69",
+   "when": "2026-09-24",
+   "d": "2026-09-24",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Glencore sets Oct. 14 for Australian market debut",
+   "desc": "Glencore (LSE: GLEN) expects to begin trading on the Australian Securities Exchange (ASX) on Oct. 14, tapping the country’s A$4.4-trillion (US$3.1-trillion) pension market to support its copper expansion and potential...",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/glencore-sets-oct-14-for-australian-market-debut/1003895111/"
+    }
+   ],
+   "first_seen": "2026-09-25T00:47:06+00:00"
+  },
+  {
+   "id": "1daa5163309571d3",
+   "when": "2026-09-24",
+   "d": "2026-09-24",
+   "metals": [
+    "Cu"
+   ],
+   "title": "AIC Mines moves to acquire Mt Cuthbert",
+   "desc": "Image: CjVitoS/stock.adobe.com AIC Mines has set its sights on securing a second operation in Queensland after securing binding agreements for the Mt Cuthbert copper project valued at $120 million. As part of the deal, A",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/aic-mines-moves-to-acquire-mt-cuthbert/"
+    }
+   ],
+   "first_seen": "2026-09-25T00:47:06+00:00"
+  },
+  {
+   "id": "1192c4a14eb38666",
+   "when": "2026-09-24",
+   "d": "2026-09-24",
+   "metals": [
+    "Li"
+   ],
+   "title": "Core Lithium enters new era as Finniss restart gathers pace",
+   "desc": "Core Lithium has emerged from a pivotal financial year with a clear path to steady-state production in 2028. Image: BJP7images/stock.adobe.com Core Lithium has emerged from a pivotal financial year with mining and proces",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/core-lithium-enters-new-era-as-finniss-restart-gathers-pace/"
+    }
+   ],
+   "first_seen": "2026-09-25T00:47:06+00:00"
+  },
+  {
+   "id": "1ee3d3d46843b561",
+   "when": "2026-09-24",
+   "d": "2026-09-24",
+   "metals": [
+    "Li"
+   ],
+   "title": "Global Lithium agrees $333 million takeover by Titan",
+   "desc": "Image: David/stock.adobe.com Global Lithium Resources has agreed a takeover bid by Titan Australia Mining through a binding scheme implementation deed which will see Titan acquire 100 per cent of the company for approxim",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/global-lithium-agrees-333-million-takeover-by-titan/"
+    }
+   ],
+   "first_seen": "2026-09-25T00:47:06+00:00"
+  },
   {
    "id": "ff0a95ff642607e8",
    "when": "2026-09-23",
