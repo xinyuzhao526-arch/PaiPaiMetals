@@ -1,21 +1,21 @@
 {
- "generated_at": "2026-09-25T00:47:06+00:00",
+ "generated_at": "2026-09-26T00:48:07+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 5,
+   "matched_metal": 3,
    "dropped_screen": 0,
-   "new": 3
+   "new": 0
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 3,
-   "dropped_screen": 2,
+   "matched_metal": 5,
+   "dropped_screen": 3,
    "new": 1
   },
   {
@@ -24,29 +24,50 @@
    "items": 5,
    "matched_metal": 4,
    "dropped_screen": 1,
-   "new": 3
+   "new": 0
   },
   {
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 3,
-   "dropped_screen": 3,
+   "matched_metal": 2,
+   "dropped_screen": 2,
    "new": 0
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 9,
-   "dropped_screen": 7,
+   "matched_metal": 8,
+   "dropped_screen": 5,
    "new": 0
   }
  ],
- "count": 13,
+ "count": 14,
  "pending": 0,
- "auto": 13,
+ "auto": 14,
  "events": [
+  {
+   "id": "78d55ab81faeed02",
+   "when": "2026-09-25",
+   "d": "2026-09-25",
+   "metals": [
+    "Cu"
+   ],
+   "title": "BHP’s Escondida restart eases tight copper supply woes",
+   "desc": "The mine halt, low Chinese inventories and an approaching holiday pause had left the copper market with little room for supply disruptions. The post BHP’s Escondida restart eases tight copper supply woes appeared first o",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/bhps-escondida-restart-eases-tight-copper-supply-woes/1003895172/"
+    }
+   ],
+   "first_seen": "2026-09-26T00:48:07+00:00"
+  },
   {
    "id": "e2cb403f5d9d3bc7",
    "when": "2026-09-24",
