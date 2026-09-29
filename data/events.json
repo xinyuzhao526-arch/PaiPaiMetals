@@ -1,12 +1,12 @@
 {
- "generated_at": "2026-09-26T00:48:07+00:00",
+ "generated_at": "2026-09-29T00:50:14+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 3,
+   "matched_metal": 1,
    "dropped_screen": 0,
    "new": 0
   },
@@ -14,16 +14,16 @@
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 5,
-   "dropped_screen": 3,
-   "new": 1
+   "matched_metal": 3,
+   "dropped_screen": 2,
+   "new": 0
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 4,
-   "dropped_screen": 1,
+   "matched_metal": 0,
+   "dropped_screen": 0,
    "new": 0
   },
   {
@@ -38,8 +38,8 @@
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 8,
-   "dropped_screen": 5,
+   "matched_metal": 6,
+   "dropped_screen": 3,
    "new": 0
   }
  ],
