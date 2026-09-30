@@ -1,21 +1,21 @@
 {
- "generated_at": "2026-09-29T00:50:14+00:00",
+ "generated_at": "2026-09-30T00:51:50+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 1,
-   "dropped_screen": 0,
+   "matched_metal": 3,
+   "dropped_screen": 3,
    "new": 0
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 3,
-   "dropped_screen": 2,
+   "matched_metal": 0,
+   "dropped_screen": 0,
    "new": 0
   },
   {
@@ -30,23 +30,44 @@
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 2,
-   "dropped_screen": 2,
+   "matched_metal": 4,
+   "dropped_screen": 4,
    "new": 0
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 6,
+   "matched_metal": 5,
    "dropped_screen": 3,
-   "new": 0
+   "new": 1
   }
  ],
- "count": 14,
+ "count": 15,
  "pending": 0,
- "auto": 14,
+ "auto": 15,
  "events": [
+  {
+   "id": "6ce3eca9fb6f78ac",
+   "when": "2026-09-29",
+   "d": "2026-09-29",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Copper price holds above $14,400 as Chile strike risk grows",
+   "desc": "A rejected wage offer at Antofagasta’s Centinela has added to supply concerns as the metal heads for a third straight monthly gain.",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/copper-holds-above-14400-as-chile-strike-risk-grows/"
+    }
+   ],
+   "first_seen": "2026-09-30T00:51:50+00:00"
+  },
   {
    "id": "78d55ab81faeed02",
    "when": "2026-09-25",
