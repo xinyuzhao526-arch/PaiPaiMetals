@@ -1,52 +1,94 @@
 {
- "generated_at": "2026-10-01T00:52:40+00:00",
+ "generated_at": "2026-10-02T00:50:35+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 3,
-   "dropped_screen": 2,
-   "new": 1
+   "matched_metal": 2,
+   "dropped_screen": 1,
+   "new": 0
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 1,
-   "dropped_screen": 1,
-   "new": 0
+   "matched_metal": 3,
+   "dropped_screen": 2,
+   "new": 1
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 2,
-   "dropped_screen": 2,
+   "matched_metal": 3,
+   "dropped_screen": 3,
    "new": 0
   },
   {
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 2,
-   "dropped_screen": 2,
+   "matched_metal": 1,
+   "dropped_screen": 1,
    "new": 0
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 4,
-   "dropped_screen": 3,
-   "new": 0
+   "matched_metal": 6,
+   "dropped_screen": 4,
+   "new": 1
   }
  ],
- "count": 16,
+ "count": 18,
  "pending": 0,
- "auto": 16,
+ "auto": 18,
  "events": [
+  {
+   "id": "caa389415f9d8095",
+   "when": "2026-10-01",
+   "d": "2026-10-01",
+   "metals": [
+    "Li"
+   ],
+   "title": "Brazil court shuts Sigma Lithium mine",
+   "desc": "Sigma Lithium (TSXV, Nasdaq: SGML; ASX: SAU) has halted all mining and processing at its Grota do Cirilo complex in Brazil, two days after dismissing reports that a court had... The post Brazil court shuts Sigma Lithium ",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/brazil-court-order-idles-sigma-lithium-mine/1003895373/"
+    }
+   ],
+   "first_seen": "2026-10-02T00:50:35+00:00"
+  },
+  {
+   "id": "1243ddf8d07b6918",
+   "when": "2026-10-01",
+   "d": "2026-10-01",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Worker dies in accident at Codelco’s Radomiro Tomic",
+   "desc": "Codelco has suspended operations in the ⁠crushing and ⁠material handling ⁠area of ​the mine where the accident ​happened.",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/worker-dies-in-accident-at-codelcos-radomiro-tomic/"
+    }
+   ],
+   "first_seen": "2026-10-02T00:50:35+00:00"
+  },
   {
    "id": "9221ced250e7e1cf",
    "when": "2026-09-30",
