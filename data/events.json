@@ -1,13 +1,13 @@
 {
- "generated_at": "2026-10-06T00:53:26+00:00",
+ "generated_at": "2026-10-07T00:55:26+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 1,
-   "dropped_screen": 1,
+   "matched_metal": 2,
+   "dropped_screen": 2,
    "new": 0
   },
   {
@@ -15,8 +15,8 @@
    "ok": true,
    "items": 20,
    "matched_metal": 6,
-   "dropped_screen": 6,
-   "new": 0
+   "dropped_screen": 5,
+   "new": 1
   },
   {
    "source": "australianmining",
@@ -30,23 +30,65 @@
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 0,
-   "dropped_screen": 0,
-   "new": 0
+   "matched_metal": 2,
+   "dropped_screen": 1,
+   "new": 1
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 7,
-   "dropped_screen": 6,
+   "matched_metal": 8,
+   "dropped_screen": 7,
    "new": 0
   }
  ],
- "count": 18,
+ "count": 20,
  "pending": 0,
- "auto": 18,
+ "auto": 20,
  "events": [
+  {
+   "id": "99e1d9a64ae5efd7",
+   "when": "2026-10-06",
+   "d": "2026-10-06",
+   "metals": [
+    "Ni"
+   ],
+   "title": "Westwin to build $502M nickel refinery in Mississippi",
+   "desc": "Westwin Elements plans to invest $502 million over five years to build a commercial-scale high-purity nickel refinery in Mississippi, as the U.S. seeks to expand domestic processing of critical minerals.... The post West",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/westwin-to-build-502m-nickel-refinery-in-mississippi/1003895478/"
+    }
+   ],
+   "first_seen": "2026-10-07T00:55:26+00:00"
+  },
+  {
+   "id": "4581dfb9da281a00",
+   "when": "2026-10-06",
+   "d": "2026-10-06",
+   "metals": [
+    "Ni"
+   ],
+   "title": "Atlantic Nickel record production as underground transition advances",
+   "desc": "Atlantic Nickel and Appian Capital Advisory Ltd have announced a record monthly performance at the company’s Santa Rita nickel sulphide mine located in Bahia, Brazil. In August, Santa Rita produced a record 12,464 t of n",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "im-mining",
+   "links": [
+    {
+     "label": "im-mining 原文",
+     "url": "https://im-mining.com/2026/10/06/atlantic-nickel-record-production-as-underground-transition-advances/"
+    }
+   ],
+   "first_seen": "2026-10-07T00:55:26+00:00"
+  },
   {
    "id": "caa389415f9d8095",
    "when": "2026-10-01",
