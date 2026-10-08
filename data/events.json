@@ -1,22 +1,22 @@
 {
- "generated_at": "2026-10-07T00:55:26+00:00",
+ "generated_at": "2026-10-08T00:56:00+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 2,
-   "dropped_screen": 2,
+   "matched_metal": 4,
+   "dropped_screen": 4,
    "new": 0
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 6,
-   "dropped_screen": 5,
-   "new": 1
+   "matched_metal": 7,
+   "dropped_screen": 6,
+   "new": 0
   },
   {
    "source": "australianmining",
@@ -30,7 +30,7 @@
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 2,
+   "matched_metal": 3,
    "dropped_screen": 1,
    "new": 1
   },
@@ -38,15 +38,57 @@
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 8,
-   "dropped_screen": 7,
-   "new": 0
+   "matched_metal": 9,
+   "dropped_screen": 8,
+   "new": 1
   }
  ],
- "count": 20,
+ "count": 22,
  "pending": 0,
- "auto": 20,
+ "auto": 22,
  "events": [
+  {
+   "id": "bb81ffdc5b6945a1",
+   "when": "2026-10-07",
+   "d": "2026-10-07",
+   "metals": [
+    "Ni"
+   ],
+   "title": "BHP agrees to sell Kambalda nickel concentrator to Gold Fields",
+   "desc": "Gold Fields has entered into formal agreements to acquire BHP’s nickel concentrator and associated exploration properties in Kambalda, Western Australia. Gold Fields will now undertake a detailed assessment of the assets",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "im-mining",
+   "links": [
+    {
+     "label": "im-mining 原文",
+     "url": "https://im-mining.com/2026/10/07/bhp-agrees-to-sell-kambalda-nickel-concentrator-to-gold-fields/"
+    }
+   ],
+   "first_seen": "2026-10-08T00:56:00+00:00"
+  },
+  {
+   "id": "6332432019a413de",
+   "when": "2026-10-07",
+   "d": "2026-10-07",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Antofagasta’s Centinela strike adds copper supply risk",
+   "desc": "Labour unrest at a major Chilean mine compounds concerns over global metal availability as copper trades near record levels.",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/antofagastas-centinela-strike-adds-copper-supply-risk/"
+    }
+   ],
+   "first_seen": "2026-10-08T00:56:00+00:00"
+  },
   {
    "id": "99e1d9a64ae5efd7",
    "when": "2026-10-06",
