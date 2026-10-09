@@ -1,22 +1,22 @@
 {
- "generated_at": "2026-10-08T00:56:00+00:00",
+ "generated_at": "2026-10-09T00:57:40+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 4,
-   "dropped_screen": 4,
-   "new": 0
+   "matched_metal": 3,
+   "dropped_screen": 2,
+   "new": 1
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
    "matched_metal": 7,
-   "dropped_screen": 6,
-   "new": 0
+   "dropped_screen": 5,
+   "new": 2
   },
   {
    "source": "australianmining",
@@ -31,22 +31,86 @@
    "ok": true,
    "items": 12,
    "matched_metal": 3,
-   "dropped_screen": 1,
-   "new": 1
+   "dropped_screen": 2,
+   "new": 0
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 9,
-   "dropped_screen": 8,
-   "new": 1
+   "matched_metal": 12,
+   "dropped_screen": 11,
+   "new": 0
   }
  ],
- "count": 22,
+ "count": 25,
  "pending": 0,
- "auto": 22,
+ "auto": 25,
  "events": [
+  {
+   "id": "85ce4e0b0973370e",
+   "when": "2026-10-08",
+   "d": "2026-10-08",
+   "metals": [
+    "Li"
+   ],
+   "title": "Elevra Lithium to supply spodumene to LG Energy Solution",
+   "desc": "Elevra Lithium has signed a binding agreement to supply spodumene concentrate from its North American Lithium (NAL) facility in Québec, Canada, to LG Energy Solution. The post Elevra Lithium to supply spodumene to LG Ene",
+   "tag": "长协/包销",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/elevra-supply-spodumene-lg-energy/"
+    }
+   ],
+   "first_seen": "2026-10-09T00:57:40+00:00"
+  },
+  {
+   "id": "a46aaab5658b1205",
+   "when": "2026-10-08",
+   "d": "2026-10-08",
+   "metals": [
+    "Cu",
+    "Ni"
+   ],
+   "title": "Levack restart puts Magna on two-mine path",
+   "desc": "Magna Mining (TSX: NICU; US-OTC: MGMNF) has approved a $70-million (US$49 million) restart of its Levack nickel-copper mine near Sudbury, Ont., targeting commercial production by mid-2028. Thursday’s preliminary economic",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/levack-restart-puts-magna-on-two-mine-path/1003895592/"
+    }
+   ],
+   "first_seen": "2026-10-09T00:57:40+00:00"
+  },
+  {
+   "id": "746b71705b251404",
+   "when": "2026-10-08",
+   "d": "2026-10-08",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Copper price gains as Chile strike threatens output",
+   "desc": "Copper prices climbed Thursday as a strike by more than 700 workers at Antofagasta’s (LSE: ANTO) Centinela mine in Chile raised concerns about production disruptions that could become more serious... The post Copper pric",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/copper-price-gains-as-chile-strike-threatens-output/1003895558/"
+    }
+   ],
+   "first_seen": "2026-10-09T00:57:40+00:00"
+  },
   {
    "id": "bb81ffdc5b6945a1",
    "when": "2026-10-07",
