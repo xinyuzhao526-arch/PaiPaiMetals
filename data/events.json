@@ -1,12 +1,12 @@
 {
- "generated_at": "2026-10-09T00:57:40+00:00",
+ "generated_at": "2026-10-10T00:55:41+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 3,
+   "matched_metal": 4,
    "dropped_screen": 2,
    "new": 1
   },
@@ -15,22 +15,22 @@
    "ok": true,
    "items": 20,
    "matched_metal": 7,
-   "dropped_screen": 5,
+   "dropped_screen": 3,
    "new": 2
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 0,
-   "dropped_screen": 0,
+   "matched_metal": 1,
+   "dropped_screen": 1,
    "new": 0
   },
   {
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 3,
+   "matched_metal": 2,
    "dropped_screen": 2,
    "new": 0
   },
@@ -39,14 +39,98 @@
    "ok": true,
    "items": 36,
    "matched_metal": 12,
-   "dropped_screen": 11,
-   "new": 0
+   "dropped_screen": 10,
+   "new": 1
   }
  ],
- "count": 25,
+ "count": 29,
  "pending": 0,
- "auto": 25,
+ "auto": 29,
  "events": [
+  {
+   "id": "6280f3df16245276",
+   "when": "2026-10-09",
+   "d": "2026-10-09",
+   "metals": [
+    "Li"
+   ],
+   "title": "UK scientists turn to biology in search for cleaner lithium",
+   "desc": "Researchers at the University of Birmingham are leading a £6.2-million ($8.2-million) project to develop protein-based membranes that could make lithium extraction more selective and potentially less energy-intensive. Th",
+   "tag": "长协/包销",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/uk-scientists-turn-to-biology-in-search-for-cleaner-lithium/1003895598/"
+    }
+   ],
+   "first_seen": "2026-10-10T00:55:41+00:00"
+  },
+  {
+   "id": "57a93bf4c25dd3da",
+   "when": "2026-10-09",
+   "d": "2026-10-09",
+   "metals": [
+    "Li"
+   ],
+   "title": "CleanTech Lithium expands foothold in Argentina",
+   "desc": "CleanTech Lithium (LSE: CTL) has secured options to add two lithium brine properties in Argentina’s Salar de Antofalla, expanding its footprint near the flagship Laguna Verde project. The company signed... The post Clean",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/cleantech-lithium-expands-foothold-in-argentina/1003895600/"
+    }
+   ],
+   "first_seen": "2026-10-10T00:55:41+00:00"
+  },
+  {
+   "id": "1b966198d8b22935",
+   "when": "2026-10-09",
+   "d": "2026-10-09",
+   "metals": [
+    "Cu"
+   ],
+   "title": "EU puts KGHM’s $2.4B copper projects on fast track",
+   "desc": "Brussels gives two Polish investments priority designation as Europe seeks to expand domestic metals supply and processing.",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/eu-puts-kghms-2-4b-copper-projects-on-fast-track/"
+    }
+   ],
+   "first_seen": "2026-10-10T00:55:41+00:00"
+  },
+  {
+   "id": "4e4196533c2d7e68",
+   "when": "2026-10-08",
+   "d": "2026-10-08",
+   "metals": [
+    "Fe"
+   ],
+   "title": "Iron ore bucks Hormuz disruption as supply disputes shift to China",
+   "desc": "Iron ore supplies have been disrupted by Hormuz tensions, while China’s procurement strategy is reshaping commerce with Australian suppliers. The post Iron ore bucks Hormuz disruption as supply disputes shift to China ap",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/analysis/iron-ore-bucks-hormuz-disruption-as-supply-disputes-shift-to-china/"
+    }
+   ],
+   "first_seen": "2026-10-10T00:55:41+00:00"
+  },
   {
    "id": "85ce4e0b0973370e",
    "when": "2026-10-08",
