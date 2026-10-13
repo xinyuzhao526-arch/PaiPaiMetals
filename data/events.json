@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-10T00:55:41+00:00",
+ "generated_at": "2026-10-13T00:59:21+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
@@ -7,7 +7,7 @@
    "ok": true,
    "items": 10,
    "matched_metal": 4,
-   "dropped_screen": 2,
+   "dropped_screen": 3,
    "new": 1
   },
   {
@@ -16,7 +16,7 @@
    "items": 20,
    "matched_metal": 7,
    "dropped_screen": 3,
-   "new": 2
+   "new": 0
   },
   {
    "source": "australianmining",
@@ -38,15 +38,57 @@
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 12,
-   "dropped_screen": 10,
+   "matched_metal": 14,
+   "dropped_screen": 11,
    "new": 1
   }
  ],
- "count": 29,
+ "count": 31,
  "pending": 0,
- "auto": 29,
+ "auto": 31,
  "events": [
+  {
+   "id": "3d2f245928ae65a9",
+   "when": "2026-10-12",
+   "d": "2026-10-12",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Codelco partially halts El Teniente mine after landslide",
+   "desc": "Codelco has partially suspended operations at the El Teniente mine in Chile following a landslide that killed two workers, reported Reuters. The post Codelco partially halts El Teniente mine after landslide appeared firs",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/codelco-partially-halts-el-teniente-mine/"
+    }
+   ],
+   "first_seen": "2026-10-13T00:59:21+00:00"
+  },
+  {
+   "id": "347b7bee76c0d48c",
+   "when": "2026-10-12",
+   "d": "2026-10-12",
+   "metals": [
+    "Li"
+   ],
+   "title": "EnergyX inks 10-year, $2B lithium offtake deal with Trafigura",
+   "desc": "The deal covers lithium products from both Black Giant in Chile project Lonestar in Texas.",
+   "tag": "长协/包销",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/energyx-inks-10-year-2b-lithium-offtake-deal-with-trafigura/"
+    }
+   ],
+   "first_seen": "2026-10-13T00:59:21+00:00"
+  },
   {
    "id": "6280f3df16245276",
    "when": "2026-10-09",
