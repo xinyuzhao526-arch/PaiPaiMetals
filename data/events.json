@@ -1,20 +1,20 @@
 {
- "generated_at": "2026-10-13T00:59:21+00:00",
+ "generated_at": "2026-10-14T01:11:47+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 4,
-   "dropped_screen": 3,
+   "matched_metal": 3,
+   "dropped_screen": 1,
    "new": 1
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 7,
+   "matched_metal": 5,
    "dropped_screen": 3,
    "new": 0
   },
@@ -22,8 +22,8 @@
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 1,
-   "dropped_screen": 1,
+   "matched_metal": 3,
+   "dropped_screen": 3,
    "new": 0
   },
   {
@@ -39,14 +39,35 @@
    "ok": true,
    "items": 36,
    "matched_metal": 14,
-   "dropped_screen": 11,
-   "new": 1
+   "dropped_screen": 12,
+   "new": 0
   }
  ],
- "count": 31,
+ "count": 32,
  "pending": 0,
- "auto": 31,
+ "auto": 32,
  "events": [
+  {
+   "id": "92c2eb4236f07cc8",
+   "when": "2026-10-13",
+   "d": "2026-10-13",
+   "metals": [
+    "Li"
+   ],
+   "title": "Trafigura, EnergyX sign ten-year lithium supply contract",
+   "desc": "Trafigura has entered into a ten-year binding agreement worth over $2bn with Energy Exploration Technologies (EnergyX) for the purchase of 100,000 metric tonnes of battery-grade lithium products from projects in the US a",
+   "tag": "长协/包销",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/trafigura-energyx-10-year-lithium-contract/"
+    }
+   ],
+   "first_seen": "2026-10-14T01:11:47+00:00"
+  },
   {
    "id": "3d2f245928ae65a9",
    "when": "2026-10-12",
