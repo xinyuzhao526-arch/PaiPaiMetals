@@ -1,52 +1,94 @@
 {
- "generated_at": "2026-10-14T01:11:47+00:00",
+ "generated_at": "2026-10-15T01:09:21+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 3,
-   "dropped_screen": 1,
-   "new": 1
+   "matched_metal": 1,
+   "dropped_screen": 0,
+   "new": 0
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 5,
+   "matched_metal": 4,
    "dropped_screen": 3,
-   "new": 0
+   "new": 1
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 3,
-   "dropped_screen": 3,
+   "matched_metal": 2,
+   "dropped_screen": 2,
    "new": 0
   },
   {
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 2,
-   "dropped_screen": 2,
+   "matched_metal": 1,
+   "dropped_screen": 1,
    "new": 0
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 14,
-   "dropped_screen": 12,
-   "new": 0
+   "matched_metal": 12,
+   "dropped_screen": 9,
+   "new": 1
   }
  ],
- "count": 32,
+ "count": 34,
  "pending": 0,
- "auto": 32,
+ "auto": 34,
  "events": [
+  {
+   "id": "da5185b429896060",
+   "when": "2026-10-14",
+   "d": "2026-10-14",
+   "metals": [
+    "Cu"
+   ],
+   "title": "BHP averts strike at world’s biggest copper mine",
+   "desc": "BHP (ASX, LSE: BHP) and the supervisors’ union at its Escondida mine in Chile have reached a preliminary agreement to avert a strike at the world’s largest copper operation. Members... The post BHP averts strike at world",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/bhp-averts-strike-at-worlds-biggest-copper-mine-2/1003895736/"
+    }
+   ],
+   "first_seen": "2026-10-15T01:09:21+00:00"
+  },
+  {
+   "id": "daa79a9384a35a57",
+   "when": "2026-10-14",
+   "d": "2026-10-14",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Copper price forecasts lifted for 2026 but tariff “collapse” still on the table",
+   "desc": "Macquarie’s collapse scenario needs Washington to rule tariffs out, which it rates least likely. More likely is limbo past January 1, with 1.5 million tonnes of US copper staying exactly where it is.",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/copper-price-forecasts-lifted-for-2026-but-tariff-collapse-still-on-the-table/"
+    }
+   ],
+   "first_seen": "2026-10-15T01:09:21+00:00"
+  },
   {
    "id": "92c2eb4236f07cc8",
    "when": "2026-10-13",
