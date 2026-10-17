@@ -1,29 +1,29 @@
 {
- "generated_at": "2026-10-16T01:08:15+00:00",
+ "generated_at": "2026-10-17T01:10:15+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 2,
-   "dropped_screen": 2,
+   "matched_metal": 3,
+   "dropped_screen": 3,
    "new": 0
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 6,
-   "dropped_screen": 5,
+   "matched_metal": 4,
+   "dropped_screen": 4,
    "new": 0
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 1,
-   "dropped_screen": 1,
+   "matched_metal": 0,
+   "dropped_screen": 0,
    "new": 0
   },
   {
@@ -31,22 +31,64 @@
    "ok": true,
    "items": 12,
    "matched_metal": 3,
-   "dropped_screen": 3,
-   "new": 0
+   "dropped_screen": 2,
+   "new": 1
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 14,
-   "dropped_screen": 9,
-   "new": 2
+   "matched_metal": 13,
+   "dropped_screen": 8,
+   "new": 1
   }
  ],
- "count": 36,
+ "count": 38,
  "pending": 0,
- "auto": 36,
+ "auto": 38,
  "events": [
+  {
+   "id": "08bd0bd4ddb54d06",
+   "when": "2026-10-16",
+   "d": "2026-10-16",
+   "metals": [
+    "Li"
+   ],
+   "title": "PLS greenlights P2000 project as it aims for ~2 Mt/y of spodumene production capacity",
+   "desc": "PLS says it has approved the A$1.9 billion ($1.3 billion) P2000 Project at Pilgangoora, marking the largest investment decision in the company’s history. The project will increase Pilgangoora’s annual spodumene concentra",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "im-mining",
+   "links": [
+    {
+     "label": "im-mining 原文",
+     "url": "https://im-mining.com/2026/10/16/pls-greenlights-p2000-project-as-it-aims-for-2-mt-y-of-spodumene-production-capacity/"
+    }
+   ],
+   "first_seen": "2026-10-17T01:10:15+00:00"
+  },
+  {
+   "id": "778b02bf5369d668",
+   "when": "2026-10-16",
+   "d": "2026-10-16",
+   "metals": [
+    "Ni"
+   ],
+   "title": "Exiro-led group takes control of Vale’s Manitoba nickel complex",
+   "desc": "New owners pledge major investment in the Thompson nickel complex as Vale retains a minority stake and long-term supply deal.",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/exiro-led-group-takes-control-of-vales-manitoba-nickel-complex/"
+    }
+   ],
+   "first_seen": "2026-10-17T01:10:15+00:00"
+  },
   {
    "id": "44189f3343ee937c",
    "when": "2026-10-15",
