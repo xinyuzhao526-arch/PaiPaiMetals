@@ -1,52 +1,159 @@
 {
- "generated_at": "2026-10-17T01:10:15+00:00",
+ "generated_at": "2026-10-20T01:13:36+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 3,
-   "dropped_screen": 3,
-   "new": 0
+   "matched_metal": 4,
+   "dropped_screen": 2,
+   "new": 2
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 4,
-   "dropped_screen": 4,
+   "matched_metal": 3,
+   "dropped_screen": 3,
    "new": 0
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 0,
-   "dropped_screen": 0,
+   "matched_metal": 1,
+   "dropped_screen": 1,
    "new": 0
   },
   {
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 3,
-   "dropped_screen": 2,
+   "matched_metal": 2,
+   "dropped_screen": 1,
    "new": 1
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 13,
-   "dropped_screen": 8,
-   "new": 1
+   "matched_metal": 10,
+   "dropped_screen": 4,
+   "new": 2
   }
  ],
- "count": 38,
+ "count": 43,
  "pending": 0,
- "auto": 38,
+ "auto": 43,
  "events": [
+  {
+   "id": "6072e4794ecb7c24",
+   "when": "2026-10-19",
+   "d": "2026-10-19",
+   "metals": [
+    "Cu",
+    "Fe"
+   ],
+   "title": "Fortescue sells copper concentrate cleaned with arsenic removal process",
+   "desc": "Fortescue has completed the commercial sale of over 40 tonnes (t) of copper concentrate that underwent arsenic removal using the company's Toowong Process technology at its demonstration plant in Brisbane, Australia. The",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/fortescue-copper-cleaned-arsenic-removal/"
+    }
+   ],
+   "first_seen": "2026-10-20T01:13:36+00:00"
+  },
+  {
+   "id": "df2b569b05f1ba04",
+   "when": "2026-10-19",
+   "d": "2026-10-19",
+   "metals": [
+    "Cu",
+    "Fe"
+   ],
+   "title": "Fortescue’s ‘world-first’ arsenic removal tech unlocks new copper processing potential",
+   "desc": "Fortescue says it has sold more than 40 tonnes of copper concentrate cleaned using its new “world-first” arsenic removal technology, creating a solution for a complex problem facing the global copper industry. The patent",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "im-mining",
+   "links": [
+    {
+     "label": "im-mining 原文",
+     "url": "https://im-mining.com/2026/10/19/fortescues-world-first-arsenic-removal-tech-unlocks-new-copper-processing-potential/"
+    }
+   ],
+   "first_seen": "2026-10-20T01:13:36+00:00"
+  },
+  {
+   "id": "5a90c6470dc16d22",
+   "when": "2026-10-19",
+   "d": "2026-10-19",
+   "metals": [
+    "Ni"
+   ],
+   "title": "Westwin Elements, Traxys eye $3.9 billion, 22 year nickel offtake extension",
+   "desc": "Westwin operates a demonstration plant in Oklahoma, and has selected Natchez, Mississippi, for its upcoming commercial-scale class 1 nickel refinery, the first in the US.",
+   "tag": "长协/包销",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/westwin-elements-traxys-eye-3-9-billion-22-year-nickel-offtake-extension/"
+    }
+   ],
+   "first_seen": "2026-10-20T01:13:36+00:00"
+  },
+  {
+   "id": "ebc4472137610f9d",
+   "when": "2026-10-19",
+   "d": "2026-10-19",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Copper-hungry US buyers circle Ivanhoe Electric mine",
+   "desc": "Advanced offtake talks could help finance the $1.4-billion Santa Cruz copper project in Arizona as AI and power grid demand accelerates.",
+   "tag": "长协/包销",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/copper-hungry-us-buyers-circle-ivanhoe-electric-mine/"
+    }
+   ],
+   "first_seen": "2026-10-20T01:13:36+00:00"
+  },
+  {
+   "id": "a69807163a3cc640",
+   "when": "2026-10-16",
+   "d": "2026-10-16",
+   "metals": [
+    "Fe"
+   ],
+   "title": "Arrow Minerals to acquire Turee Creek Iron Ore Project",
+   "desc": "Arrow Minerals has signed an agreement with Ground Risk to acquire the Turee Creek Iron Ore Project in Western Australia and submitted 12 exploration licence applications. The post Arrow Minerals to acquire Turee Creek I",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/arrow-to-acquire-turee-creek-project/"
+    }
+   ],
+   "first_seen": "2026-10-20T01:13:36+00:00"
+  },
   {
    "id": "08bd0bd4ddb54d06",
    "when": "2026-10-16",
