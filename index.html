@@ -1580,8 +1580,10 @@ function syncEventCard(){
   const ch = document.getElementById('changes');
   if(!card || !inv || !ch) return;
   if(window.innerWidth <= 1100){ ch.style.height=''; ch.style.maxHeight=''; return; }
-  const padB = parseFloat(getComputedStyle(card).paddingBottom)||0;
-  const chrome = (ch.getBoundingClientRect().top - card.getBoundingClientRect().top) + padB;
+  const cs = getComputedStyle(card);
+  const padB = parseFloat(cs.paddingBottom)||0;
+  const bdB = parseFloat(cs.borderBottomWidth)||0;
+  const chrome = (ch.getBoundingClientRect().top - card.getBoundingClientRect().top) + padB + bdB;
   const target = Math.round(inv.getBoundingClientRect().height - chrome);
   ch.style.maxHeight = 'none';
   ch.style.height = Math.max(260, Math.min(900, target)) + 'px';
