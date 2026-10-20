@@ -142,10 +142,51 @@ def fetch_shfe(start=None, back=10):
     return None, {}
 
 
+def append_history(path, lme, shfe):
+    """把当日快照并入日序列（同日覆盖、不全量重取）。
+    页面画库存折线就靠这份文件：回补由 fetch_stock_history.py 做，日常增长靠这里。"""
+    hist = {"schema": 1, "unit": "t", "LME": {}, "SHFE": {}}
+    if os.path.exists(path):
+        try:
+            with open(path, encoding="utf-8") as f:
+                old = json.load(f)
+            for k in ("LME", "SHFE"):
+                for m, arr in (old.get(k) or {}).items():
+                    hist[k][m] = [list(x) for x in arr]
+        except Exception:  # noqa: BLE001
+            pass
+    added = 0
+    for bag, src in (("LME", lme or {}), ("SHFE", shfe or {})):
+        for metal, s in src.items():
+            if not isinstance(s, dict) or "date" not in s or "t" not in s:
+                continue
+            arr = hist[bag].setdefault(metal, [])
+            d = s["date"]
+            for row in arr:
+                if row[0] == d:
+                    row[1] = s["t"]
+                    break
+            else:
+                arr.append([d, s["t"]])
+                added += 1
+            arr.sort(key=lambda x: x[0])
+    hist["generated_at"] = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    hist["sources"] = {
+        "LME": "https://www.westmetall.com/en/markdaten.php?action=table&field=LME_{M}_stock",
+        "SHFE": SHFE_URL.replace("{d}", "YYYYMMDD"),
+    }
+    hist["note"] = "交易所公开库存日序列，单位吨。LME 经 westmetall 公开镜像；SHFE 取官网每日仓单。仅公开数据。"
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(hist, f, ensure_ascii=False, separators=(",", ":"))
+    return added
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="data/stocks.json")
     ap.add_argument("--shfe-date", default=None, help="指定仓单日 YYYYMMDD（默认自动回退找最新）")
+    ap.add_argument("--history", default=None, help="历史序列路径（默认与 --out 同目录的 stocks_history.json）")
     args = ap.parse_args()
 
     print("[1/2] LME 库存（westmetall 公开镜像）")
@@ -174,6 +215,10 @@ def main():
         json.dump(payload, f, ensure_ascii=False, indent=2)
     print("[ok] 写入 %s · as_of=%s · LME %d 项 · SHFE %d 项"
           % (args.out, as_of, len(lme), len(shfe)))
+
+    hist_path = args.history or os.path.join(os.path.dirname(args.out) or ".", "stocks_history.json")
+    added = append_history(hist_path, lme, shfe)
+    print("[ok] 合并历史 %s · 新增 %d 个数据点" % (hist_path, added))
 
 
 if __name__ == "__main__":

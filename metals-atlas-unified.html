@@ -106,6 +106,17 @@ h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
 .inv .ex{display:flex;justify-content:space-between;font-size:12px;font-weight:700}
 .inv .val{font-size:22px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin:6px 0 2px}
 .inv .val small{font-size:12px;color:var(--muted);font-weight:600}.inv .lbl{font-size:11px;color:var(--muted)}
+/* 库存折线：交易所公开日序列 */
+#inv h2 .seg{display:inline-flex;gap:2px;background:#f1f5f9;border:1px solid var(--line);border-radius:8px;padding:2px;font-weight:600}
+#inv h2 .seg button{border:0;background:transparent;font:inherit;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;color:var(--muted);cursor:pointer}
+#inv h2 .seg button.on{background:#fff;color:var(--accent);box-shadow:0 1px 3px rgba(15,23,42,.12)}
+.spk{margin:8px 0 2px;color:var(--accent)}
+.spk svg{display:block;width:100%;height:44px}
+.spk .ln{fill:none;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.spk .ar{opacity:.13}
+.spk-foot{display:flex;justify-content:space-between;gap:8px;font-size:10.5px;color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
+.spk-foot b{font-weight:800}
+.spk-foot .up{color:#b45309}.spk-foot .dn{color:#047857}
 .bench{margin-top:10px;border:1px dashed var(--banner-bd);background:var(--banner-bg);border-radius:11px;padding:12px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
 .bench strong{font-size:20px;letter-spacing:-.03em}
 .map-wrap{display:grid;grid-template-columns:1.55fr .85fr;gap:14px;margin:14px 0}
@@ -229,7 +240,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
     <div class="grid-2" id="events">
       <div class="card"><h2>近期供给事件 <em>最新在前 · 点击打开来源</em></h2><div class="meta" id="ev-meta" style="margin:-4px 0 8px;font-size:11.5px;color:var(--muted)">按事件时点倒序（年度/财年取期末，区间取末段）</div><div class="ev-wrap"><div id="changes"></div><div class="ev-more"><span>向下滚动查看更早事件 ↓</span></div></div></div>
       <div class="card" id="inv">
-        <h2>库存与显性供给 <em>单位见各卡</em></h2>
+        <h2>库存与显性供给 <span class="seg" id="spk-seg" title="折线区间：交易所日库存（LME / SHFE）"><button type="button" data-r="30" class="on">1月</button><button type="button" data-r="90">3月</button><button type="button" data-r="0">全部</button></span></h2>
         <div class="meta" id="inv-asof" style="margin:-4px 0 10px;font-size:11.5px;color:var(--muted)">数据时点：页面内置核验基线（正在尝试加载实时数据…）</div>
         <div class="inv" id="inv-list"></div>
         <div class="bench" id="bench" role="button" tabindex="0">
@@ -1064,9 +1075,12 @@ function renderPanels(){
     <button type="button" data-id="${x.id}">
       <div class="ex">${x.ex||''}<span>${exChip(x)}<span class="chip">${th.inv_chip||'库存'}</span></span></div>
       <div class="val">${x.val||'—'} <small>${x.unit||'kt'}</small></div>
+      <div class="spk" data-spk="${x.id}"></div>
       <div class="lbl">${x.lbl||''}</div>
       <div class="lbl" style="margin-top:4px">${x.foot||''}</div>
     </button>`).join('') || '<div class="meta">暂无库存</div>';
+  renderSparks();
+
 
   const rk=document.getElementById('rank-list');
   if(rk) rk.innerHTML = RANK.map(r=>`
@@ -1539,6 +1553,72 @@ function applyStocks(j){
   const el = document.getElementById('inv-asof');
   if(el) el.innerHTML = '数据时点：<b>' + asof + '</b> · LME / SHFE 自动刷新（公开镜像 / 官网仓单）· 其余为核验基线，时点与口径见各卡';
 }
+/* ===== 库存折线：交易所公开日序列 =====
+   data/stocks_history.json 由 scripts/fetch_stock_history.py 回补、
+   scripts/fetch_stocks.py 每交易日追加。单位吨，前端只做展示不改变原值。 */
+let HIST = null, spkRange = 30;
+function sparkSeries(x){
+  const conf = STOCK_MAP[currentMetal];
+  if(!conf || !HIST) return null;
+  const id = String(x.id||'');
+  let bag=null, k=null;
+  if(id.indexOf('lme')===0){ bag=HIST.LME; k=stockKey(conf.lme, id); }
+  else if(id.indexOf('shfe')===0){ bag=HIST.SHFE; k=stockKey(conf.shfe, id); }
+  else return null;
+  const arr = (bag && k) ? bag[k] : null;
+  return (arr && arr.length>=2) ? {k:k, arr:arr} : null;
+}
+function renderSparks(){
+  if(!HIST) return;
+  document.querySelectorAll('#inv-list .spk').forEach(el=>{
+    const id = el.dataset.spk;
+    const x = (INV||[]).filter(i=>String(i.id)===id)[0];
+    if(!x){ el.innerHTML=''; return; }
+    const s = sparkSeries(x);
+    if(!s){ el.innerHTML='<div class="spk-foot"><span>暂无日序列</span></div>'; return; }
+    let arr = s.arr;
+    if(spkRange>0){
+      const d0 = new Date(arr[arr.length-1][0]+'T00:00:00Z');
+      d0.setUTCDate(d0.getUTCDate()-spkRange);
+      const cut = d0.toISOString().slice(0,10);
+      const f = arr.filter(p=>p[0]>=cut);
+      if(f.length>=2) arr=f;
+    }
+    const vals = arr.map(p=>p[1]);
+    const mn = Math.min.apply(null,vals), mx = Math.max.apply(null,vals);
+    const W=100, H=44, pad=3, span=(mx-mn)||1;
+    const pts = arr.map((p,i)=>[pad+(W-2*pad)*(i/(arr.length-1)), H-pad-(H-2*pad)*((p[1]-mn)/span)]);
+    const d = pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(2)+' '+p[1].toFixed(2)).join(' ');
+    const area = d+' L'+pts[pts.length-1][0].toFixed(2)+' '+(H-pad)+' L'+pts[0][0].toFixed(2)+' '+(H-pad)+' Z';
+    const first=arr[0][1], last=arr[arr.length-1][1];
+    const chg = first ? (last/first-1)*100 : 0;
+    const lab = spkRange===30?'近1月':(spkRange===90?'近3月':'全部');
+    el.innerHTML =
+      '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" role="img" aria-label="'+s.k+' 库存 '+lab+'走势">'
+      +'<path class="ar" d="'+area+'" fill="currentColor"></path>'
+      +'<path class="ln" d="'+d+'" stroke="currentColor"></path></svg>'
+      +'<div class="spk-foot"><span>'+lab+' · '+arr[0][0].slice(5)+'→'+arr[arr.length-1][0].slice(5)+' · '+arr.length+' 点</span>'
+      +'<span class="'+(chg>=0?'up':'dn')+'"><b>'+(chg>=0?'+':'')+chg.toFixed(1)+'%</b></span></div>';
+  });
+}
+function initSparkSeg(){
+  const seg = document.getElementById('spk-seg');
+  if(!seg) return;
+  seg.onclick = e=>{
+    const b = e.target.closest('button[data-r]'); if(!b) return;
+    spkRange = Number(b.dataset.r)||0;
+    seg.querySelectorAll('button').forEach(x=>x.classList.toggle('on', x===b));
+    renderSparks();
+  };
+}
+async function loadStockHistory(){
+  try{
+    const r = await fetch('data/stocks_history.json', {cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    HIST = await r.json();
+    renderSparks();
+  }catch(e){ HIST = null; }
+}
 async function loadLiveStocks(){
   const el = document.getElementById('inv-asof');
   try{
@@ -1557,6 +1637,8 @@ function boot(){
     initMap();
     loadMetal(currentMetal, false);
     loadLiveStocks();
+    initSparkSeg();
+    loadStockHistory();
     loadLiveEvents();
   }catch(err){
     console.error(err);
