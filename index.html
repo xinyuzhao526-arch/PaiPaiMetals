@@ -74,7 +74,8 @@ h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
   .grid-2{grid-template-columns:1.15fr 1fr}
   .map-wrap{grid-template-columns:1.7fr .8fr}
 }
-/* 事件卡片：固定高度 + 内部滚动，一屏约 3 条，向下滚动翻页 */
+/* 事件卡片：与库存卡等高（库存卡加折线后变高），内部滚动，向下翻页 */
+#events{align-items:start}
 .ev-wrap{position:relative}
 #changes{max-height:520px;overflow-y:auto;overscroll-behavior:contain;padding-right:8px;scroll-behavior:smooth;scroll-snap-type:y proximity;scrollbar-width:thin;scrollbar-color:#cbd5e1 transparent}
 #changes::-webkit-scrollbar{width:8px}
@@ -87,6 +88,8 @@ h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
 .ev-more{position:absolute;left:0;right:8px;bottom:8px;text-align:center;pointer-events:none;transition:opacity .25s}
 .ev-more span{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:999px;padding:2px 11px;font-size:10.5px;font-weight:700;color:var(--accent);box-shadow:0 1px 5px rgba(15,23,42,.08)}
 .ev-wrap.at-end::after,.ev-wrap.at-end .ev-more{opacity:0}
+/* 窄屏堆叠时不做等高同步，给滚动区一个上限 */
+@media(max-width:1100px){ #changes{max-height:460px} }
 .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
 .card h2{margin:0 0 10px;font-size:15px;display:flex;justify-content:space-between;gap:8px;align-items:center}
 .card h2 em{font-style:normal;font-size:11px;font-weight:600;color:var(--muted)}
@@ -1568,6 +1571,30 @@ function sparkSeries(x){
   const arr = (bag && k) ? bag[k] : null;
   return (arr && arr.length>=2) ? {k:k, arr:arr} : null;
 }
+/* 事件卡与库存卡等高：库存卡加折线后会变高，事件滚动区跟着拉长。
+   用 JS 而不是 grid stretch——卡片是 auto 高度，stretch 会被自身内容撑开后再反推，
+   结果是事件列表把两张卡一起拉高、反而失去滚动。 */
+function syncEventCard(){
+  const card = document.querySelector('#events > .card');
+  const inv = document.getElementById('inv');
+  const ch = document.getElementById('changes');
+  if(!card || !inv || !ch) return;
+  if(window.innerWidth <= 1100){ ch.style.height=''; ch.style.maxHeight=''; return; }
+  const padB = parseFloat(getComputedStyle(card).paddingBottom)||0;
+  const chrome = (ch.getBoundingClientRect().top - card.getBoundingClientRect().top) + padB;
+  const target = Math.round(inv.getBoundingClientRect().height - chrome);
+  ch.style.maxHeight = 'none';
+  ch.style.height = Math.max(260, Math.min(900, target)) + 'px';
+}
+let _evRO = null;
+function watchEventCard(){
+  syncEventCard();
+  const inv = document.getElementById('inv');
+  if(window.ResizeObserver && inv && !_evRO){
+    _evRO = new ResizeObserver(()=>syncEventCard());
+    _evRO.observe(inv);
+  }
+}
 function renderSparks(){
   if(!HIST) return;
   document.querySelectorAll('#inv-list .spk').forEach(el=>{
@@ -1600,6 +1627,7 @@ function renderSparks(){
       +'<div class="spk-foot"><span>'+lab+' · '+arr[0][0].slice(5)+'→'+arr[arr.length-1][0].slice(5)+' · '+arr.length+' 点</span>'
       +'<span class="'+(chg>=0?'up':'dn')+'"><b>'+(chg>=0?'+':'')+chg.toFixed(1)+'%</b></span></div>';
   });
+  syncEventCard();
 }
 function initSparkSeg(){
   const seg = document.getElementById('spk-seg');
@@ -1639,6 +1667,8 @@ function boot(){
     loadLiveStocks();
     initSparkSeg();
     loadStockHistory();
+    watchEventCard();
+    window.addEventListener('resize', syncEventCard);
     loadLiveEvents();
   }catch(err){
     console.error(err);
