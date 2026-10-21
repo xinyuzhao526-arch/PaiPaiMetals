@@ -57,7 +57,7 @@
    ],
    "title": "Fortescue sells copper concentrate cleaned with arsenic removal process",
    "desc": "Fortescue has completed the commercial sale of over 40 tonnes (t) of copper concentrate that underwent arsenic removal using the company's Toowong Process technology at its demonstration plant in Brisbane, Australia. The",
-   "tag": "并购/股权",
+   "tag": "技术/工艺",
    "status": "auto",
    "src_level": "media",
    "src": "mining-technology",
@@ -67,7 +67,9 @@
      "url": "https://www.mining-technology.com/news/fortescue-copper-cleaned-arsenic-removal/"
     }
    ],
-   "first_seen": "2026-10-20T01:13:36+00:00"
+   "first_seen": "2026-10-20T01:13:36+00:00",
+   "title_zh": "福特斯克售出经除砷工艺处理的铜精矿",
+   "summary_zh": "福特斯克在布里斯班中试厂以 Toowong 工艺完成逾 40 吨除砷铜精矿的商业销售，为高砷铜精矿的加工与销售提供了新路径。口径：报道仅披露试销规模逾 40 吨，商业化产能与长协安排尚未披露。"
   },
   {
    "id": "df2b569b05f1ba04",
@@ -79,7 +81,7 @@
    ],
    "title": "Fortescue’s ‘world-first’ arsenic removal tech unlocks new copper processing potential",
    "desc": "Fortescue says it has sold more than 40 tonnes of copper concentrate cleaned using its new “world-first” arsenic removal technology, creating a solution for a complex problem facing the global copper industry. The patent",
-   "tag": "并购/股权",
+   "tag": "技术/工艺",
    "status": "auto",
    "src_level": "media",
    "src": "im-mining",
@@ -89,7 +91,9 @@
      "url": "https://im-mining.com/2026/10/19/fortescues-world-first-arsenic-removal-tech-unlocks-new-copper-processing-potential/"
     }
    ],
-   "first_seen": "2026-10-20T01:13:36+00:00"
+   "first_seen": "2026-10-20T01:13:36+00:00",
+   "title_zh": "福特斯克称全球首创除砷技术打开铜加工空间",
+   "summary_zh": "同一事件的另一篇报道，强调该技术可处理高砷铜精矿这一全球铜行业难题，已售出逾 40 吨经处理精矿。口径：仍属技术验证与试销阶段，对铜供给的实际增量需继续观察。"
   },
   {
    "id": "5a90c6470dc16d22",
@@ -110,7 +114,9 @@
      "url": "https://www.mining.com/westwin-elements-traxys-eye-3-9-billion-22-year-nickel-offtake-extension/"
     }
    ],
-   "first_seen": "2026-10-20T01:13:36+00:00"
+   "first_seen": "2026-10-20T01:13:36+00:00",
+   "title_zh": "Westwin 与 Traxys 商讨 39 亿美元、22 年期镍包销延长",
+   "summary_zh": "Westwin 在俄克拉何马州运营中试厂，并选定密西西比州纳奇兹建设其美国首座商业化一级镍精炼厂；双方就 39 亿美元、22 年期的镍包销延长进行磋商。口径：金额与期限来自报道，最终条款未定。"
   },
   {
    "id": "ebc4472137610f9d",
@@ -131,7 +137,9 @@
      "url": "https://www.mining.com/copper-hungry-us-buyers-circle-ivanhoe-electric-mine/"
     }
    ],
-   "first_seen": "2026-10-20T01:13:36+00:00"
+   "first_seen": "2026-10-20T01:13:36+00:00",
+   "title_zh": "美国买家争抢 Ivanhoe Electric 铜矿包销",
+   "summary_zh": "围绕亚利桑那州 14 亿美元的 Santa Cruz 铜项目，Ivanhoe Electric 正与美方买家深入谈判包销，协议有望为项目建设提供融资，背景是 AI 与电网需求加速。口径：处于谈判阶段，数量与定价未披露。"
   },
   {
    "id": "a69807163a3cc640",
@@ -152,7 +160,9 @@
      "url": "https://www.mining-technology.com/news/arrow-to-acquire-turee-creek-project/"
     }
    ],
-   "first_seen": "2026-10-20T01:13:36+00:00"
+   "first_seen": "2026-10-20T01:13:36+00:00",
+   "title_zh": "Arrow Minerals 拟收购 Turee Creek 铁矿项目",
+   "summary_zh": "Arrow Minerals 与 Ground Risk 签署协议，收购西澳 Turee Creek 铁矿项目，并提交 12 项勘探许可申请。口径：属勘探阶段资产，短期不形成产量。"
   },
   {
    "id": "08bd0bd4ddb54d06",
@@ -173,7 +183,9 @@
      "url": "https://im-mining.com/2026/10/16/pls-greenlights-p2000-project-as-it-aims-for-2-mt-y-of-spodumene-production-capacity/"
     }
    ],
-   "first_seen": "2026-10-17T01:10:15+00:00"
+   "first_seen": "2026-10-17T01:10:15+00:00",
+   "title_zh": "PLS 批准 P2000 项目，目标锂辉石产能约 200 万吨/年",
+   "summary_zh": "PLS 批准 Pilgangoora 的 P2000 项目，投资额 19 亿澳元（约 13 亿美元），为公司史上最大投资决定，将提升 Pilgangoora 锂辉石精矿年产能。口径：投资与产能目标来自公司披露，投产时点未见明确。"
   },
   {
    "id": "778b02bf5369d668",
@@ -194,7 +206,9 @@
      "url": "https://www.mining.com/exiro-led-group-takes-control-of-vales-manitoba-nickel-complex/"
     }
    ],
-   "first_seen": "2026-10-17T01:10:15+00:00"
+   "first_seen": "2026-10-17T01:10:15+00:00",
+   "title_zh": "Exiro 牵头财团接手淡水河谷马尼托巴镍资产",
+   "summary_zh": "Exiro 牵头财团取得淡水河谷 Thompson 镍矿区控制权，新股东承诺大额投入，淡水河谷保留少数股权并签订长期供应协议。口径：交易对价未披露。"
   },
   {
    "id": "44189f3343ee937c",
@@ -215,7 +229,9 @@
      "url": "https://www.mining.com/tech-giants-come-knocking-for-a-piece-of-anglo-american-as-copper-scarcity-bites-wanblad-tells-ft/"
     }
    ],
-   "first_seen": "2026-10-16T01:08:15+00:00"
+   "first_seen": "2026-10-16T01:08:15+00:00",
+   "title_zh": "铜稀缺升温，科技巨头洽购英美资源股权",
+   "summary_zh": "英美资源 CEO Wanblad 向《金融时报》表示，已收到科技公司「深度意向」，但尚未转为股权；与泰克资源 540 亿美元的合并仍待中国监管放行。口径：均为洽谈层面信息。"
   },
   {
    "id": "bb94a2d72c60ccc1",
@@ -236,7 +252,9 @@
      "url": "https://www.mining.com/copper-price-falls-for-third-day-as-us-inflation-shock-easing-chile-strike-risk-spur-selloff/"
     }
    ],
-   "first_seen": "2026-10-16T01:08:15+00:00"
+   "first_seen": "2026-10-16T01:08:15+00:00",
+   "title_zh": "美国通胀冲击叠加智利罢工风险缓和，铜价三连跌",
+   "summary_zh": "美国通胀数据超预期与智利罢工风险降温同时出现，触发获利了结，铜价连续第三日下跌。口径：属价格与情绪面波动，不改变供需平衡判断。"
   },
   {
    "id": "da5185b429896060",
@@ -257,7 +275,9 @@
      "url": "https://www.northernminer.com/news/bhp-averts-strike-at-worlds-biggest-copper-mine-2/1003895736/"
     }
    ],
-   "first_seen": "2026-10-15T01:09:21+00:00"
+   "first_seen": "2026-10-15T01:09:21+00:00",
+   "title_zh": "必和必拓 Escondida 达成初步协议，避免罢工",
+   "summary_zh": "必和必拓与智利 Escondida 矿区监工工会达成初步协议，避免这座全球最大铜矿发生罢工。口径：协议仍需会员表决。"
   },
   {
    "id": "daa79a9384a35a57",
@@ -278,7 +298,9 @@
      "url": "https://www.mining.com/copper-price-forecasts-lifted-for-2026-but-tariff-collapse-still-on-the-table/"
     }
    ],
-   "first_seen": "2026-10-15T01:09:21+00:00"
+   "first_seen": "2026-10-15T01:09:21+00:00",
+   "title_zh": "机构上调 2026 年铜价预测，关税「崩塌」情形仍未排除",
+   "summary_zh": "机构上调 2026 年铜价预测；麦格理的「崩塌」情形需华盛顿明确排除关税，被列为概率最低，更可能的情形是 1 月 1 日后维持悬置，150 万吨美国铜继续滞留当地。口径：属预测与情景假设。"
   },
   {
    "id": "92c2eb4236f07cc8",
@@ -299,7 +321,9 @@
      "url": "https://www.mining-technology.com/news/trafigura-energyx-10-year-lithium-contract/"
     }
    ],
-   "first_seen": "2026-10-14T01:11:47+00:00"
+   "first_seen": "2026-10-14T01:11:47+00:00",
+   "title_zh": "托克与 EnergyX 签署十年期锂供应合同",
+   "summary_zh": "托克与 EnergyX 签订十年期约束性协议，价值逾 20 亿美元，采购 10 万吨电池级锂产品，货源包括美国等项目。口径：数量 10 万吨、期限十年，年度交付节奏未披露。"
   },
   {
    "id": "3d2f245928ae65a9",
@@ -320,7 +344,9 @@
      "url": "https://www.mining-technology.com/news/codelco-partially-halts-el-teniente-mine/"
     }
    ],
-   "first_seen": "2026-10-13T00:59:21+00:00"
+   "first_seen": "2026-10-13T00:59:21+00:00",
+   "title_zh": "智利国家铜业 El Teniente 因滑坡部分停产",
+   "summary_zh": "智利国家铜业旗下 El Teniente 铜矿发生滑坡致两名工人死亡，公司已部分暂停作业。口径：停产区段与影响产量未披露。"
   },
   {
    "id": "347b7bee76c0d48c",
@@ -341,7 +367,9 @@
      "url": "https://www.mining.com/energyx-inks-10-year-2b-lithium-offtake-deal-with-trafigura/"
     }
    ],
-   "first_seen": "2026-10-13T00:59:21+00:00"
+   "first_seen": "2026-10-13T00:59:21+00:00",
+   "title_zh": "EnergyX 与托克敲定十年 20 亿美元锂包销",
+   "summary_zh": "同一交易的另一篇报道，覆盖智利 Black Giant 与得州 Lonestar 项目的锂产品。口径：与 10 月 13 日报道为同一协议，不重复计入供给增量。"
   },
   {
    "id": "6280f3df16245276",
@@ -362,7 +390,9 @@
      "url": "https://www.northernminer.com/news/uk-scientists-turn-to-biology-in-search-for-cleaner-lithium/1003895598/"
     }
    ],
-   "first_seen": "2026-10-10T00:55:41+00:00"
+   "first_seen": "2026-10-10T00:55:41+00:00",
+   "title_zh": "英国团队以生物膜技术探索更清洁的锂提取",
+   "summary_zh": "伯明翰大学牵头 620 万英镑项目，开发蛋白质基膜以提升锂提取选择性并降低能耗。口径：处于研发阶段，短期无产量影响。"
   },
   {
    "id": "57a93bf4c25dd3da",
@@ -383,7 +413,9 @@
      "url": "https://www.northernminer.com/news/cleantech-lithium-expands-foothold-in-argentina/1003895600/"
     }
    ],
-   "first_seen": "2026-10-10T00:55:41+00:00"
+   "first_seen": "2026-10-10T00:55:41+00:00",
+   "title_zh": "CleanTech Lithium 扩大阿根廷盐湖布局",
+   "summary_zh": "CleanTech Lithium 取得阿根廷 Salar de Antofalla 两处锂盐湖资产期权，在其旗舰 Laguna Verde 项目附近扩张。口径：期权阶段，未形成资源量或产能承诺。"
   },
   {
    "id": "1b966198d8b22935",
@@ -404,7 +436,9 @@
      "url": "https://www.mining.com/eu-puts-kghms-2-4b-copper-projects-on-fast-track/"
     }
    ],
-   "first_seen": "2026-10-10T00:55:41+00:00"
+   "first_seen": "2026-10-10T00:55:41+00:00",
+   "title_zh": "欧盟将 KGHM 24 亿美元铜项目列入快速通道",
+   "summary_zh": "布鲁塞尔给予波兰两项铜投资优先地位，以扩大欧洲本土金属供应与加工能力。口径：审批加速，投产时点未定。"
   },
   {
    "id": "4e4196533c2d7e68",
@@ -425,7 +459,9 @@
      "url": "https://www.mining-technology.com/analysis/iron-ore-bucks-hormuz-disruption-as-supply-disputes-shift-to-china/"
     }
    ],
-   "first_seen": "2026-10-10T00:55:41+00:00"
+   "first_seen": "2026-10-10T00:55:41+00:00",
+   "title_zh": "铁矿石未跟随霍尔木兹扰动，供给博弈转向中国",
+   "summary_zh": "霍尔木兹局势扰动供给，但铁矿石表现相对抗跌，中国采购策略正在重塑与澳洲供应商的贸易关系。口径：原文强调铁矿石「未受扰动」，与标题前半句一致。"
   },
   {
    "id": "85ce4e0b0973370e",
@@ -446,7 +482,9 @@
      "url": "https://www.mining-technology.com/news/elevra-supply-spodumene-lg-energy/"
     }
    ],
-   "first_seen": "2026-10-09T00:57:40+00:00"
+   "first_seen": "2026-10-09T00:57:40+00:00",
+   "title_zh": "Elevra Lithium 向 LG 新能源供应锂辉石精矿",
+   "summary_zh": "Elevra Lithium 签署约束性协议，由魁北克 North American Lithium 工厂向 LG 新能源供应锂辉石精矿。口径：数量与期限未在摘要中披露。"
   },
   {
    "id": "a46aaab5658b1205",
@@ -468,7 +506,9 @@
      "url": "https://www.northernminer.com/news/levack-restart-puts-magna-on-two-mine-path/1003895592/"
     }
    ],
-   "first_seen": "2026-10-09T00:57:40+00:00"
+   "first_seen": "2026-10-09T00:57:40+00:00",
+   "title_zh": "Magna 批准 Levack 复产，转向双矿运营",
+   "summary_zh": "Magna Mining 批准 7,000 万加元（约 4,900 万美元）重启安大略 Levack 镍铜矿，目标 2028 年年中实现商业生产。口径：金额与投产时点来自初步经济评估。"
   },
   {
    "id": "746b71705b251404",
@@ -489,7 +529,9 @@
      "url": "https://www.northernminer.com/news/copper-price-gains-as-chile-strike-threatens-output/1003895558/"
     }
    ],
-   "first_seen": "2026-10-09T00:57:40+00:00"
+   "first_seen": "2026-10-09T00:57:40+00:00",
+   "title_zh": "智利罢工威胁产量，铜价上行",
+   "summary_zh": "Antofagasta 旗下 Centinela 逾 700 名工人罢工，引发产出中断担忧，铜价周四走高。口径：属价格反应，实际减产幅度未定。"
   },
   {
    "id": "bb81ffdc5b6945a1",
@@ -510,7 +552,9 @@
      "url": "https://im-mining.com/2026/10/07/bhp-agrees-to-sell-kambalda-nickel-concentrator-to-gold-fields/"
     }
    ],
-   "first_seen": "2026-10-08T00:56:00+00:00"
+   "first_seen": "2026-10-08T00:56:00+00:00",
+   "title_zh": "必和必拓向 Gold Fields 出售 Kambalda 镍选厂",
+   "summary_zh": "Gold Fields 签署正式协议，收购必和必拓在西澳 Kambalda 的镍选厂及相关勘探资产，并将对资产做详细评估。口径：对价未披露。"
   },
   {
    "id": "6332432019a413de",
@@ -531,7 +575,9 @@
      "url": "https://www.mining.com/antofagastas-centinela-strike-adds-copper-supply-risk/"
     }
    ],
-   "first_seen": "2026-10-08T00:56:00+00:00"
+   "first_seen": "2026-10-08T00:56:00+00:00",
+   "title_zh": "Antofagasta Centinela 罢工加剧铜供给风险",
+   "summary_zh": "智利主要矿山劳资纠纷叠加铜价接近历史高位，市场对全球金属可得性的担忧上升。口径：与罢工事件同源，实际影响待评估。"
   },
   {
    "id": "99e1d9a64ae5efd7",
@@ -552,7 +598,9 @@
      "url": "https://www.northernminer.com/news/westwin-to-build-502m-nickel-refinery-in-mississippi/1003895478/"
     }
    ],
-   "first_seen": "2026-10-07T00:55:26+00:00"
+   "first_seen": "2026-10-07T00:55:26+00:00",
+   "title_zh": "Westwin 拟在密西西比投 5.02 亿美元建镍精炼厂",
+   "summary_zh": "Westwin Elements 计划五年投资 5.02 亿美元，在密西西比建设商业化高纯镍精炼厂，配合美国扩大关键矿产本土加工。口径：投资为计划值，投产时点未定。"
   },
   {
    "id": "4581dfb9da281a00",
@@ -573,7 +621,9 @@
      "url": "https://im-mining.com/2026/10/06/atlantic-nickel-record-production-as-underground-transition-advances/"
     }
    ],
-   "first_seen": "2026-10-07T00:55:26+00:00"
+   "first_seen": "2026-10-07T00:55:26+00:00",
+   "title_zh": "Atlantic Nickel 产量创纪录，井下转产推进",
+   "summary_zh": "巴西 Bahia 州 Santa Rita 镍硫化物矿 8 月产镍 12,464 吨，创月度纪录，井下转产持续推进。口径：单月产量为单点数据，不宜外推全年。"
   },
   {
    "id": "caa389415f9d8095",
@@ -594,7 +644,9 @@
      "url": "https://www.northernminer.com/news/brazil-court-order-idles-sigma-lithium-mine/1003895373/"
     }
    ],
-   "first_seen": "2026-10-02T00:50:35+00:00"
+   "first_seen": "2026-10-02T00:50:35+00:00",
+   "title_zh": "巴西法院叫停 Sigma Lithium 矿山",
+   "summary_zh": "Sigma Lithium 已全面停止巴西 Grota do Cirilo 矿区的开采与加工，此前两日公司刚否认法院裁定的相关报道。口径：停产系司法裁定所致，恢复时间不明。"
   },
   {
    "id": "1243ddf8d07b6918",
@@ -615,7 +667,9 @@
      "url": "https://www.mining.com/worker-dies-in-accident-at-codelcos-radomiro-tomic/"
     }
    ],
-   "first_seen": "2026-10-02T00:50:35+00:00"
+   "first_seen": "2026-10-02T00:50:35+00:00",
+   "title_zh": "智利国家铜业 Radomiro Tomic 事故致一人死亡",
+   "summary_zh": "Codelco 已暂停 Radomiro Tomic 铜矿破碎与物料处理区域的作业。口径：停产区段有限，产量影响待评估。"
   },
   {
    "id": "9221ced250e7e1cf",
@@ -636,7 +690,9 @@
      "url": "https://www.mining-technology.com/news/cotec-copper-intelligence-agreement-drc-tailings/"
     }
    ],
-   "first_seen": "2026-10-01T00:52:40+00:00"
+   "first_seen": "2026-10-01T00:52:40+00:00",
+   "title_zh": "CoTec 与 Copper Intelligence 合作开发刚果（金）尾矿",
+   "summary_zh": "双方签署正式合资协议，聚焦刚果（金）历史铜尾矿的处理与回收。口径：尾矿再处理项目，规模与投产时点未披露。"
   },
   {
    "id": "6ce3eca9fb6f78ac",
@@ -657,7 +713,9 @@
      "url": "https://www.mining.com/copper-holds-above-14400-as-chile-strike-risk-grows/"
     }
    ],
-   "first_seen": "2026-09-30T00:51:50+00:00"
+   "first_seen": "2026-09-30T00:51:50+00:00",
+   "title_zh": "智利罢工风险升温，铜价守住 14,400 美元上方",
+   "summary_zh": "Antofagasta 旗下 Centinela 的薪资方案被拒，供给担忧加剧，铜价有望连续第三个月上涨。口径：价格为报道口径，未注明交易所与合约月份。"
   },
   {
    "id": "78d55ab81faeed02",
@@ -678,7 +736,9 @@
      "url": "https://www.northernminer.com/news/bhps-escondida-restart-eases-tight-copper-supply-woes/1003895172/"
     }
    ],
-   "first_seen": "2026-09-26T00:48:07+00:00"
+   "first_seen": "2026-09-26T00:48:07+00:00",
+   "title_zh": "必和必拓 Escondida 复产缓解铜供应紧张",
+   "summary_zh": "Escondida 恢复作业，缓解此前矿山停产、中国低库存与假日前夕叠加造成的紧张局面。口径：复产后的产量爬坡节奏未披露。"
   },
   {
    "id": "e2cb403f5d9d3bc7",
@@ -699,7 +759,9 @@
      "url": "https://www.mining-technology.com/news/talisman-acquires-licences-tirzzit-project/"
     }
    ],
-   "first_seen": "2026-09-25T00:47:06+00:00"
+   "first_seen": "2026-09-25T00:47:06+00:00",
+   "title_zh": "Talisman Metals 增持摩洛哥 Tirzzit 铜项目三张许可",
+   "summary_zh": "Talisman Metals 取得紧邻其摩洛哥 Tirzzit 铜项目现有矿区的三张勘探许可。口径：勘探阶段资产，无产量影响。"
   },
   {
    "id": "cc462d2df816bc52",
@@ -720,7 +782,9 @@
      "url": "https://www.mining-technology.com/news/bhp-suspends-activities-escondida-mine/"
     }
    ],
-   "first_seen": "2026-09-25T00:47:06+00:00"
+   "first_seen": "2026-09-25T00:47:06+00:00",
+   "title_zh": "检修事故致必和必拓 Escondida 暂停作业",
+   "summary_zh": "智利北部 Escondida 铜矿一名工人在检修作业中死亡，必和必拓宣布暂停作业。口径：与 9 月 25 日复产、10 月 14 日避免罢工属同一事件链。"
   },
   {
    "id": "c72f5cba5240ad13",
@@ -741,7 +805,9 @@
      "url": "https://www.mining-technology.com/news/blue-moon-to-acquire-turner-deposit/"
     }
    ],
-   "first_seen": "2026-09-25T00:47:06+00:00"
+   "first_seen": "2026-09-25T00:47:06+00:00",
+   "title_zh": "Blue Moon Metals 拟收购 Turner 铜金矿床",
+   "summary_zh": "Blue Moon Metals 同意从 Gold Coast Mining 收购 Turner 铜金 VMS 矿床的全部权益。口径：对价与资源量未在摘要中披露。"
   },
   {
    "id": "ed8dc800f3538d69",
@@ -762,7 +828,9 @@
      "url": "https://www.northernminer.com/news/glencore-sets-oct-14-for-australian-market-debut/1003895111/"
     }
    ],
-   "first_seen": "2026-09-25T00:47:06+00:00"
+   "first_seen": "2026-09-25T00:47:06+00:00",
+   "title_zh": "嘉能可定于 10 月 14 日登陆澳交所",
+   "summary_zh": "嘉能可预计 10 月 14 日在澳交所开始交易，借此对接澳大利亚 4.4 万亿澳元养老金市场，支持铜业务扩张。口径：为上市安排，不直接改变产量。"
   },
   {
    "id": "1daa5163309571d3",
@@ -783,7 +851,9 @@
      "url": "https://www.australianmining.com.au/aic-mines-moves-to-acquire-mt-cuthbert/"
     }
    ],
-   "first_seen": "2026-09-25T00:47:06+00:00"
+   "first_seen": "2026-09-25T00:47:06+00:00",
+   "title_zh": "AIC Mines 拟以 1.2 亿澳元收购 Mt Cuthbert 铜项目",
+   "summary_zh": "AIC Mines 就昆士兰 Mt Cuthbert 铜项目签署约束性协议，交易估值 1.2 亿澳元，拟借此取得第二座在产项目。口径：估值 1.2 亿澳元，交割条件未详。"
   },
   {
    "id": "1192c4a14eb38666",
@@ -804,7 +874,9 @@
      "url": "https://www.australianmining.com.au/core-lithium-enters-new-era-as-finniss-restart-gathers-pace/"
     }
    ],
-   "first_seen": "2026-09-25T00:47:06+00:00"
+   "first_seen": "2026-09-25T00:47:06+00:00",
+   "title_zh": "Core Lithium Finniss 复产推进，目标 2028 年达产",
+   "summary_zh": "Core Lithium 完成关键财年，Finniss 项目采选恢复推进，公司给出 2028 年达产的路径。口径：达产时点为公司目标值。"
   },
   {
    "id": "1ee3d3d46843b561",
@@ -825,7 +897,9 @@
      "url": "https://www.australianmining.com.au/global-lithium-agrees-333-million-takeover-by-titan/"
     }
    ],
-   "first_seen": "2026-09-25T00:47:06+00:00"
+   "first_seen": "2026-09-25T00:47:06+00:00",
+   "title_zh": "Global Lithium 接受 Titan 3.33 亿澳元收购",
+   "summary_zh": "Global Lithium Resources 同意 Titan Australia Mining 通过协议安排收购其 100% 股权，对价约 3.33 亿澳元。口径：与 9 月 23 日 SID 公告为同一交易。"
   },
   {
    "id": "ff0a95ff642607e8",
@@ -848,7 +922,9 @@
    "first_seen": "2026-09-24T01:15:47+00:00",
    "src_level": "media",
    "confirmed": "user-2026-09-24",
-   "detail": "据报道，Nth Cycle（美国金属精炼企业）与嘉能可签订规模约 10 亿美元的包销协议，供应从退役电池中回收的锂及其他关键矿物。口径：协议金额约 10 亿美元；实物数量与交付周期未在报道中披露。"
+   "detail": "据报道，Nth Cycle（美国金属精炼企业）与嘉能可签订规模约 10 亿美元的包销协议，供应从退役电池中回收的锂及其他关键矿物。口径：协议金额约 10 亿美元；实物数量与交付周期未在报道中披露。",
+   "title_zh": "Nth Cycle 与嘉能可签订 10 亿美元再生金属供应协议",
+   "summary_zh": "Nth Cycle 与嘉能可签署约 10 亿美元包销协议，供应从退役电池回收的锂及其他关键矿物。口径：金额约 10 亿美元，实物数量与交付周期未披露。"
   },
   {
    "id": "84b1f061562ff17b",
@@ -871,7 +947,9 @@
    "first_seen": "2026-09-24T01:15:47+00:00",
    "src_level": "media",
    "confirmed": "user-2026-09-24",
-   "detail": "Global Lithium Resources 与 Titan Australia Mining 签署约束性安排协议（SID），拟议收购对价约 A$333m。口径：交易金额约 A$333m；标的为公司控制权变更，影响其锂项目推进节奏。"
+   "detail": "Global Lithium Resources 与 Titan Australia Mining 签署约束性安排协议（SID），拟议收购对价约 A$333m。口径：交易金额约 A$333m；标的为公司控制权变更，影响其锂项目推进节奏。",
+   "title_zh": "Global Lithium 与 Titan 签署 2.37 亿美元收购协议",
+   "summary_zh": "双方签署约束性安排协议，拟议收购对价约 3.33 亿澳元（2.37 亿美元）。口径：公司控制权变更，影响其锂项目推进节奏。"
   },
   {
    "id": "cbc51741daf06fae",
@@ -894,7 +972,9 @@
    "first_seen": "2026-09-24T01:15:47+00:00",
    "src_level": "media",
    "confirmed": "user-2026-09-24",
-   "detail": "智利矿业监管机构 Sernageomin 确认 Escondida 发生致命事故，BHP 已暂停作业并派出区域团队调查。口径：停产起止时间与影响产量尚未由公司披露，需待 BHP 官方说明。"
+   "detail": "智利矿业监管机构 Sernageomin 确认 Escondida 发生致命事故，BHP 已暂停作业并派出区域团队调查。口径：停产起止时间与影响产量尚未由公司披露，需待 BHP 官方说明。",
+   "title_zh": "必和必拓 Escondida 致命事故后暂停作业",
+   "summary_zh": "智利监管机构 Sernageomin 确认 Escondida 发生致命事故，必和必拓已暂停作业并派出区域团队调查。口径：停产起止时间与影响产量未披露。"
   },
   {
    "id": "31c1e5f51f6d275c",
@@ -917,7 +997,9 @@
    "first_seen": "2026-09-24T01:15:47+00:00",
    "src_level": "media",
    "confirmed": "user-2026-09-24",
-   "detail": "Bridge Green Upcycle 与 Hartree Partners 签署八年期商业协议，涉及从退役电池回收的碳酸锂的采购与销售。口径：协议期限八年，报道称协议价值在 5 亿–10 亿美元区间；实物数量未披露。"
+   "detail": "Bridge Green Upcycle 与 Hartree Partners 签署八年期商业协议，涉及从退役电池回收的碳酸锂的采购与销售。口径：协议期限八年，报道称协议价值在 5 亿–10 亿美元区间；实物数量未披露。",
+   "title_zh": "Bridge Green 与 Hartree 签署八年期锂协议",
+   "summary_zh": "双方签署八年期商业协议，涉及退役电池回收碳酸锂的采购与销售，按当前价格计价值 5 亿至 10 亿美元。口径：期限八年，实物数量未披露。"
   },
   {
    "id": "1f338c2a36be4680",
@@ -940,7 +1022,9 @@
    "first_seen": "2026-09-24T01:15:47+00:00",
    "src_level": "media",
    "confirmed": "user-2026-09-24",
-   "detail": "Vale 确认收购 Ligga 30% 权益，公司称此举用于提升铁矿石产量；当地交易所曾就该交易未向投资者披露提出问询。口径：收购比例 30%，对价约 1.9 亿美元；标的权益对应的新增产能与产出时点未在报道中披露。"
+   "detail": "Vale 确认收购 Ligga 30% 权益，公司称此举用于提升铁矿石产量；当地交易所曾就该交易未向投资者披露提出问询。口径：收购比例 30%，对价约 1.9 亿美元；标的权益对应的新增产能与产出时点未在报道中披露。",
+   "title_zh": "淡水河谷 1.9 亿美元收购 Ligga 铁矿 30% 权益",
+   "summary_zh": "淡水河谷确认收购 Ligga 30% 权益以提升铁矿石产量，此前当地交易所就该交易未向投资者披露提出问询。口径：对价约 1.9 亿美元，新增产能与时点未披露。"
   },
   {
    "id": "64cb528a12de2d5c",
@@ -964,7 +1048,14 @@
    "first_seen": "2026-09-24T01:15:47+00:00",
    "src_level": "media",
    "confirmed": "user-2026-09-24",
-   "detail": "Capstone Copper（TSX: CS；ASX: CSC）将其位于墨西哥的 Cozamin 铜-银-锌-铅矿出售给Luca Mining（TSXV: LUCA），对价最高 3.85 亿美元（约 5.4 亿加元），资金将转向其他项目。口径：交易对价最高 US$385m；标的为 Cozamin 矿，涉及铜、锌、铅。"
+   "detail": "Capstone Copper（TSX: CS；ASX: CSC）将其位于墨西哥的 Cozamin 铜-银-锌-铅矿出售给Luca Mining（TSXV: LUCA），对价最高 3.85 亿美元（约 5.4 亿加元），资金将转向其他项目。口径：交易对价最高 US$385m；标的为 Cozamin 矿，涉及铜、锌、铅。",
+   "title_zh": "Capstone 以最高 3.85 亿美元向 Luca 出售墨西哥矿",
+   "summary_zh": "Capstone Copper 将墨西哥 Cozamin 铜-银-锌-铅矿出售给 Luca Mining，对价最高 3.85 亿美元（5.4 亿加元），资金转向其他项目。口径：对价上限 US$385m。"
   }
- ]
+ ],
+ "zh_note": "title_zh / summary_zh 为按英文原文标题与摘要编译的中文版本，仅供阅读；术语与口径以链接原文为准。",
+ "zh_coverage": {
+  "translated": 43,
+  "total": 43
+ }
 }

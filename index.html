@@ -84,6 +84,8 @@ h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
 #changes::-webkit-scrollbar-track{background:transparent}
 #changes .item{scroll-snap-align:start}
 #changes .item:last-child{margin-bottom:0}
+.item .en{font-size:11px;line-height:1.45;color:#8a93a3;margin-top:4px;word-break:break-word;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+#changes .item .desc{overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical}
 .ev-wrap::after{content:'';position:absolute;left:0;right:8px;bottom:0;height:52px;background:linear-gradient(180deg,rgba(255,255,255,0),var(--paper));pointer-events:none;transition:opacity .25s}
 .ev-more{position:absolute;left:0;right:8px;bottom:8px;text-align:center;pointer-events:none;transition:opacity .25s}
 .ev-more span{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:999px;padding:2px 11px;font-size:10.5px;font-weight:700;color:var(--accent);box-shadow:0 1px 5px rgba(15,23,42,.08)}
@@ -249,7 +251,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
       <span class="chip ok">已核验</span><span class="chip warn">口径注意</span><span class="chip pend">待核/待补</span><span class="chip">不适用</span>
     </div>
     <div class="grid-2" id="events">
-      <div class="card"><h2>近期供给事件 <em>最新在前 · 点击打开来源</em></h2><div class="meta" id="ev-meta" style="margin:-4px 0 8px;font-size:11.5px;color:var(--muted)">按事件时点倒序（年度/财年取期末，区间取末段）</div><div class="ev-wrap"><div id="changes"></div><div class="ev-more"><span>向下滚动查看更早事件 ↓</span></div></div></div>
+      <div class="card"><h2>近期供给事件 <em>中文摘要 · 原文链接在详情内</em></h2><div class="meta" id="ev-meta" style="margin:-4px 0 8px;font-size:11.5px;color:var(--muted)">按事件时点倒序（年度/财年取期末，区间取末段）</div><div class="ev-wrap"><div id="changes"></div><div class="ev-more"><span>向下滚动查看更早事件 ↓</span></div></div></div>
       <div class="card" id="inv">
         <h2>库存与显性供给 <span class="seg" id="spk-seg" title="折线区间：交易所日库存（LME / SHFE）"><button type="button" data-r="30" class="on">1月</button><button type="button" data-r="90">3月</button><button type="button" data-r="0">全部</button></span></h2>
         <div class="meta" id="inv-asof" style="margin:-4px 0 10px;font-size:11.5px;color:var(--muted)">数据时点：页面内置核验基线（正在尝试加载实时数据…）</div>
@@ -752,9 +754,13 @@ function eventList(metal){
     .map(e=>{
       const st = e.status==='pend' ? 'pend' : (e.status==='auto' ? 'auto' : 'ok');
       return Object.assign({}, e, {tag:e.tag||'供给事件', status:st, detail:e.detail||'',
-        pending:st==='pend', auto:st==='auto'});
+        pending:st==='pend', auto:st==='auto',
+        dispTitle:e.title_zh||e.title||'', dispDesc:e.summary_zh||e.desc||'',
+        enTitle:e.title||'', enDesc:e.desc||'', zhPending:!e.title_zh});
     });
-  return CHANGES.map(c=>Object.assign({}, c, {pending:false, auto:false})).concat(pool)
+  return CHANGES.map(c=>Object.assign({}, c, {pending:false, auto:false,
+      dispTitle:c.title_zh||c.title||'', dispDesc:c.summary_zh||c.desc||'',
+      enTitle:'', enDesc:'', zhPending:false})).concat(pool)
     .sort((a,b)=>String(b.d||'').localeCompare(String(a.d||'')));
 }
 async function loadLiveEvents(){
@@ -769,6 +775,7 @@ async function loadLiveEvents(){
 let region='全部', mode='project', sortKey='actual', mapFilter='all';
 let map, markerLayer, markersByN={}, mapReady=false, baseLayers={}, currentBase=null;
 
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function chip(st){
   return st==='ok' ? '<span class="chip ok">已核验</span>'
     : st==='warn' ? '<span class="chip warn">口径注意</span>'
@@ -1072,17 +1079,21 @@ function renderPanels(){
     const evs = eventList(currentMetal);
     const nauto = evs.filter(x=>x.auto).length;
     const pend = evs.filter(x=>x.pending).length;
-    let note = '';
-    if(nauto) note += '<div class="meta" style="margin:0 0 8px;font-size:11px;color:#2a4f9b">自动发布 '+nauto+' 条（蓝底）· 按事件类型白名单入库，来源为公开媒体</div>';
-    if(pend) note += '<div class="meta" style="margin:0 0 8px;font-size:11px;color:var(--warn)">待确认 '+pend+' 条（黄底）</div>';
-    ch.innerHTML = note + (evs.map(c=>`
+    const nzh = evs.filter(x=>x.enTitle).length;
+    const nz0 = evs.filter(x=>x.zhPending).length;
+    ch.innerHTML = (evs.map(c=>`
     <button type="button" class="item${c.pending?' pending':''}${c.auto?' auto':''}" data-id="${c.id}">
-      <div><div class="when">${c.when||''}${c.auto?' · 自动发布':''}${c.pending?' · 待确认':''}</div><div class="title">${c.title||''}</div><div class="desc">${c.desc||''}</div><div class="hint">打开来源 →</div></div>
+      <div><div class="when">${c.when||''}${c.auto?' · 自动发布':''}${c.pending?' · 待确认':''}${c.zhPending?' · 待译':''}</div><div class="title">${esc(c.dispTitle)}</div><div class="desc">${esc(c.dispDesc)}</div>${c.enTitle?`<div class="en">原标题 ${esc(c.enTitle)}</div>`:''}<div class="hint">查看摘要 · 打开英文原文 →</div></div>
       <div class="tag">${c.tag||''}</div>
     </button>`).join('') || '<div class="meta">暂无事件</div>');
 
     const m=document.getElementById('ev-meta');
-    if(m) m.innerHTML = '按事件时点倒序（年度/财年取期末，区间取末段）· 共 <strong>'+evs.length+'</strong> 条，滚动查看更早';
+    const extra=[];
+    if(nauto) extra.push('自动发布 '+nauto+' 条（蓝底）');
+    if(pend) extra.push('待确认 '+pend+' 条（黄底）');
+    if(nzh) extra.push('英文原文已编译中文摘要 '+nzh+' 条'+(nz0?'（'+nz0+' 条待译）':''));
+    if(m) m.innerHTML = '按事件时点倒序（年度/财年取期末，区间取末段）· 共 <strong>'+evs.length+'</strong> 条，滚动查看更早'
+      + (extra.length?'<br><span style="color:#5b6472">'+extra.join(' · ')+' · 口径以链接原文为准</span>':'');
     const wrap=ch.closest('.ev-wrap');
     if(wrap){
       const syncEnd=()=>wrap.classList.toggle('at-end', ch.scrollTop+ch.clientHeight >= ch.scrollHeight-4);
@@ -1445,7 +1456,11 @@ function bindUI(){
   if(ch) ch.addEventListener('click', e=>{
     const b=e.target.closest('.item'); if(!b) return;
     const c=eventList(currentMetal).find(x=>x.id===b.dataset.id); if(!c) return;
-    openDrawer({title:c.title, sub:c.when, status:c.status, blocks:[{label:'摘要',text:c.desc},{label:'核验',text:c.detail||c.desc}], links:c.links||[]});
+    const bl=[{label:'中文摘要',text:c.dispDesc}];
+    if(c.enTitle) bl.push({label:'英文原标题',text:c.enTitle});
+    if(c.enDesc && c.enDesc!==c.dispDesc) bl.push({label:'英文原文摘要',text:c.enDesc});
+    if(c.detail) bl.push({label:'核验与口径',text:c.detail});
+    openDrawer({title:c.dispTitle, sub:c.when, status:c.status, blocks:bl, links:c.links||[]});
   });
   const inv=document.getElementById('inv-list');
   if(inv) inv.addEventListener('click', e=>{
