@@ -48,10 +48,39 @@
    "new": 0
   }
  ],
- "count": 47,
+ "count": 48,
  "pending": 0,
  "auto": 47,
  "events": [
+  {
+   "id": "14cadbf2a0d6384b",
+   "when": "2026-10-20",
+   "d": "2026-10-20",
+   "metals": [
+    "Ni"
+   ],
+   "title": "Chinese nickel producers plan meeting on coordinated Indonesia HPAL output cuts",
+   "desc": "Executives from Tsingshan, GEM, Lygend Resources and Zhejiang Huayou Cobalt plan to meet as early as Oct 20 to discuss coordinated production cuts at their Indonesian HPAL plants producing MHP, as weak prices squeeze margins. A similar proposal in August ended without agreement.",
+   "title_zh": "青山、格林美、力勤、华友拟开会商讨印尼 HPAL 协同减产",
+   "summary_zh": "四家中国镍企高管计划最早 10 月 20 日开会，讨论以当前产量为基准协同削减印尼高压酸浸（HPAL）产能，产品为镍钴中间品 MHP。8 月曾讨论同类提议但未达成协议。口径：彭博引述知情人士，减产规模未定，会议与协议均不保证落地。",
+   "tag": "供给扰动",
+   "status": "ok",
+   "src": "mining.com.au / Digitimes（引彭博）",
+   "src_level": "media",
+   "links": [
+    {
+     "label": "mining.com.au 原文",
+     "url": "https://mining.com.au/chinese-nickel-producers-advance-plans-to-cut-indonesian-output/"
+    },
+    {
+     "label": "Digitimes 原文",
+     "url": "https://www.digitimes.com/news/a20261021PD216/nickel-production-policy-government.html"
+    }
+   ],
+   "first_seen": "2026-10-21T06:06:24+00:00",
+   "detail": "彭博引述知情人士：青山控股、格林美、力勤资源、浙江华友钴业高管计划最早 10/20 开会，讨论在印尼电池材料（HPAL 产 MHP）环节协同减产，规模以当前产量为基准，细节可能变化，不保证办会或达成协议。背景：LME 镍价较 2026 年 5 月高点跌约 20%、8 月以来加速下行，钴价处一年低位；印尼收紧 RKAB 配额并上调矿石基准价，中东局势推高硫磺成本，部分园区受干旱缺水扰动。口径提示：8 月同类磋商曾提出各减约 30% 但未达成，不能把这 30% 当作本轮方案；四家公司均未回应置评请求。",
+   "confirmed": "user-2026-10-21"
+  },
   {
    "id": "0c9f4832415b17a2",
    "when": "2026-10-20",
@@ -1151,7 +1180,7 @@
   }
  ],
  "zh_coverage": {
-  "translated": 47,
-  "total": 47
+  "translated": 48,
+  "total": 48
  }
 }
