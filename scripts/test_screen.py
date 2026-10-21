@@ -5,7 +5,7 @@
 用途：调整 INCLUDE / EXCLUDE 关键词后，先跑这个脚本确认判定没有回退。
   python3 scripts/test_screen.py
 
-覆盖三类用例：
+覆盖四类用例（D 为 2026-10-21 新增的锡专项）：
   A. 应保留——真实的供给事件（6 条，取自 2026-09-24 人工核验结果）
   B. 应剔除——估值可研 / 融资 / 设备订单 / 价格行情（11 条，同批被剔除的候选）
   C. 强信号覆盖——停产减产类与政策类事件，即便稿子里出现「成本」「价格」等
@@ -60,6 +60,23 @@ DROP = [
      "Copper prices bounced as US warehouse space ran out."),
 ]
 
+# 锡专项：裸词 tin 的语境规则 + 专业源（ITA）来的典型稿。2026-10-21 新增。
+TIN_KEEP = [
+    ("Yunnan Tin announces 2026 maintenance",
+     "Yunnan Tin said it will suspend smelting for maintenance, cutting refined tin output."),
+    ("Indonesia plans tin export ban from January",
+     "The world's largest tin exporter plans to restrict tin concentrate exports, a policy that could tighten global supply."),
+    ("Metals X targets full takeover of First Tin",
+     "Metals X has made an offer for First Tin, adding the Tellerhäuser tin project to its portfolio."),
+]
+# 第三项 = 是否应被归为 Sn。科研类稿提到 tin 但没有供给语境，不归类，属预期行为。
+TIN_DROP = [
+    ("Tin price hits record high as speculators pile in",
+     "Tin prices rallied to a record on speculative buying, with no change to mine supply.", True),
+    ("Tin could help solar cells hold onto lost energy",
+     "Researchers say tin-based perovskites could improve solar cell efficiency.", False),
+]
+
 OVERRIDE = [
     ("Codelco cuts 2026 output guidance as costs rise at El Teniente", "停产/减产 + 成本词"),
     ("Chile raises copper royalty after mining law reform", "政策 + 融资词误伤"),
@@ -92,6 +109,23 @@ def main():
         if not ok:
             fail += 1
             print("         为什么:", why)
+
+    print("== D. 锡专项：品种归类 + 事件类型（5）==")
+    for t, d in TIN_KEEP:
+        m = fe.classify(t + " " + d)
+        ok, tag, why = fe.screen(t + " " + d)
+        good = ("Sn" in m) and ok
+        print(f"  {'OK  ' if good else 'FAIL'} [Sn={('Y' if 'Sn' in m else 'N')}][{tag}] {t[:48]}")
+        if not good:
+            fail += 1
+            print("         为什么:", why)
+    for t, d, want_sn in TIN_DROP:
+        m = fe.classify(t + " " + d)
+        ok, tag, why = fe.screen(t + " " + d)
+        good = (("Sn" in m) == want_sn) and not ok
+        print(f"  {'OK  ' if good else 'FAIL'} [Sn={('Y' if 'Sn' in m else 'N')}] ({why}) {t[:48]}")
+        if not good:
+            fail += 1
 
     print()
     print(f"失败项：{fail}")

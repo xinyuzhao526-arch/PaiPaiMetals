@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-21T05:12:03+00:00",
+ "generated_at": "2026-10-21T05:56:21+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
@@ -28,11 +28,8 @@
   },
   {
    "source": "im-mining",
-   "ok": true,
-   "items": 12,
-   "matched_metal": 3,
-   "dropped_screen": 3,
-   "new": 0
+   "ok": false,
+   "error": "<urlopen error _ssl.c:993: The handshake operation timed out>"
   },
   {
    "source": "mining.com",
@@ -40,12 +37,20 @@
    "items": 36,
    "matched_metal": 13,
    "dropped_screen": 7,
-   "new": 1
+   "new": 0
+  },
+  {
+   "source": "ita",
+   "ok": true,
+   "items": 10,
+   "matched_metal": 8,
+   "dropped_screen": 5,
+   "new": 0
   }
  ],
- "count": 44,
+ "count": 47,
  "pending": 0,
- "auto": 44,
+ "auto": 47,
  "events": [
   {
    "id": "0c9f4832415b17a2",
@@ -66,7 +71,9 @@
      "url": "https://www.mining.com/glencore-clears-key-hurdle-for-peru-copper-expansion/"
     }
    ],
-   "first_seen": "2026-10-21T05:12:03+00:00"
+   "first_seen": "2026-10-21T05:12:03+00:00",
+   "title_zh": "嘉能可秘鲁 Coroccohuayco 铜矿扩建过关键一关",
+   "summary_zh": "土地协议谈成，Coroccohuayco 项目朝 2029 年投产推进，用于延长秘鲁 Antapaccay 矿的服务年限。口径：报道未给出新增产能与投资额。"
   },
   {
    "id": "6072e4794ecb7c24",
@@ -391,6 +398,29 @@
    "first_seen": "2026-10-13T00:59:21+00:00",
    "title_zh": "EnergyX 与托克敲定十年 20 亿美元锂包销",
    "summary_zh": "同一交易的另一篇报道，覆盖智利 Black Giant 与得州 Lonestar 项目的锂产品。口径：与 10 月 13 日报道为同一协议，不重复计入供给增量。"
+  },
+  {
+   "id": "94a93a1e0e2f3a2c",
+   "when": "2026-10-09",
+   "d": "2026-10-09",
+   "metals": [
+    "Sn"
+   ],
+   "title": "Metals X targets full takeover of First Tin",
+   "desc": "Fir Australian tin miner Metals X (ASX: MLX) has made an offer to acquire tin explorer First Tin (LSE: 1SN). Metals X, co-owner of the Renison tin mine in Tasmania, already holds a stake of approximately 23% in First Tin",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "ita",
+   "links": [
+    {
+     "label": "ita 原文",
+     "url": "https://www.internationaltin.org/metals-x-targets-full-takeover-of-first-tin/?utm_source=rss&utm_medium=rss&utm_campaign=metals-x-targets-full-takeover-of-first-tin"
+    }
+   ],
+   "first_seen": "2026-10-21T05:50:30+00:00",
+   "title_zh": "Metals X 拟全面收购 First Tin",
+   "summary_zh": "塔斯马尼亚 Renison 锡矿的共同持有人 Metals X 向锡勘探商 First Tin 发出收购要约，其已持有 First Tin 约 23% 股份。口径：对价与交易条款未在摘要中给出。"
   },
   {
    "id": "6280f3df16245276",
@@ -739,6 +769,29 @@
    "summary_zh": "Antofagasta 旗下 Centinela 的薪资方案被拒，供给担忧加剧，铜价有望连续第三个月上涨。口径：价格为报道口径，未注明交易所与合约月份。"
   },
   {
+   "id": "8e7caac51357a52e",
+   "when": "2026-09-28",
+   "d": "2026-09-28",
+   "metals": [
+    "Sn"
+   ],
+   "title": "Yunnan Tin announces 2026 maintenance",
+   "desc": "The world’s largest producer of refined tin, Yunnan Tin Company (YTC), has announced maintenance at its Gejiu smelter will commence on 30 September 2026 for up to 45 days. Annual maintenance is usually performed in July ",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "ita",
+   "links": [
+    {
+     "label": "ita 原文",
+     "url": "https://www.internationaltin.org/yunnan-tin-announces-2026-maintenance/?utm_source=rss&utm_medium=rss&utm_campaign=yunnan-tin-announces-2026-maintenance"
+    }
+   ],
+   "first_seen": "2026-10-21T05:55:21+00:00",
+   "title_zh": "云锡宣布 2026 年检修，个旧冶炼厂最长停 45 天",
+   "summary_zh": "全球最大精锡生产商云锡宣布，个旧冶炼厂自 2026 年 9 月 30 日起检修，最长 45 天；公司称年度检修通常安排在 7 至 8 月，已计入年度经营计划。口径：可见摘要未给出对产量的具体影响。"
+  },
+  {
    "id": "78d55ab81faeed02",
    "when": "2026-09-25",
    "d": "2026-09-25",
@@ -1048,6 +1101,29 @@
    "summary_zh": "淡水河谷确认收购 Ligga 30% 权益以提升铁矿石产量，此前当地交易所就该交易未向投资者披露提出问询。口径：对价约 1.9 亿美元，新增产能与时点未披露。"
   },
   {
+   "id": "ecce34fcd53a0072",
+   "when": "2026-09-21",
+   "d": "2026-09-21",
+   "metals": [
+    "Sn"
+   ],
+   "title": "China Minmetals moves to take control of Huaxi Nonferrous",
+   "desc": "China Minmetals Corporation has signed a framework agreement to acquire control of Chinese tin producer Huaxi Nonferrous (SSE: 600301) through an investment in its indirect parent company. China Minmetals plans to contri",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "ita",
+   "links": [
+    {
+     "label": "ita 原文",
+     "url": "https://www.internationaltin.org/china-minmetals-moves-to-take-control-of-huaxi-nonferrous/?utm_source=rss&utm_medium=rss&utm_campaign=china-minmetals-moves-to-take-control-of-huaxi-nonferrous"
+    }
+   ],
+   "first_seen": "2026-10-21T05:55:21+00:00",
+   "title_zh": "中国五矿拟控股锡企华锡有色",
+   "summary_zh": "中国五矿签署框架协议，拟通过投资其间接母公司取得锡生产商华锡有色（600301）的控制权，方式为现金或现金加非现金资产注入广西关键金属产业集团。口径：属框架协议，持股比例与对价未披露。"
+  },
+  {
    "id": "64cb528a12de2d5c",
    "when": "2026-09-21",
    "d": "2026-09-21",
@@ -1075,7 +1151,7 @@
   }
  ],
  "zh_coverage": {
-  "translated": 43,
-  "total": 44
+  "translated": 47,
+  "total": 47
  }
 }

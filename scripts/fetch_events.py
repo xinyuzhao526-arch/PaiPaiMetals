@@ -44,6 +44,7 @@ FEEDS = [
     ("australianmining", "https://www.australianmining.com.au/feed/"),
     ("im-mining", "https://im-mining.com/feed/"),
     ("mining.com", "https://www.mining.com/feed/"),  # 偶发被 CDN 拦截，失败即跳过
+    ("ita", "https://www.internationaltin.org/feed/"),  # 国际锡协：锡专业源，补综合媒体覆盖不足
 ]
 
 # ---------------------------------------------------------------------------
@@ -60,10 +61,22 @@ STRONG = {
     "Ni":   ["nickel", "laterite", "nornickel", "ambatovy", "saprolite", "镍"],
     "PbZn": ["zinc", "galena", "red dog", "hindustan zinc", "zinc-lead", "lead-zinc",
              "铅锌", "锌", "铅"],
-    "Sn":   ["cassiterite", "timah", "minsur", "alphamin", "renison", "锡"],
+    "Sn":   ["cassiterite", "timah", "minsur", "alphamin", "renison", "锡",
+             "yunnan tin", "malaysia smelting", "metals x", "first tin", "cornish metals",
+             "wa state", "man maw", "bisie", "huaxi"],
 }
-# 说明：standalone 的 lead / tin / iron 极易当动词误命中（lead the project 等），故不作关键词；
-#       铅锌/锡/铁 另由 zinc-lead、lead-zinc、铅锌、锡、铁矿石、铁矿 等强词覆盖。
+# 说明：standalone 的 lead / iron 极易当动词误命中（lead the project 等），故不作关键词；
+#       铅锌/铁 另由 zinc-lead、lead-zinc、铅锌、铁矿石、铁矿 等强词覆盖。
+#       锡的裸词 "tin" 属金属名词、不会被当动词，但会误命中 getting / printing 一类词尾，
+#       因此只在「词边界 + 供给语境词」同时满足时才判为 Sn（见 SN_CONTEXT），
+#       否则「Yunnan Tin 宣布检修」「印尼将锡挂牌交易」这类稿会连品种归类都过不了。
+# 裸词 tin 的供给语境：出现任一即认为讨论的是锡金属本身（而非词尾巧合）
+SN_CONTEXT = ["smelter", "smelters", "refinery", "refined", "mine", "mines", "mining",
+              "concentrate", "ore", "export", "exports", "quota", "ingot", "solder",
+              "production", "output", "supply", "reserves", "resource", "deposit",
+              "project", "indonesia", "malaysia", "myanmar", "yunnan", "bolivia",
+              "brazil", "drc", "recycling", "recycled"]
+
 STRONG_COMBO = {
     "PbZn": ["lead-zinc", "zinc-lead", "lead and zinc", "lead & zinc"],
     "Sn":   ["tin mine", "tin mining", "tin concentrate", "tin smelter"],
@@ -85,6 +98,9 @@ INCLUDE = [
         "curtail", "curtailment", "idle", "idled", "accident", "fatal", "collapse",
         "fire", "flood", "blockade", "landslide", "disruption", "outage",
         "mine closure", "closure of", "resumes operations", "restart", "restarted",
+        "maintenance at", "announces maintenance", "scheduled maintenance",
+        "annual maintenance", "maintenance period", "maintenance shutdown",
+        "smelter maintenance", "检修", "停产检修",
         "output guidance", "guidance cut", "cuts output", "cut output",
         "output cut", "output cuts", "cuts production", "cut production",
         "production cut", "production cuts", "reduces output", "reduce output",
@@ -259,6 +275,8 @@ def classify(text):
     for metal, kws in STRONG_COMBO.items():
         if metal not in hits and any(k in t for k in kws):
             hits.append(metal)
+    if "Sn" not in hits and _hit(t, "tin") and any(_hit(t, w) for w in SN_CONTEXT):
+        hits.append("Sn")
     return hits
 
 
