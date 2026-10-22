@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-21T05:56:21+00:00",
+ "generated_at": "2026-10-22T05:15:30+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
@@ -7,7 +7,7 @@
    "ok": true,
    "items": 10,
    "matched_metal": 3,
-   "dropped_screen": 1,
+   "dropped_screen": 3,
    "new": 0
   },
   {
@@ -28,16 +28,19 @@
   },
   {
    "source": "im-mining",
-   "ok": false,
-   "error": "<urlopen error _ssl.c:993: The handshake operation timed out>"
+   "ok": true,
+   "items": 12,
+   "matched_metal": 2,
+   "dropped_screen": 2,
+   "new": 0
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 13,
-   "dropped_screen": 7,
-   "new": 0
+   "matched_metal": 11,
+   "dropped_screen": 6,
+   "new": 2
   },
   {
    "source": "ita",
@@ -48,10 +51,52 @@
    "new": 0
   }
  ],
- "count": 48,
+ "count": 50,
  "pending": 0,
- "auto": 47,
+ "auto": 49,
  "events": [
+  {
+   "id": "3a69a350888a24da",
+   "when": "2026-10-21",
+   "d": "2026-10-21",
+   "metals": [
+    "Li"
+   ],
+   "title": "Lithium’s $100B question: Who will build 134 new mines?",
+   "desc": "BMI forecasts lithium demand will more than triple by 2050, requiring a massive mining expansion to meet EV growth.",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/lithiums-100b-question-who-will-build-134-new-mines/"
+    }
+   ],
+   "first_seen": "2026-10-22T05:15:30+00:00"
+  },
+  {
+   "id": "738c379aff5c8fe2",
+   "when": "2026-10-21",
+   "d": "2026-10-21",
+   "metals": [
+    "Cu"
+   ],
+   "title": "First Quantum’s Kansanshi expansion beats design capacity",
+   "desc": "Zambian copper operation targets 27 million tonnes of ore throughput in 2026 as new processing facilities lift output.",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/first-quantums-kansanshi-expansion-beats-design-capacity/"
+    }
+   ],
+   "first_seen": "2026-10-22T05:15:30+00:00"
+  },
   {
    "id": "14cadbf2a0d6384b",
    "when": "2026-10-20",
@@ -1181,6 +1226,6 @@
  ],
  "zh_coverage": {
   "translated": 48,
-  "total": 48
+  "total": 50
  }
 }
