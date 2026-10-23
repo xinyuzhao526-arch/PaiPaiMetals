@@ -1,14 +1,14 @@
 {
- "generated_at": "2026-10-22T05:15:30+00:00",
+ "generated_at": "2026-10-23T05:14:26+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 3,
-   "dropped_screen": 3,
-   "new": 0
+   "matched_metal": 2,
+   "dropped_screen": 1,
+   "new": 1
   },
   {
    "source": "northernminer",
@@ -22,17 +22,17 @@
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 0,
-   "dropped_screen": 0,
+   "matched_metal": 1,
+   "dropped_screen": 1,
    "new": 0
   },
   {
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 2,
-   "dropped_screen": 2,
-   "new": 0
+   "matched_metal": 5,
+   "dropped_screen": 4,
+   "new": 1
   },
   {
    "source": "mining.com",
@@ -40,7 +40,7 @@
    "items": 36,
    "matched_metal": 11,
    "dropped_screen": 6,
-   "new": 2
+   "new": 1
   },
   {
    "source": "ita",
@@ -51,10 +51,73 @@
    "new": 0
   }
  ],
- "count": 50,
+ "count": 53,
  "pending": 0,
- "auto": 49,
+ "auto": 52,
  "events": [
+  {
+   "id": "ee24ffd262c98511",
+   "when": "2026-10-22",
+   "d": "2026-10-22",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Questcorp to acquire final 49% in North Island Project, Canada",
+   "desc": "Questcorp Mining has signed an agreement to acquire the remaining 49% interest in the North Island Copper Project near Port Hardy, Vancouver Island, British Columbia, Canada. The post Questcorp to acquire final 49% in No",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/questcorp-acquire-final-49-north-island/"
+    }
+   ],
+   "first_seen": "2026-10-23T05:14:26+00:00"
+  },
+  {
+   "id": "148dd8382845d9e4",
+   "when": "2026-10-22",
+   "d": "2026-10-22",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Thiess wins long-term mining services contracts in Mongolia",
+   "desc": "Global mining services provider Thiess has been awarded two five-year contracts in Mongolia, strengthening its presence in the country, the company says. Under the two contracts, Thiess will deliver underground mining se",
+   "tag": "长协/包销",
+   "status": "auto",
+   "src_level": "media",
+   "src": "im-mining",
+   "links": [
+    {
+     "label": "im-mining 原文",
+     "url": "https://im-mining.com/2026/10/22/thiess-wins-long-term-mining-services-contracts-in-mongolia/"
+    }
+   ],
+   "first_seen": "2026-10-23T05:14:26+00:00"
+  },
+  {
+   "id": "faffcd9778d93a85",
+   "when": "2026-10-22",
+   "d": "2026-10-22",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Southern Copper weighs $680M Cuajone mine expansion",
+   "desc": "A proposed milling upgrade could boost copper and molybdenum output at the Peruvian operation.",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/southern-copper-weighs-680m-cuajone-mine-expansion/"
+    }
+   ],
+   "first_seen": "2026-10-23T05:14:26+00:00"
+  },
   {
    "id": "3a69a350888a24da",
    "when": "2026-10-21",
@@ -1226,6 +1289,6 @@
  ],
  "zh_coverage": {
   "translated": 48,
-  "total": 50
+  "total": 53
  }
 }
