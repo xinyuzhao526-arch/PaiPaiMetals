@@ -209,6 +209,90 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
 .fold[aria-expanded="true"] .fold-caret{transform:rotate(90deg)}
 .fold-n{font-size:12px;font-weight:600;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){.fold-caret{transition:none}}
+
+/* ===== 重大供给事件 · 三方向时间轴 ===== */
+.sev{margin-top:26px}
+.sev-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.sev-title{display:flex;align-items:baseline;gap:10px;border-left:3px solid var(--accent-2);padding-left:11px}
+.sev-title h2{margin:0;font-size:23px;letter-spacing:-.01em}
+.sev-title .sev-sub{font-size:12px;color:var(--muted);letter-spacing:.02em}
+.sev-ctl{display:flex;gap:8px;flex-wrap:wrap}
+.sev-seg{display:flex;border:1px solid #d6dee8;border-radius:8px;overflow:hidden;background:#fff}
+.sev-seg button{border:0;background:#fff;color:#475569;padding:7px 15px;font-size:12.5px;font-weight:650;cursor:pointer;border-left:1px solid #d6dee8;transition:.15s}
+.sev-seg button:first-child{border-left:0}
+.sev-seg button:hover{background:#f8fafc}
+.sev-seg button.on{background:var(--accent-2);color:#fff}
+.sev-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:11.5px;color:var(--muted);padding:0 2px 8px;font-variant-numeric:tabular-nums}
+.sev-card{padding:16px 18px 12px}
+.sev-lanes{position:relative}
+.sev-grid{position:absolute;left:118px;right:0;top:0;bottom:0;pointer-events:none;overflow:hidden}
+.sev-lane{display:grid;grid-template-columns:106px 1fr;gap:12px;align-items:center;position:relative}
+.sev-lane-lbl{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#334155;font-weight:650;line-height:1.2}
+.sev-lane-lbl .sym{font-style:normal;font-size:11px;color:var(--accent-2);width:10px;text-align:center}
+.sev-track{position:relative;height:48px}
+.sev-track::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:#dde5ef}
+.sev-vline{position:absolute;top:4px;bottom:4px;width:1px;background:#f1f5fa}
+.sev-dot{position:absolute;top:50%;transform:translate(-50%,-50%);border:0;background:none;padding:2px 3px;line-height:1;cursor:pointer;font-size:13px;border-radius:999px;color:var(--accent-2);transition:background .15s}
+.sev-lane[data-k="del"] .sev-dot{font-size:16px;font-weight:700;padding:2px 7px}
+.sev-dot:hover{background:#eaf1fb}
+.sev-dot.on{background:none;box-shadow:0 0 0 2px rgba(29,78,216,.22)}
+.sev-cluster{position:absolute;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:1px;padding:3px 5px;border:1px solid #c9d6ea;border-radius:999px;background:#f7fafd}
+.sev-cluster .sev-dot{position:static;transform:none}
+.sev-cluster .sev-dot.on{box-shadow:none;background:rgba(29,78,216,.10)}
+.sev-axis{display:grid;grid-template-columns:106px 1fr;gap:12px;margin-top:2px}
+.sev-ax-lbl{font-size:11px;color:#94a3b8;font-weight:650;align-self:start;padding-top:6px}
+.sev-ticks{position:relative;height:23px;border-top:1px solid #e8eef6;border-left:1px solid #e6edf5}
+.sev-tick{position:absolute;top:6px;transform:translateX(-50%);font-size:11px;color:#94a3b8;white-space:nowrap;font-variant-numeric:tabular-nums}
+.sev-months{margin-top:16px;display:flex;flex-direction:column;gap:9px}
+.sev-mh{display:flex;align-items:baseline;gap:10px;font-size:13px;padding-bottom:2px}
+.sev-mh b{font-weight:800;color:var(--ink);letter-spacing:-.01em}
+.sev-mh span{font-size:11.5px;color:var(--muted)}
+.sev-chips{display:flex;flex-wrap:wrap;gap:2px 20px}
+.sev-chip{display:inline-flex;align-items:center;gap:7px;background:none;border:0;border-bottom:2px solid transparent;padding:3px 0 6px;cursor:pointer;color:#3f4c5c;font-size:12.5px;max-width:100%;text-align:left}
+.sev-chip i{font-style:normal;font-size:10px}
+.sev-chip em{font-style:normal;font-size:10.5px;font-weight:800;color:#7b8794;letter-spacing:.03em}
+.sev-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:min(34ch,42vw)}
+.sev-chip:hover{color:var(--accent-2)}
+.sev-chip.on{border-bottom-color:var(--accent-2);color:var(--ink);font-weight:700}
+.sev-detail{border-top:1px solid var(--line);border-left:3px solid var(--accent-2);margin-top:14px;padding:15px 0 6px 16px;background:linear-gradient(90deg,rgba(30,58,138,.045),rgba(30,58,138,0) 62%)}
+.sev-dmeta{display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--muted);margin-bottom:7px;font-variant-numeric:tabular-nums}
+.sev-dmeta i{font-style:normal;font-size:11px}
+.sev-dmeta em{font-style:normal;font-weight:800;color:#51606f;letter-spacing:.04em}
+.sev-dgrid{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start}
+.sev-dgrid.single{grid-template-columns:1fr}
+.sev-dbody h3{margin:0 0 4px;font-size:20px;letter-spacing:-.01em;line-height:1.3}
+.sev-dsub{margin:0 0 10px;color:#4b5a6b;font-size:12.5px}
+.sev-dbul{margin:0;padding-left:16px;color:#334155;font-size:12.5px;line-height:1.95}
+.sev-dcav{margin:11px 0 0;font-size:11.5px;color:#64748b;border-left:2px solid #cbd5e1;padding-left:9px;line-height:1.75;max-width:72ch}
+.sev-dsrc{margin:8px 0 0;font-size:11px;color:#94a3b8}
+.sev-dmetric{text-align:right;min-width:132px;border-left:1px solid var(--line);padding-left:20px}
+.sev-dmetric strong{display:block;font-size:42px;line-height:1;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.03em;color:var(--ink)}
+.sev-dmetric span{display:block;font-size:11.5px;color:var(--muted);margin-top:5px}
+.sev-dmetric button{margin-top:16px;border:0;background:none;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;padding:0}
+.sev-dmetric button:hover{text-decoration:underline}
+.sev-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:14px;padding-top:10px;font-size:11.5px;color:var(--muted)}
+.sev-foot .lg{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sev-foot .lg i{font-style:normal;color:var(--accent-2)}
+.sev-foot .lg .sep{color:#cbd5e1}
+.sev-note-btn{border:0;background:none;color:var(--muted);font-size:11.5px;font-weight:650;cursor:pointer;padding:0}
+.sev-note-btn:hover{color:var(--accent)}
+.sev-note{margin-top:10px;border:1px dashed #d6dee8;border-radius:10px;padding:12px 14px;font-size:12px;color:#475569;line-height:1.85;background:#fbfdff}
+.sev-note b{color:var(--ink)}
+.sev-empty{margin:10px 0;font-size:12.5px;color:var(--muted)}
+@media(max-width:820px){
+  .sev-lane,.sev-axis{grid-template-columns:76px 1fr;gap:8px}
+  .sev-grid{left:84px}
+  .sev-lane-lbl{font-size:11.5px;gap:5px}
+  .sev-lane-lbl .sym{display:none}
+  .sev-title h2{font-size:19px}
+  .sev-dgrid{grid-template-columns:1fr;gap:10px}
+  .sev-dmetric{text-align:left;border-left:0;border-top:1px solid var(--line);padding:10px 0 0;min-width:0}
+  .sev-dmetric strong{font-size:32px}
+  .sev-dmetric button{margin-top:10px}
+  .sev-chip span{max-width:60vw}
+  .sev-detail{padding-left:12px}
+}
+
 </style>
 </head>
 <body>
@@ -231,7 +315,8 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
     <nav>
       <a class="active" href="#top">总览</a>
       <a href="#map">世界地图</a>
-      <a href="#events">供给事件</a>
+      <a href="#events">事件快讯</a>
+      <a href="#sev">重大供给事件</a>
       <a href="#inv">库存与显性供给</a>
       <a href="#track">产量追踪</a>
       <a href="#sources">来源总表</a>
@@ -266,6 +351,46 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
         </div>
       </div>
     </div>
+    <section class="section sev" id="sev">
+      <div class="sev-head">
+        <div class="sev-title">
+          <h2>重大供给事件</h2>
+          <span class="sev-sub">停产 · 复产 · 供给调整</span>
+        </div>
+        <div class="sev-ctl">
+          <span class="sev-seg" id="sev-range" role="group" aria-label="时间区间">
+            <button type="button" data-r="1y" class="on">今年</button><button type="button" data-r="3y">近三年</button><button type="button" data-r="all">全部</button>
+          </span>
+          <span class="sev-seg" id="sev-scope" role="group" aria-label="品种范围">
+            <button type="button" data-s="cur" class="on">本品种</button><button type="button" data-s="all">全金属</button>
+          </span>
+        </div>
+      </div>
+      <div class="sev-meta">
+        <span id="sev-range-label">—</span>
+        <span id="sev-count">—</span>
+      </div>
+      <div class="card sev-card">
+        <div class="sev-chart" id="sev-chart" aria-label="供给事件时间轴"></div>
+        <div class="sev-months" id="sev-months"></div>
+        <div class="sev-detail" id="sev-detail"></div>
+        <div class="sev-foot">
+          <div class="lg">
+            <span><i>▲</i> 恢复</span><span class="sep">·</span>
+            <span><i>▼</i> 收缩</span><span class="sep">·</span>
+            <span><i>–</i> 受阻</span><span class="sep">·</span>
+            <span>颜色代表金属，每个符号对应一条披露</span>
+          </div>
+          <button type="button" class="sev-note-btn" id="sev-note-btn">筛选与口径 ↗</button>
+        </div>
+        <div class="sev-note" id="sev-note" hidden>
+          <b>方向口径</b>：▲供给恢复＝复产、重启、发运恢复；▼供给收缩＝停产、减产、配额收紧；–交付受阻＝物流与发运环节受限，不改产能。<br>
+          <b>时间口径</b>：按<b>披露日期</b>而非事件发生日排布，「今年」为当年 1 月 1 日至今，「近三年」为滚动 36 个月，「全部」自最早收录日。同一事件多次披露只取关键一次，避免重复计点。<br>
+          <b>数值口径</b>：指标可为产能、产量、发运量或比例，彼此不可相加；比例类指标（如电解槽重启比例）不等于产量恢复比例。<br>
+          <b>与上方「近期供给事件」的区别</b>：上方为自动抓取的新闻流，按时间倒序、含并购与长协等非供给事件；本图为人工核验的供给方向事件，用于看节奏，不替代原始披露。
+        </div>
+      </div>
+    </section>
     <div class="map-wrap" id="map">
       <div class="card map-card">
         <div class="map-toolbar">
@@ -1371,6 +1496,146 @@ function renderTrack(){
     tr.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openTrack(r,tr); } };
   });
 }
+/* ===== 重大供给事件 · 三方向时间轴（按披露日期） ===== */
+const SUP_METAL_C = {Cu:['Cu','#1d4ed8'],Al:['Al','#0f766e'],PbZn:['Pb/Zn','#a16207'],Ni:['Ni','#0369a1'],Sn:['Sn','#9333ea'],Li:['Li','#be123c'],Fe:['Fe','#b45309']};
+const SUP_LANES = [{k:'rec',s:'▲',n:'供给恢复'},{k:'del',s:'–',n:'交付受阻'},{k:'cut',s:'▼',n:'供给收缩'}];
+let SUP_EVENTS = [{"id": "al-gulf-hit","m": "Al","d": "2026-03-28","dir": "cut","title": "海湾三家铝厂受袭停产，合计逾 200 万吨","sub": "Qatalum 减产 40%、Alba 减产 19%、EGA Al Taweelah 全停","metric": {"v": "200","u": "万吨","l": "受影响产能"},"bullets": ["卡塔尔铝业约 65 万吨产能减产 40%，约合 26 万吨","巴林铝业约 160 万吨产能减产 19%，约合 31 万吨","EGA Al Taweelah 约 160 万吨因遇袭全面停产"],"caveat": "为产能口径，不等于全年产量损失；已减产产能复产通常需 6–12 个月。","src": "兴证策略 2026-10 配置报告；EGA 官方通报","links": [{"label": "EGA 复产通报","url": "https://media.ega.ae/ega-reaches-50-completion-of-al-taweelah-smelter-restart/"}]},{"id": "al-taweelah-alumina","m": "Al","d": "2026-07-02","dir": "rec","title": "Al Taweelah 氧化铝精炼厂恢复至事故前一半","sub": "3 月 28 日停产，7 月初复产并稳定在半数产能","metric": {"v": "50","u": "%","l": "氧化铝产能"},"bullets": ["上半年氧化铝产量 60.2 万吨，同比减少 47%","进一步提产取决于供应链与氧化铝采购策略"],"caveat": "精炼厂与电解铝是两条复产线，节奏并不同步。","src": "华西证券·阿联酋铝业 2026 半年报点评（2026-09-07）","links": []},{"id": "al-yarwun","m": "Al","d": "2026-10-01","dir": "cut","title": "Rio Tinto Yarwun 氧化铝拟减产约 40%","sub": "以延寿至 2035 年前后换取进一步评估时间","metric": {"v": "40","u": "%","l": "氧化铝产能"},"bullets": ["叠加 Kwinana 已关停，澳洲氧化铝供应结构生变"],"caveat": "公司口径为“拟减产”，最终幅度以正式披露为准。","src": "Rio Tinto 2025 全年业绩（SEC 6-K）","links": [{"label": "Rio Tinto 6-K","url": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000006/ex1_2025-q4results.htm"}]},{"id": "al-cbg","m": "Al","d": "2026-10-05","dir": "rec","title": "EGA 恢复几内亚铝土矿发运","sub": "首船 6.6 万吨自 Kamsar 起运；CBG 年供最高 490 万吨至 2044 年","metric": {"v": "6.6","u": "万吨","l": "首批铝土矿"},"bullets": ["2025 年 7 月几内亚吊销 GAC 采矿权，铝土供应随之中断","5 月达成和解、8 月底完成交割后重启供货"],"caveat": "恢复的是原料发运，不等于氧化铝、电解铝产量同比例回升。","src": "SMM（2026-10-15）；LME Insight（2026-10-05）","links": [{"label": "SMM 报道","url": "https://news.metal.com/newscontent/104159905-ega-receives-first-shipment-of-guinean-bauxite-under-renewed-cbg-agreement"},{"label": "LME Insight","url": "https://www.lmeinsight.com/ega-resumes-guinean-bauxite-shipments-after-settlement-with-government/"}]},{"id": "al-alumar","m": "Al","d": "2026-10-15","dir": "rec","title": "Alcoa 完成 Alumar 铝厂复产","sub": "三季度原铝产量 64.9 万吨，环比 +2%","metric": {"v": "+2","u": "%","l": "原铝产量环比"},"bullets": ["连续第六个季度环比增产，5 家冶炼厂创年内产量纪录","增量主要来自二季度产能重启与本季 Alumar 复产完成"],"caveat": "复产完成不等于满产，后续季度产量才是验证。","src": "Alcoa 2026Q3 业绩（2026-10-15）","links": [{"label": "Alcoa 三季度业绩","url": "https://news.alcoa.com/press-releases/press-release-details/2026/Alcoa-Corporation-Reports-Third-Quarter-2026-Results/default.aspx"}]},{"id": "al-taweelah-cells","m": "Al","d": "2026-10-21","dir": "rec","title": "EGA Al Taweelah 已重启一半电解槽","sub": "1,262 台中 631 台已重启","metric": {"v": "50","u": "%","l": "电解槽"},"bullets": ["分阶段复产；尚未全面恢复","首个电解槽 5 月 26 日重启，目标 2027Q1 全面恢复"],"caveat": "电解槽重启比例不等于产量恢复比例；不据此折算铝吨数。","src": "EGA 官方通报（2026-10-21）；Gulf News","links": [{"label": "EGA 官方","url": "https://media.ega.ae/ega-reaches-50-completion-of-al-taweelah-smelter-restart/"},{"label": "Gulf News","url": "https://gulfnews.com/business/markets/ega-restarts-half-of-al-taweelah-smelter-targets-full-output-by-early-2027-1.500718275"}]},{"id": "al-delivery","m": "Al","d": "2026-10-24","dir": "del","title": "近端交付约束仍在","sub": "区域发运绕行霍尔木兹，复产尚未传导至现货","metric": null,"bullets": ["EGA 建立经霍尔木兹海峡以外港口的替代出口路线，维持原料与客户发货","海外复产持续推进，但近端交付仍偏紧"],"caveat": "交付受阻为物流口径，与产能、产量口径不可混算。","src": "南华期货·铝产业链周报（2026-10-24）；华西证券 2026-09-07","links": []},{"id": "cu-grasberg","m": "Cu","d": "2025-09-01","dir": "cut","title": "Grasberg Block Cave 停产扰动","sub": "PTFI 2025 年铜产约 10 亿磅，低于 2024 年约 18 亿磅","metric": {"v": "10","u": "亿磅","l": "PTFI 2025 铜产"},"bullets": ["Freeport 2025 合并铜产约 34 亿磅，约 154 万吨","印尼端大幅下降；计划 2026Q2 起分阶段复产、下半年恢复约 85% 正常速率"],"caveat": "为年度产量口径；复产节奏为计划值，需按季报校正。","src": "Freeport 业绩与 10-K；Metalnomist","links": [{"label": "FCX 业绩","url": "https://last10k.com/sec-filings/fcx/0000831259-26-000012.htm"},{"label": "Metalnomist","url": "https://www.metalnomist.com/2026/03/grasberg-copper-disruption-cuts.html"}]},{"id": "cu-cobre-panama","m": "Cu","d": "2026-08-02","dir": "rec","title": "Cobre Panama 启动库存矿加工","sub": "二季度处理约 210 万吨库存矿，产铜精矿 3,216 吨","metric": {"v": "3–4","u": "万吨","l": "2026 产量指引"},"bullets": ["5 月启动三条磨矿线中的首条；库存矿约 3,800 万吨，可回收铜约 7 万吨","与巴拿马政府的正式谈判临近，员工增至约 3,000 人"],"caveat": "加工的是库存矿，不等于矿山恢复开采；指引仅覆盖库存矿。","src": "中国银河·有色周报（2026-08-02）；华鑫证券二季报汇总（2026-10-10）","links": []},{"id": "cu-lasbambas","m": "Cu","d": "2026-08-24","dir": "rec","title": "Las Bambas 确认恢复运营","sub": "8 月 21 日起恢复，未等同满产","metric": null,"bullets": ["MMG 相关确认；2025 年 Las Bambas 产铜 410.8 kt、集团 507 kt","对全年吨数影响待季报披露"],"caveat": "恢复运营不等于满产，产量影响需按季报核对。","src": "Mining Journal；MMG 年报","links": [{"label": "Mining Journal","url": "https://www.mining-journal.com/miners/news-articles/4535995/mmg-resumes-operations-las-bambas"},{"label": "MMG 产量","url": "https://www.mmg.com/investors/reports-and-presentations/strong-fourth-quarter-driven-by-record-and-near-record-production-results/"}]},{"id": "pbzn-nyrstar","m": "PbZn","d": "2026-01-01","dir": "cut","title": "Nyrstar Hobart 锌冶炼减产约 25%","sub": "负 TC 与成本压力下收缩","metric": {"v": "25","u": "%","l": "Hobart 产量"},"bullets": ["美国 Clarksville 冶炼资产出售给 Korea Zinc，原锌冶炼格局变化"],"caveat": "为冶炼端减产，与矿端供应口径不同。","src": "Nyrstar 公告","links": [{"label": "Nyrstar 公告","url": "https://www.nyrstar.com/resource-center/press-releases/nyrstars-hobart-zinc-operations-to-reduce-production-by-25"}]},{"id": "pbzn-tara","m": "PbZn","d": "2025-12-31","dir": "rec","title": "Boliden Tara 重启，矿山锌回升至 351 kt","sub": "同比 +114%，精炼锌约 457 kt","metric": {"v": "351","u": "kt","l": "Tara 矿山锌"},"bullets": ["Odda 冶炼同步爬坡"],"caveat": "同比增幅受低基数影响，勿直接外推。","src": "Boliden 年报","links": [{"label": "Boliden","url": "https://www.boliden.com/"}]},{"id": "ni-rkab","m": "Ni","d": "2026-02-01","dir": "cut","title": "印尼 RKAB 配额降至 2.6–2.7 亿吨","sub": "较 2025 年 3.79 亿吨降约 30%，韦达湾配额砍幅 71%","metric": {"v": "-30","u": "%","l": "镍矿配额"},"bullets": ["Mysteel 测算对应镍金属量减少 70–80 万吨，占全球供应 15%–18%","执行仍有博弈空间，价格过快上涨可能触发追加配额"],"caveat": "矿石吨不等于含镍金属吨。","src": "国信证券中期策略（2026-06-12）；SSW","links": [{"label": "SSW 印尼","url": "https://stainless-steel-world.net/the-world-nickel-market-in-2026-indonesia-the-influencer/"}]},{"id": "ni-wan","m": "Ni","d": "2025-12-31","dir": "cut","title": "BHP 西澳镍矿停产","sub": "FY25 产量约 30 kt 后临时停产","metric": {"v": "30","u": "kt","l": "FY25 产量"},"bullets": ["澳矿大幅收缩；Nornickel 同期 −3% 至 199 kt"],"caveat": "停产为临时性质，重启时点未定。","src": "BHP FY25 业绩；Nornickel","links": [{"label": "BHP","url": "https://www.e-mj.com/news/australia-and-oceania/bhp-delivers-record-numbers-for-fy25/"},{"label": "Nornickel","url": "https://www.akm.ru/eng/news/norilsk-nickel-reduced-nickel-production-by-3-in-2025/"}]},{"id": "ni-ambatovy","m": "Ni","d": "2026-06-30","dir": "rec","title": "Ambatovy 飓风停产后重启","sub": "2026 年初飓风致多月停产，年中恢复","metric": null,"bullets": ["2025 年产量约 28 kt，铭牌 60 kt","年化目标下修"],"caveat": "利用率长期偏低，复产不等于回到铭牌。","src": "Skillings","links": [{"label": "Skillings","url": "https://www.skillings.net/nickel-market-outlook-2026-ambatovy-resumes-operations-after-cyclone/"}]},{"id": "ni-imip","m": "Ni","d": "2026-09-01","dir": "cut","title": "印尼干旱拖累冶炼，部分 RKEF 减产","sub": "IMIP 周边缺水少雨，BMS 一号炉减产、约 570 人停工","metric": {"v": "570","u": "人","l": "暂时停工"},"bullets": ["苏拉威西、马鲁古、巴布亚水电供应受扰","配额收缩与冶炼减产相互强化"],"caveat": "影响范围尚未扩至韦达湾工业区。","src": "国联民生（2026-09-15）","links": []},{"id": "sn-wabang","m": "Sn","d": "2026-01-01","dir": "rec","title": "缅甸佤邦锡矿复产偏慢","sub": "仅恢复至禁矿前 40%–50%","metric": {"v": "40–50","u": "%","l": "禁矿前产量"},"bullets": ["曼相矿区 2 月启动深部矿洞抽水，受排水、品位、民爆物资与雨季扰动","2026 上半年中国自缅甸进口锡精矿实物量近 4 万吨，超 2025 全年"],"caveat": "复产仅是边际缓和，全年难回历史高位。","src": "国贸期货锡专题（2026-09-15）；USGS","links": [{"label": "USGS 锡","url": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-tin.pdf"}]},{"id": "sn-wabang-pump","m": "Sn","d": "2026-02-27","dir": "rec","title": "佤邦明确抽水分摊流程，加速低海拔矿区复产","sub": "对华锡精矿含锡量已回升至约 1,300 吨/月","metric": {"v": "1,300","u": "吨/月","l": "对华锡精矿含锡"},"bullets": ["2025 年 5–10 月低位约 630 吨/月","若锡价维持 35 万元/吨以上，2026 年缅甸对华矿量有望接近 2 万吨"],"caveat": "月度出口波动大，单月数据不代表趋势。","src": "宁证期货期现日报（2026-03-02）；ITA","links": []},{"id": "sn-delivery","m": "Sn","d": "2026-07-31","dir": "del","title": "雨季拖累缅甸锡矿进口","sub": "7 月进口折金属量降至 1,077 吨","metric": {"v": "1,077","u": "吨","l": "7 月进口金属量"},"bullets": ["雨季结束后出口有望小幅修复","国内冶炼原料约束仍存"],"caveat": "进口为实物量折金属，与矿产量口径不同。","src": "国贸期货锡专题（2026-09-15）","links": []},{"id": "sn-southcroft","m": "Sn","d": "2026-10-23","dir": "rec","title": "South Crofty 融资 1.81 亿美元推进重启","sub": "英国康沃尔锡矿重启资金到位","metric": {"v": "1.81","u": "亿美元","l": "融资额"},"bullets": ["开发商 Cornish Metals 向现有及新投资者募资 1.35 亿英镑"],"caveat": "融资到位距实际投产仍有距离。","src": "ITA（2026-10-23）","links": [{"label": "ITA 原文","url": "https://www.internationaltin.org/usd181-million-raised-for-south-crofty-restart/"}]},{"id": "li-jianxiawo","m": "Li","d": "2025-08-09","dir": "cut","title": "宁德时代枧下窝矿区停产","sub": "采矿证到期关停，一期年产碳酸锂约 4.2 万吨","metric": {"v": "4.2","u": "万吨","l": "LCE 年产能"},"bullets": ["2024 年 9 月曾因锂价过低首次停产，2025 年 2 月复工","2025 年 12 月市场预期的复产并未兑现"],"caveat": "关停的是采矿端，选矿与冶炼环节影响需分开评估。","src": "国泰君安期货·碳酸锂逻辑重塑（2026-10-07）；期货日报（2025-08-10）","links": []},{"id": "li-jianxiawo-eia","m": "Li","d": "2026-08-17","dir": "rec","title": "枧下窝环评受理公示，复产预期升温","sub": "公示后碳酸锂价格自高点回落","metric": null,"bullets": ["碳酸锂价格自 2026 年中高点 209,880 元/吨回落至 9 月约 116,960 元/吨"],"caveat": "环评受理不等同核准，复产时点仍不确定。","src": "国泰君安期货·碳酸锂逻辑重塑（2026-10-07）","links": []},{"id": "fe-simandou","m": "Fe","d": "2025-12-01","dir": "rec","title": "Simandou 首船发运，进入爬坡期","sub": "12 月首船约 20 万吨离港赴华，规划级约 1.2 亿吨/年","metric": {"v": "20","u": "万吨","l": "首船发运"},"bullets": ["SimFer 2025 年破碎 2.3 Mt","Rio 2026 年 Simandou 销售指引（份额）5–10 Mt"],"caveat": "矿门到销售有 2–3 个月时滞；规划产能非当期产量。","src": "Rio Tinto 2025 年业绩；Caixin","links": [{"label": "Rio YE25","url": "https://announcements.asx.com.au/asxpdf/20260219/pdf/06whs6pphd7pxk.pdf"},{"label": "Caixin","url": "https://www.caixinglobal.com/2025-12-03/simandou-iron-ore-mine-ships-first-cargo-to-china-102389356.html"}]}];
+const SEV = {range:'1y', scope:'cur', sel:null};
+function supDate(v){ const p=String(v||'').split('-').map(Number); return new Date(p[0]||2026,(p[1]||1)-1,p[2]||1); }
+function supFmt(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function sevBounds(){
+  const n=new Date(); const today=new Date(n.getFullYear(),n.getMonth(),n.getDate()); let s;
+  if(SEV.range==='1y') s=new Date(today.getFullYear(),0,1);
+  else if(SEV.range==='3y') s=new Date(today.getFullYear()-3,today.getMonth(),today.getDate());
+  else{ const ds=SUP_EVENTS.map(e=>supDate(e.d)).sort((a,b)=>a-b); s=ds.length?new Date(ds[0].getFullYear(),ds[0].getMonth(),1):new Date(today.getFullYear()-5,0,1); }
+  return [s,today];
+}
+function sevRows(){
+  const b=sevBounds(), s=b[0], e=b[1];
+  return SUP_EVENTS.filter(x=>(SEV.scope==='all'||x.m===currentMetal)&&supDate(x.d)>=s&&supDate(x.d)<=e)
+    .sort((a,b2)=>String(b2.d).localeCompare(String(a.d)));
+}
+function sevPos(v,s,e){ const d=(v instanceof Date)?v:supDate(v); const t=(d-s)/Math.max(1,(e-s))*100; return Math.max(2.2,Math.min(95.6,t)); }
+function sevCol(m){ return (SUP_METAL_C[m]||['','#1e3a8a'])[1]; }
+function sevName(m){ return (SUP_METAL_C[m]||[m||'','#1e3a8a'])[0]; }
+function renderSupplyEvents(reset){
+  const chart=document.getElementById('sev-chart'); if(!chart) return;
+  let b=sevBounds(), s=b[0], e=b[1];
+  let rows=sevRows();
+  if(reset && !rows.length && SEV.scope==='cur' && SEV.range==='1y' && SUP_EVENTS.some(x=>x.m===currentMetal)){
+    SEV.range='3y'; syncSevSeg(); b=sevBounds(); s=b[0]; e=b[1]; rows=sevRows();
+  }
+  if(reset || !rows.some(x=>x.id===SEV.sel)){ const pick=rows.filter(x=>x.metric&&x.metric.v)[0]||rows[0]; SEV.sel=pick?pick.id:null; }
+  const rl=document.getElementById('sev-range-label'); if(rl) rl.textContent=supFmt(s)+' — '+supFmt(e);
+  const ct=document.getElementById('sev-count');
+  if(ct) ct.textContent=rows.length+'条重大事件 · 按披露日期';
+
+  const spanM=(e.getFullYear()-s.getFullYear())*12+(e.getMonth()-s.getMonth());
+  const step=spanM<=11?1:3;
+  const ticks=[]; let y=s.getFullYear(), m=s.getMonth();
+  while(y<e.getFullYear()||(y===e.getFullYear()&&m<=e.getMonth())){
+    const d=new Date(y,m,1);
+    if(d>=s&&d<=e&&m%step===0) ticks.push({x:sevPos(d,s,e),t:step===1?(m+1)+'月':String(y).slice(2)+'Q'+(Math.floor(m/3)+1)});
+    m++; if(m>11){m=0;y++;}
+  }
+  const lanes=SUP_LANES.map(L=>{
+    const items=rows.filter(r=>r.dir===L.k).map(r=>({r,x:sevPos(r.d,s,e)})).sort((a,b2)=>a.x-b2.x);
+    const groups=[]; items.forEach(it=>{ const g=groups[groups.length-1]; if(g&&it.x-g[g.length-1].x<3.0) g.push(it); else groups.push([it]); });
+    const marks=groups.map(g=>{
+      if(g.length===1){
+        const it=g[0], on=it.r.id===SEV.sel;
+        return '<button type="button" class="sev-dot'+(on?' on':'')+'" style="left:'+it.x.toFixed(2)+'%;color:'+sevCol(it.r.m)+'" data-id="'+it.r.id+'" title="'+esc(it.r.title)+'" aria-label="'+esc(it.r.title)+'">'+L.s+'</button>';
+      }
+      let cx=g.reduce((a,x)=>a+x.x,0)/g.length; cx=Math.max(4.4,Math.min(94.2,cx));
+      return '<span class="sev-cluster" style="left:'+cx.toFixed(2)+'%">'+g.map(it=>'<button type="button" class="sev-dot'+(it.r.id===SEV.sel?' on':'')+'" style="color:'+sevCol(it.r.m)+'" data-id="'+it.r.id+'" title="'+esc(it.r.title)+'" aria-label="'+esc(it.r.title)+'">'+L.s+'</button>').join('')+'</span>';
+    }).join('');
+    return '<div class="sev-lane" data-k="'+L.k+'"><div class="sev-lane-lbl"><i class="sym">'+L.s+'</i>'+L.n+'</div><div class="sev-track">'+marks+'</div></div>';
+  }).join('');
+  const grid='<div class="sev-grid">'+ticks.map(t=>'<span class="sev-vline" style="left:'+t.x.toFixed(2)+'%"></span>').join('')+'</div>';
+  chart.innerHTML = '<div class="sev-lanes">'+grid+lanes+'</div>'
+    + '<div class="sev-axis"><div class="sev-ax-lbl">披露时间</div><div class="sev-ticks">'
+    + ticks.map(t=>'<span class="sev-tick" style="left:'+t.x.toFixed(2)+'%">'+t.t+'</span>').join('')
+    + '</div></div>';
+
+  const mbox=document.getElementById('sev-months');
+  if(mbox){
+    if(!rows.length){
+      mbox.innerHTML='<p class="sev-empty">该区间暂无收录的重大供给事件，可切换「近三年」或「全部」查看；收录范围以公开披露为限。</p>';
+    }else{
+      const by={}; rows.forEach(r=>{ const k=String(r.d).slice(0,7); (by[k]=by[k]||[]).push(r); });
+      mbox.innerHTML=Object.keys(by).sort().reverse().map(k=>{
+        const ymd=k.split('-'), list=by[k];
+        return '<div class="sev-month"><div class="sev-mh"><b>'+ymd[0]+'年'+Number(ymd[1])+'月</b><span>'+list.length+'条重大事件</span></div><div class="sev-chips">'
+          + list.map(r=>{ const L=SUP_LANES.filter(x=>x.k===r.dir)[0]||SUP_LANES[0];
+              return '<button type="button" class="sev-chip'+(r.id===SEV.sel?' on':'')+'" data-id="'+r.id+'"><i class="sym" style="color:'+sevCol(r.m)+'">'+L.s+'</i><em>'+sevName(r.m)+'</em><span>'+esc(r.title)+'</span></button>';
+            }).join('')
+          + '</div></div>';
+      }).join('');
+    }
+  }
+  renderSevDetail(rows);
+}
+function syncSevSeg(){
+  const r=document.getElementById('sev-range'); if(r) Array.prototype.forEach.call(r.children,b=>b.classList.toggle('on',b.dataset.r===SEV.range));
+  const c=document.getElementById('sev-scope'); if(c) Array.prototype.forEach.call(c.children,b=>b.classList.toggle('on',b.dataset.s===SEV.scope));
+}
+function renderSevDetail(rows){
+  const box=document.getElementById('sev-detail'); if(!box) return;
+  const r=(rows||sevRows()).filter(x=>x.id===SEV.sel)[0];
+  if(!r){ box.innerHTML='<p class="sev-empty">该区间暂无收录事件。</p>'; return; }
+  const L=SUP_LANES.filter(x=>x.k===r.dir)[0]||SUP_LANES[0];
+  const hasLink=!!(r.links&&r.links.length&&r.links[0].url);
+  const srcBtn='<button type="button" id="sev-src">详情与来源 ↗</button>';
+  const metric=(r.metric&&r.metric.v)
+    ? '<div class="sev-dmetric"><strong>'+esc(r.metric.v)+'</strong><span>'+esc(((r.metric.u||'')+' '+(r.metric.l||'')).trim())+'</span>'+(hasLink?srcBtn:'')+'</div>'
+    : (hasLink?'<div class="sev-dmetric">'+srcBtn+'</div>':'');
+  box.innerHTML =
+    '<div class="sev-dmeta"><i class="sym" style="color:'+sevCol(r.m)+'">'+L.s+'</i><em>'+sevName(r.m)+'</em><span>'+String(r.d).slice(0,10)+'</span><span>'+L.n+'</span></div>'
+    + '<div class="sev-dgrid'+(metric?'':' single')+'"><div class="sev-dbody">'
+    + '<h3>'+esc(r.title)+'</h3>'
+    + (r.sub?'<p class="sev-dsub">'+esc(r.sub)+'</p>':'')
+    + (r.bullets&&r.bullets.length?'<ul class="sev-dbul">'+r.bullets.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'')
+    + (r.caveat?'<p class="sev-dcav">'+esc(r.caveat)+'</p>':'')
+    + (r.src?'<p class="sev-dsrc">来源：'+esc(r.src)+'</p>':'')
+    + '</div>'+metric+'</div>';
+  const btn=document.getElementById('sev-src');
+  if(btn) btn.onclick=()=>{
+    const u=r.links&&r.links[0]&&r.links[0].url;
+    if(u) window.open(u,'_blank','noopener,noreferrer'); else toast('该条暂无外链，来源见下方注记');
+  };
+}
+async function loadSupplyEvents(){
+  try{
+    const r=await fetch('data/supply_events.json',{cache:'no-store'});
+    if(!r.ok) return;
+    const j=await r.json();
+    if(Array.isArray(j.events)&&j.events.length){ SUP_EVENTS=j.events; renderSupplyEvents(false); }
+  }catch(e){ /* 本地打开或离线时保留页内基线 */ }
+}
+(function bindSev(){
+  const rseg=document.getElementById('sev-range');
+  if(rseg) rseg.addEventListener('click',e=>{
+    const b=e.target.closest('button[data-r]'); if(!b) return;
+    Array.prototype.forEach.call(rseg.children,x=>x.classList.toggle('on',x===b));
+    SEV.range=b.dataset.r; renderSupplyEvents(true);
+  });
+  const sseg=document.getElementById('sev-scope');
+  if(sseg) sseg.addEventListener('click',e=>{
+    const b=e.target.closest('button[data-s]'); if(!b) return;
+    Array.prototype.forEach.call(sseg.children,x=>x.classList.toggle('on',x===b));
+    SEV.scope=b.dataset.s; renderSupplyEvents(true);
+  });
+  ['sev-chart','sev-months'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    el.addEventListener('click',e=>{
+      const b=e.target.closest('[data-id]'); if(!b) return;
+      SEV.sel=b.dataset.id; renderSupplyEvents(false);
+    });
+  });
+  const nb=document.getElementById('sev-note-btn'), note=document.getElementById('sev-note');
+  if(nb&&note) nb.onclick=()=>{ note.hidden=!note.hidden; nb.textContent=note.hidden?'筛选与口径 ↗':'收起口径'; };
+  loadSupplyEvents();
+})();
 function loadMetal(m, pushUrl=true){
   if(!METAL_DATA[m]){ toast('无此品种数据'); return; }
   currentMetal=m;
@@ -1381,6 +1646,7 @@ function loadMetal(m, pushUrl=true){
   buildFilters();
   buildRegions();
   renderPanels();
+  renderSupplyEvents(true);
   renderTrack();
   if(mapReady) renderMapMarkers();
   if(pushUrl){
