@@ -443,7 +443,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
       <div class="table-wrap">
         <table class="track">
           <thead><tr>
-            <th>主体<small>国家 · 环节</small></th><th>隶属公司<small>运营方 / 权益方 · 合资已标注</small></th><th>储量/资源<small>含单位 · 基准 · 时点</small></th><th>期初指引<small>本期原指引 / 上期实际</small></th><th>最新指引 / 备注</th>
+            <th>主体<small>国家 · 环节</small></th><th>隶属公司<small>运营方 / 权益方 · 合资已标注</small></th><th>储量 / 产量<small>矿山行＝储量 · 冶炼精炼行＝产量</small></th><th>期初指引<small>本期原指引 / 上期实际</small></th><th>最新指引 / 备注</th>
             <th>YoY</th><th>调整</th><th>已披露产量</th><th></th>
           </tr></thead>
           <tbody id="tbody"></tbody>
@@ -1405,6 +1405,15 @@ function ownerCell(r){
     + (r.jv ? '<div style="margin-top:3px"><span class="chip warn">合资</span></div>' : '');
 }
 function reserveCell(r){
+  const flowKind = r.rkind==='refinery' || r.rkind==='smelter' || ['原铝','氧化铝','镍铁','镍锍','NPI','销售'].indexOf(r.tag)>=0;
+  if(flowKind && !(r.reserve && r.reserve!=='—')){
+    const val = r.latest || (r.actual!=null ? String(r.actual) : '');
+    if(val){
+      return '<div class="num" style="font-size:12px">'+esc(val)+'</div>'
+        + '<div class="meta" style="margin-top:4px">产量'+(r.actualAsOf?' · '+esc(r.actualAsOf):'')+'</div>'
+        + '<div class="meta" style="color:var(--pend)">产量口径 · 无单项储量</div>';
+    }
+  }
   const naKind = r.rkind==='na' || r.rkind==='refinery' || (r.rkind==='smelter' && r.tag==='原铝');
   if(naKind){
     const why=(r.rkind==='refinery'||r.rkind==='smelter')?'冶炼/精炼口径，不含储量':(r.rwhy||'该口径不含储量');
@@ -1473,6 +1482,7 @@ function renderTrack(){
     const nT=totalRows().length, nA=assetRows().length;
     tnote.innerHTML='本表只列<b>单点资产</b>（能落到单一厂矿/项目的产量），与地图上「按产量缩放」同一口径。'
       +'另有 <b>'+nT+'</b> 条企业合计 / 国家·全球总量，已移到 <a href="#track" id="goto-totals">总量与格局</a>。'
+      +'「储量 / 产量」列：矿山行填储量，冶炼精炼行填产量（该口径无单项储量）。'
       +(nA?'':' <span class="chip warn">本品种暂无单点资产级产量，请直接看「总量与格局」</span>');
     const gl=document.getElementById('goto-totals');
     if(gl) gl.onclick=ev=>{ ev.preventDefault();
