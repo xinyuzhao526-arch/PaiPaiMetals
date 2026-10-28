@@ -1,21 +1,31 @@
 {
- "base": "https://models.github.ai/inference",
  "env": {
-  "github_token": true,
+  "actions_token": true,
   "translate_key": false
  },
  "results": {
-  "github_token|openai/gpt-4o-mini": {
-   "ok": true,
+  "actions|models.github.ai/inference": {
    "status": 200,
-   "head": "OK\r\n"
+   "ctype": "text/plain",
+   "head": "OK\r\n",
+   "json": false
   },
-  "github_token|openai/gpt-4.1-mini": {
-   "ok": true,
+  "actions|models.github.ai/inference/v1": {
    "status": 200,
-   "head": "OK\r\n"
+   "ctype": "text/plain",
+   "head": "OK\r\n",
+   "json": false
   },
-  "translate_key": {
+  "actions|models.inference.ai.azure.com": {
+   "error": "<urlopen error [Errno -2] Name or service not known>"
+  },
+  "actions|api.githubcopilot.com": {
+   "status": 400,
+   "ctype": "text/plain; charset=utf-8",
+   "head": "bad request: the Copilot-Integration-Id header does not match the GitHub App that issued this installation access token\n",
+   "json": false
+  },
+  "translate": {
    "skipped": "empty"
   }
  }
