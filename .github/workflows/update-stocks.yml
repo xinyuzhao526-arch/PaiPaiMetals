@@ -9,7 +9,11 @@ name: Update stocks & supply events
 #                 过滤后入库：status=auto / src_level=media，页面显示蓝底「自动发布」，
 #                 无需人工逐条确认；已回溯一手来源的条目为 status=ok（页面「已核验」）。
 #   3) 中文编译：新增条目由 scripts/translate_events.py 生成 title_zh / summary_zh
-#                 （需配置仓库 Secret TRANSLATE_API_KEY；缺 key 时页面显示英文并标「待译」）。
+#                 需要一把外部大模型 key（OpenAI 兼容接口），配置为仓库 Secret TRANSLATE_API_KEY，
+#                 并用仓库 Variables 指定 TRANSLATE_API_BASE / TRANSLATE_MODEL。
+#                 注意：GitHub 自带的 Models 接口（models.github.ai）已不再返回补全，
+#                 仅回 200 + "OK"，不可再用作翻译通道。
+#                 缺 key 或缺通道时页面显示英文并标「待译」，不阻断其余流程。
 #
 # 改关键词后务必跑回归：python3 scripts/test_screen.py
 # 未覆盖：GFEX / DCE 官网对自动化请求有反爬（JS 挑战 / HTTP 412），锂与铁的交易所仓单
@@ -51,6 +55,8 @@ jobs:
         continue-on-error: true
         env:
           TRANSLATE_API_KEY: ${{ secrets.TRANSLATE_API_KEY }}
+          TRANSLATE_API_BASE: ${{ vars.TRANSLATE_API_BASE }}
+          TRANSLATE_MODEL: ${{ vars.TRANSLATE_MODEL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 scripts/translate_events.py --in data/events.json
 
