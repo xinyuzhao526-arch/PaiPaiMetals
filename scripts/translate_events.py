@@ -86,7 +86,7 @@ def call_api(base, key, model, batch):
     try:
         body = json.loads(raw_body)
     except json.JSONDecodeError as exc:
-        raise ValueError("响应非 JSON（通道被拦截或凭据失效）：" + raw_body[:80].replace("\n", " ")) from exc
+        raise ValueError("通道返回非 JSON（凭据失效或端点已停用）：" + raw_body[:80].replace("\n", " ")) from exc
     text = body["choices"][0]["message"]["content"]
     m = re.search(r"\[.*\]", text, re.S)
     if not m:
@@ -100,8 +100,8 @@ def main():
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--limit", type=int, default=0)
-    ap.add_argument("--base", default=os.environ.get("TRANSLATE_API_BASE", DEFAULT_BASE))
-    ap.add_argument("--model", default=os.environ.get("TRANSLATE_MODEL", DEFAULT_MODEL))
+    ap.add_argument("--base", default=(os.environ.get("TRANSLATE_API_BASE") or "").strip() or DEFAULT_BASE)
+    ap.add_argument("--model", default=(os.environ.get("TRANSLATE_MODEL") or "").strip() or DEFAULT_MODEL)
     args = ap.parse_args()
 
     d = load(args.src)
