@@ -133,6 +133,7 @@ h1{margin:0;font-size:clamp(24px,2.8vw,32px);letter-spacing:-.03em}
 .map-hint{font-size:11px;color:var(--muted)}
 .basesel{border:1px solid var(--line);background:#f8fafc;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:650;cursor:pointer;color:var(--ink)}
 #leaflet-map{flex:1;min-height:420px;width:100%;background:var(--map-bg)}
+#leaflet-map .leaflet-container, #leaflet-map.leaflet-container{background:#b8dcee}
 .map-foot{padding:10px 14px;border-top:1px solid var(--line);display:flex;gap:14px;flex-wrap:wrap;font-size:12px;align-items:center}
 .map-legend{padding:7px 14px 10px;display:flex;gap:13px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--muted);line-height:1.9;background:#fcfdfe}
 .map-legend .lg{display:inline-flex;align-items:center;gap:5px}
@@ -1674,8 +1675,23 @@ function setBase(key){
   currentBase.addTo(map);
   const hint=document.getElementById('map-base-hint');
   if(hint) hint.textContent='底图：'+key;
+  /* 世界之外的留白按底图取色，避免出现与海面割裂的色块 */
+  const bg={'Esri Street':'#99d9f2','Esri Imagery':'#0a1a26'}[key]||'#99d9f2';
+  try{ map.getContainer().style.background=bg; }catch(e){}
   const sel=document.getElementById('base-sel');
   if(sel) sel.value=key;
+}
+let WORLD_BOUNDS=null;
+/* 缩放下限：让整幅世界刚好铺满一次；再缩小就会出现多张重复的世界地图，故锁死 */
+function clampWorldZoom(){
+  if(!map) return;
+  const size=map.getSize();
+  if(!size || !size.x || !size.y) return;
+  /* 世界在 zoom z 时为 256*2^z 像素；取横竖两向的较小值，即整幅世界刚好装进视口 */
+  const fit=Math.min(Math.log(size.x/256)/Math.LN2, Math.log(size.y/256)/Math.LN2);
+  if(!isFinite(fit)) return;
+  map.setMinZoom(fit);
+  if(map.getZoom()<fit) map.setZoom(fit, {animate:false});
 }
 function initMap(){
   const el=document.getElementById('leaflet-map');
@@ -1685,10 +1701,19 @@ function initMap(){
     mapReady=false;
     return;
   }
-  map=L.map(el, {scrollWheelZoom:true, worldCopyJump:true}).setView([10, 20], 2);
+  WORLD_BOUNDS=L.latLngBounds([[-85,-179.9],[85,179.9]]);
+  /* worldCopyJump 关掉 + 底图 noWrap：不再横向复制世界；
+     不用 maxBounds（它会把缩放下限顶回整数级、与"整幅世界可见"冲突），改用 moveend 夹住中心点 */
+  map=L.map(el, {scrollWheelZoom:true, worldCopyJump:false, zoomSnap:0}).setView([10, 20], 2);
+  map.on('moveend', ()=>{
+    const c=map.getCenter(), lat=Math.max(-83,Math.min(83,c.lat)), lng=Math.max(-179.5,Math.min(179.5,c.lng));
+    if(Math.abs(lat-c.lat)>0.01 || Math.abs(lng-c.lng)>0.01) map.setView([lat,lng], map.getZoom(), {animate:false});
+  });
   baseLayers = {
-    'Esri Street': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {attribution:'Tiles © Esri', maxZoom:19}),
-    'Esri Imagery': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {attribution:'Tiles © Esri', maxZoom:19})
+    'Esri Street': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {attribution:'Tiles © Esri', maxZoom:19, noWrap:true, bounds:WORLD_BOUNDS,
+      errorTileUrl:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'}),
+    'Esri Imagery': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {attribution:'Tiles © Esri', maxZoom:19, noWrap:true, bounds:WORLD_BOUNDS,
+      errorTileUrl:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'})
   };
   markerLayer=L.layerGroup().addTo(map);
   /* 先建选项再设值：否则 sel.value 会先于 option 存在，下拉框显示为空 */
@@ -1701,7 +1726,8 @@ function initMap(){
   }
   setBase('Esri Street');
   mapReady=true;
-  setTimeout(()=>map.invalidateSize(), 200);
+  setTimeout(()=>{ map.invalidateSize(); clampWorldZoom(); }, 200);
+  window.addEventListener('resize', ()=>{ setTimeout(clampWorldZoom, 120); });
 }
 
 function bindUI(){
