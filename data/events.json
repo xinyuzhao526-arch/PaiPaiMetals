@@ -74,7 +74,9 @@
      "url": "https://www.northernminer.com/news/strike-curbs-output-at-canadas-largest-copper-mine/1003896047/"
     }
    ],
-   "first_seen": "2026-10-27T05:28:22+00:00"
+   "first_seen": "2026-10-27T05:28:22+00:00",
+   "title_zh": "泰克 Highland Valley 铜矿因罢工减产",
+   "summary_zh": "泰克资源称，加拿大最大铜矿 Highland Valley 在工人上周六罢工后以降负荷状态运行。"
   },
   {
    "id": "cb7450a903c71eca",
@@ -95,7 +97,9 @@
      "url": "https://www.internationaltin.org/usd181-million-raised-for-south-crofty-restart/?utm_source=rss&utm_medium=rss&utm_campaign=usd181-million-raised-for-south-crofty-restart"
     }
    ],
-   "first_seen": "2026-10-24T04:56:33+00:00"
+   "first_seen": "2026-10-24T04:56:33+00:00",
+   "title_zh": "South Crofty 锡矿重启募资 1.81 亿美元",
+   "summary_zh": "英国锡矿开发商 Cornish Metals 向现有及新投资者募资 1.35 亿英镑，约合 1.81 亿美元，用于康沃尔 South Crofty 锡矿重启。"
   },
   {
    "id": "ee24ffd262c98511",
@@ -116,7 +120,9 @@
      "url": "https://www.mining-technology.com/news/questcorp-acquire-final-49-north-island/"
     }
    ],
-   "first_seen": "2026-10-23T05:14:26+00:00"
+   "first_seen": "2026-10-23T05:14:26+00:00",
+   "title_zh": "Questcorp 将收购 North Island 铜矿项目剩余 49%",
+   "summary_zh": "Questcorp Mining 已签署协议，收购加拿大温哥华岛 North Island 铜矿项目剩余 49% 权益。"
   },
   {
    "id": "148dd8382845d9e4",
@@ -137,7 +143,9 @@
      "url": "https://im-mining.com/2026/10/22/thiess-wins-long-term-mining-services-contracts-in-mongolia/"
     }
    ],
-   "first_seen": "2026-10-23T05:14:26+00:00"
+   "first_seen": "2026-10-23T05:14:26+00:00",
+   "title_zh": "Thiess 获蒙古两项五年期采矿服务合同",
+   "summary_zh": "矿业服务商 Thiess 在蒙古获得两份五年期合同，将提供地下采矿服务。"
   },
   {
    "id": "faffcd9778d93a85",
@@ -158,7 +166,9 @@
      "url": "https://www.mining.com/southern-copper-weighs-680m-cuajone-mine-expansion/"
     }
    ],
-   "first_seen": "2026-10-23T05:14:26+00:00"
+   "first_seen": "2026-10-23T05:14:26+00:00",
+   "title_zh": "南方铜业评估 6.8 亿美元 Cuajone 扩产",
+   "summary_zh": "拟议的磨矿升级有望提升秘鲁 Cuajone 项目的铜、钼产量。"
   },
   {
    "id": "3a69a350888a24da",
@@ -179,7 +189,9 @@
      "url": "https://www.mining.com/lithiums-100b-question-who-will-build-134-new-mines/"
     }
    ],
-   "first_seen": "2026-10-22T05:15:30+00:00"
+   "first_seen": "2026-10-22T05:15:30+00:00",
+   "title_zh": "锂的千亿美元之问：谁建 134 座新矿",
+   "summary_zh": "BMI 预测到 2050 年锂需求将增长两倍以上，需大规模扩矿以满足电动车增长。"
   },
   {
    "id": "738c379aff5c8fe2",
@@ -200,7 +212,9 @@
      "url": "https://www.mining.com/first-quantums-kansanshi-expansion-beats-design-capacity/"
     }
    ],
-   "first_seen": "2026-10-22T05:15:30+00:00"
+   "first_seen": "2026-10-22T05:15:30+00:00",
+   "title_zh": "第一量子 Kansanshi 扩产超设计产能",
+   "summary_zh": "该赞比亚铜矿新处理设施投用后产量提升，2026 年目标矿石处理量 2,700 万吨。"
   },
   {
    "id": "14cadbf2a0d6384b",
@@ -1330,7 +1344,7 @@
   }
  ],
  "zh_coverage": {
-  "translated": 48,
+  "translated": 55,
   "total": 55
  }
 }
