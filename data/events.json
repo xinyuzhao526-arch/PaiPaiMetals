@@ -1,14 +1,14 @@
 {
- "generated_at": "2026-10-27T05:28:22+00:00",
+ "generated_at": "2026-10-28T06:10:03+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 4,
-   "dropped_screen": 3,
-   "new": 0
+   "matched_metal": 3,
+   "dropped_screen": 1,
+   "new": 2
   },
   {
    "source": "northernminer",
@@ -22,24 +22,24 @@
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 1,
-   "dropped_screen": 1,
-   "new": 0
+   "matched_metal": 2,
+   "dropped_screen": 0,
+   "new": 2
   },
   {
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 1,
-   "dropped_screen": 1,
+   "matched_metal": 2,
+   "dropped_screen": 2,
    "new": 0
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 10,
-   "dropped_screen": 7,
+   "matched_metal": 12,
+   "dropped_screen": 10,
    "new": 0
   },
   {
@@ -51,10 +51,116 @@
    "new": 0
   }
  ],
- "count": 55,
+ "count": 60,
  "pending": 0,
- "auto": 54,
+ "auto": 59,
  "events": [
+  {
+   "id": "7f2c9a7808bf1f1a",
+   "when": "2026-10-28",
+   "d": "2026-10-28",
+   "metals": [
+    "Li"
+   ],
+   "title": "PLS delivers record Pilgangoora lithium production",
+   "desc": "The Pilgangoora operation in Western Australia Image: PLS PLS has delivered record spodumene concentrate production of 267,600 tonnes at its Pilgangoora operation in Western Australia during the September quarter, a 25 p",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/pls-delivers-record-pilgangoora-lithium-production/"
+    }
+   ],
+   "first_seen": "2026-10-28T06:10:03+00:00"
+  },
+  {
+   "id": "af26873f55e66ed5",
+   "when": "2026-10-27",
+   "d": "2026-10-27",
+   "metals": [
+    "Cu"
+   ],
+   "title": "KEFI JV conditionally approves Jibal Qutman gold project",
+   "desc": "KEFI Gold and Copper’s Saudi joint venture (JV) Gold and Minerals Company (GMCO) has given conditional approval for the development of Stage 1 of the Jibal Qutman Gold Project in Saudi Arabia. The post KEFI JV conditiona",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/kefi-jv-approves-jibal-qutman-project/"
+    }
+   ],
+   "first_seen": "2026-10-28T06:10:03+00:00"
+  },
+  {
+   "id": "ccf1ce43c4d75de7",
+   "when": "2026-10-27",
+   "d": "2026-10-27",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Codelco copper mine blockade adds to supply concerns",
+   "desc": "Workers at Codelco’s Ministro Hales copper mine in northern Chile blocked access to the operation for about six hours on Monday in a dispute over unpaid bonuses following a serious... The post Codelco copper mine blockad",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/codelco-copper-mine-blockade-adds-to-supply-concerns/1003896154/"
+    }
+   ],
+   "first_seen": "2026-10-28T06:10:03+00:00"
+  },
+  {
+   "id": "afb7f384f66b3e4c",
+   "when": "2026-10-27",
+   "d": "2026-10-27",
+   "metals": [
+    "Fe",
+    "Li"
+   ],
+   "title": "First-of-its kind Pilbara power play brings Fortescue and PLS together",
+   "desc": "Image: agnormark/adobe.stock.com PLS has secured a minimum of 325 gigawatt-hours per annum of electricity for its Pilgangoora operation in Western Australia, supporting the project’s forecast power demand under the P2000",
+   "tag": "长协/包销",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/first-of-its-kind-pilbara-power-play-brings-fortescue-and-pls-together/"
+    }
+   ],
+   "first_seen": "2026-10-28T06:10:03+00:00"
+  },
+  {
+   "id": "e006a422a8e75a54",
+   "when": "2026-10-26",
+   "d": "2026-10-26",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Rio Tinto, LCL agree farm-in on PNG’s Liamu copper-gold project",
+   "desc": "Rio Tinto has signed a binding farm-in and joint venture agreement with LCL Resources to acquire up to an 80% interest in the Liamu copper-gold project in Papua New Guinea (PNG). The post Rio Tinto, LCL agree farm-in on ",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/rio-tinto-lcl-farm-in-liamu-project/"
+    }
+   ],
+   "first_seen": "2026-10-28T06:10:03+00:00"
+  },
   {
    "id": "6e07fd6823fd195f",
    "when": "2026-10-26",
@@ -1345,6 +1451,6 @@
  ],
  "zh_coverage": {
   "translated": 55,
-  "total": 55
+  "total": 60
  }
 }
