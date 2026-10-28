@@ -82,7 +82,11 @@ def call_api(base, key, model, batch):
         method="POST",
     )
     with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        body = json.loads(r.read().decode("utf-8"))
+        raw_body = r.read().decode("utf-8", "ignore")
+    try:
+        body = json.loads(raw_body)
+    except json.JSONDecodeError as exc:
+        raise ValueError("响应非 JSON（通道被拦截或凭据失效）：" + raw_body[:80].replace("\n", " ")) from exc
     text = body["choices"][0]["message"]["content"]
     m = re.search(r"\[.*\]", text, re.S)
     if not m:
@@ -107,10 +111,12 @@ def main():
     if args.check or not todo:
         return 0
 
-    key = os.environ.get("TRANSLATE_API_KEY") or os.environ.get("GITHUB_TOKEN") or ""
-    if not key:
-        print("[zh] 未配置 TRANSLATE_API_KEY / GITHUB_TOKEN，跳过编译；页面将显示英文标题并标注「待译」")
+    keys = [k for k in [(os.environ.get("TRANSLATE_API_KEY") or "").strip(),
+                        (os.environ.get("GITHUB_TOKEN") or "").strip()] if k]
+    if not keys:
+        print("::warning::未配置 TRANSLATE_API_KEY / GITHUB_TOKEN，跳过编译；页面将显示英文标题并标注「待译」")
         return 0
+    key = keys[0]
 
     if args.limit:
         todo = todo[:args.limit]
@@ -129,6 +135,9 @@ def main():
                 break
             except (urllib.error.URLError, urllib.error.HTTPError, ValueError, KeyError) as exc:
                 print(f"[zh] 批次 {start//BATCH+1} 第 {attempt+1} 次失败：{exc}")
+                if attempt == 0 and len(keys) > 1 and key != keys[-1]:
+                    key = keys[-1]
+                    print("[zh] 首通道失败，切换到备用通道（GITHUB_TOKEN）重试")
                 res = None
                 time.sleep(2)
         if not res:
@@ -151,7 +160,10 @@ def main():
     with open(args.src, "w", encoding="utf-8") as f:
         json.dump(d, f, ensure_ascii=False, indent=1)
         f.write("\n")
+    left = len(pending(d.get("events", [])))
     print(f"[zh] 新编译 {ok} 条，覆盖率 {d['zh_coverage']['translated']}/{d['zh_coverage']['total']}")
+    if left:
+        print(f"::warning::{left} 条仍无中文，页面将以英文显示并标注「待译」；请检查 TRANSLATE_API_KEY 与翻译通道")
     return 0
 
 
