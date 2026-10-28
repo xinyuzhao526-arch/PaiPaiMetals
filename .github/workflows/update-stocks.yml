@@ -9,8 +9,10 @@ name: Update stocks & supply events
 #                 过滤后入库：status=auto / src_level=media，页面显示蓝底「自动发布」，
 #                 无需人工逐条确认；已回溯一手来源的条目为 status=ok（页面「已核验」）。
 #   3) 中文编译：新增条目由 scripts/translate_events.py 生成 title_zh / summary_zh
-#                 需要一把外部大模型 key（OpenAI 兼容接口），配置为仓库 Secret TRANSLATE_API_KEY，
-#                 并用仓库 Variables 指定 TRANSLATE_API_BASE / TRANSLATE_MODEL。
+#                 需要一把外部大模型 key（OpenAI 兼容接口），配置为仓库 Secret TRANSLATE_API_KEY 即可。
+#                 默认通道 DeepSeek（api.deepseek.com/v1，deepseek-chat），境内可直连、无需代理；
+#                 换服务商时用仓库 Variables 覆盖 TRANSLATE_API_BASE / TRANSLATE_MODEL。
+#                 调用发生在 GitHub 的 runner 上，与本地网络无关，访客也不需要任何代理。
 #                 注意：GitHub 自带的 Models 接口（models.github.ai）已不再返回补全，
 #                 仅回 200 + "OK"，不可再用作翻译通道。
 #                 缺 key 或缺通道时页面显示英文并标「待译」，不阻断其余流程。
@@ -54,9 +56,10 @@ jobs:
       - name: Translate new events to Chinese (best effort)
         continue-on-error: true
         env:
+          # 只有 Secret 是必填项；不填 Variables 时默认走 DeepSeek（境内可直连，无需任何代理）
           TRANSLATE_API_KEY: ${{ secrets.TRANSLATE_API_KEY }}
-          TRANSLATE_API_BASE: ${{ vars.TRANSLATE_API_BASE }}
-          TRANSLATE_MODEL: ${{ vars.TRANSLATE_MODEL }}
+          TRANSLATE_API_BASE: ${{ vars.TRANSLATE_API_BASE || 'https://api.deepseek.com/v1' }}
+          TRANSLATE_MODEL: ${{ vars.TRANSLATE_MODEL || 'deepseek-chat' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 scripts/translate_events.py --in data/events.json
 
