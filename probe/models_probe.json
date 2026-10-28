@@ -1,0 +1,22 @@
+{
+ "base": "https://models.github.ai/inference",
+ "env": {
+  "github_token": true,
+  "translate_key": false
+ },
+ "results": {
+  "github_token|openai/gpt-4o-mini": {
+   "ok": true,
+   "status": 200,
+   "head": "OK\r\n"
+  },
+  "github_token|openai/gpt-4.1-mini": {
+   "ok": true,
+   "status": 200,
+   "head": "OK\r\n"
+  },
+  "translate_key": {
+   "skipped": "empty"
+  }
+ }
+}
