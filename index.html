@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>矿端公开核验台 · 多金属</title>
+<title>铜</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
@@ -326,8 +326,8 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-si
   <div class="main" id="top">
     <div class="top">
       <div>
-        <p class="kicker" id="kicker">Public multi-metal verification desk</p>
-        <h1 id="page-title">多金属 · 公开核验</h1>
+        <p class="kicker" id="kicker">COPPER</p>
+        <h1 id="page-title">铜</h1>
         <p class="lead" id="page-lead">侧栏切换品种，共用同一地图与抽屉。</p>
       </div>
       <div class="meta-pills" id="meta-pills"></div>
@@ -495,8 +495,8 @@ const THEMES = {
     "map_bg": "#dbeafe",
     "hover": "#eff6ff",
     "active_row": "#dbeafe",
-    "title": "铜 · 全球矿端公开核验",
-    "kicker": "Public mine verification desk",
+    "title": "铜",
+    "kicker": "COPPER",
     "lead": "七金属统一页：侧栏切换 Cu / Fe / Al / Li / Ni / Pb·Zn / Sn；圆点=样本点，点击可打开公开来源。",
     "pills": "品种 <strong>Cu</strong> · 全球矿端 <strong>23.0 Mt</strong>",
     "banner": "铜：以矿山含铜为主；圆点=样本点，颜色=核验状态。",
@@ -517,8 +517,8 @@ const THEMES = {
     "map_bg": "#ccfbf1",
     "hover": "#f0fdfa",
     "active_row": "#ccfbf1",
-    "title": "铝 · 全链公开核验",
-    "kicker": "Public aluminium verification desk",
+    "title": "铝",
+    "kicker": "ALUMINIUM",
     "lead": "铝链三层：铝土矿 → 氧化铝 → 原铝。勿把矿石吨与金属吨混排。",
     "pills": "品种 <strong>Al</strong> · 全球原铝 2025 <strong>73.8 Mt</strong>",
     "banner": "铝：地图可筛铝土矿/冶炼。全球原铝 IAI 口径；中国产量多源对照。",
@@ -539,8 +539,8 @@ const THEMES = {
     "map_bg": "#fef9c3",
     "hover": "#fefce8",
     "active_row": "#fef9c3",
-    "title": "铅锌 · 矿端与精炼公开核验",
-    "kicker": "Public lead & zinc verification desk",
+    "title": "铅锌",
+    "kicker": "LEAD & ZINC",
     "lead": "精矿含锌与精炼锌分列；勿直接相加。",
     "pills": "品种 <strong>Pb/Zn</strong> · 精炼锌缺口 <strong>33 kt</strong>",
     "banner": "铅锌：ILZSG 2025 精炼锌缺口 33 kt；矿山与精炼分列。",
@@ -555,8 +555,8 @@ const THEMES = {
     "accent": "#0f766e",
     "accent2": "#115e59",
     "grad": "linear-gradient(145deg,#2dd4bf,#0f766e 60%,#115e59)",
-    "kicker": "锡 · 矿山/精锡核验",
-    "title": "锡供给公开核验",
+    "kicker": "TIN",
+    "title": "锡",
     "lead": "矿山 Sn / 精矿含锡 / 精锡 / 出口 / 库存分层，禁止混加。",
     "banner": "锡：USGS 矿山与云锡/Minsur/Timah/Alphamin 等精锡并列。",
     "rank_h": "锡样本榜 · 矿山/精锡分层",
@@ -577,8 +577,8 @@ const THEMES = {
     "accent": "#7c3aed",
     "accent2": "#5b21b6",
     "grad": "linear-gradient(145deg,#a78bfa,#7c3aed 60%,#5b21b6)",
-    "kicker": "锂 · LCE/盐/精矿核验",
-    "title": "锂供给公开核验",
+    "kicker": "LITHIUM",
+    "title": "锂",
     "lead": "LCE / 锂盐 / SC / 金属锂分层，禁止混加。",
     "banner": "锂：盐湖与硬岩口径并列。",
     "rank_h": "锂样本榜 · LCE/SC 分层",
@@ -599,8 +599,8 @@ const THEMES = {
     "accent": "#b45309",
     "accent2": "#92400e",
     "grad": "linear-gradient(145deg,#f59e0b,#b45309 60%,#92400e)",
-    "kicker": "铁 · 可用矿/发运核验",
-    "title": "铁矿公开核验",
+    "kicker": "IRON ORE",
+    "title": "铁",
     "lead": "可用矿 / 湿吨发运 / 球团 / 粗钢分层，禁止混加。",
     "banner": "铁：四大矿与港口库存。",
     "rank_h": "铁样本榜 · 可用矿/发运分层",
@@ -621,8 +621,8 @@ const THEMES = {
     "accent": "#0369a1",
     "accent2": "#0c4a6e",
     "grad": "linear-gradient(145deg,#38bdf8,#0369a1 60%,#0c4a6e)",
-    "kicker": "镍 · 矿山/原生/NPI 核验",
-    "title": "镍供给公开核验",
+    "kicker": "NICKEL",
+    "title": "镍",
     "lead": "矿山 Ni / 原生 / Class1 / NPI 分层，禁止混加。",
     "banner": "镍：印尼与硫化镍体系并列。",
     "rank_h": "镍样本榜 · 矿山/原生/NPI 分层",
@@ -984,7 +984,7 @@ function applyTheme(m){
   set('meta-pills', `<span class="pill">${th.pills}</span><span class="pill">样本点 <strong id="mine-count">—</strong></span><span class="pill" id="baseline-pill" title="榜单 / 产量追踪 / 来源总表 / 事件为人工核验快照，不自动更新；库存与供给事件池为自动刷新">研究数据基线 <strong>${DATA_BASELINE}</strong></span><span class="pill">底图 <strong>Esri</strong></span>`, true);
   set('rail-note', `品种：Cu/Fe/Al/Li/Ni/Pb·Zn/Sn<br>底图：Esri World Street<br>库存自动刷新 · <strong>${th.note||''}</strong><br>研究数据基线：<strong>${DATA_BASELINE}</strong>`, true);
   set('foot-left', '矿端公开核验台 · 统一页 · '+(th.note||m));
-  document.title = '矿端公开核验台 · ' + (METAL_LABEL[m]||m);
+  document.title = th.title || (METAL_LABEL[m]||m);
 }
 function unitLabel(r){ return r.unit || 'kt'; }
 function passFilter(r){
