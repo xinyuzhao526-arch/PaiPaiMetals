@@ -1,60 +1,145 @@
 {
- "generated_at": "2026-10-29T06:19:41+00:00",
+ "generated_at": "2026-10-30T06:19:09+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 4,
-   "dropped_screen": 2,
+   "matched_metal": 3,
+   "dropped_screen": 1,
    "new": 1
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 4,
-   "dropped_screen": 4,
+   "matched_metal": 6,
+   "dropped_screen": 6,
    "new": 0
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 0,
-   "dropped_screen": 0,
-   "new": 0
+   "matched_metal": 2,
+   "dropped_screen": 1,
+   "new": 1
   },
   {
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 3,
-   "dropped_screen": 3,
-   "new": 0
+   "matched_metal": 1,
+   "dropped_screen": 0,
+   "new": 1
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 11,
-   "dropped_screen": 8,
-   "new": 1
+   "matched_metal": 13,
+   "dropped_screen": 12,
+   "new": 0
   },
   {
    "source": "ita",
    "ok": true,
    "items": 10,
-   "matched_metal": 8,
+   "matched_metal": 9,
    "dropped_screen": 5,
-   "new": 0
+   "new": 1
   }
  ],
- "count": 62,
+ "count": 66,
  "pending": 0,
- "auto": 61,
+ "auto": 65,
  "events": [
+  {
+   "id": "764ce39d633f46ee",
+   "when": "2026-10-30",
+   "d": "2026-10-30",
+   "metals": [
+    "Cu",
+    "PbZn"
+   ],
+   "title": "Aurelia Metals hits eight-year cash flow high",
+   "desc": "Image: mirwanto/stock.adobe.com Aurelia Metals has delivered its strongest quarterly operating cash flow since 2018 as rising gold, copper and zinc production strengthens its financial position ahead of a major processin",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/aurelia-metals-hits-eight-year-cash-flow-high/"
+    }
+   ],
+   "first_seen": "2026-10-30T06:19:09+00:00"
+  },
+  {
+   "id": "606d76cebfeb3489",
+   "when": "2026-10-29",
+   "d": "2026-10-29",
+   "metals": [
+    "Al"
+   ],
+   "title": "KAP Minerals, Cymat to advance scandium-aluminium alloy JV in Canada",
+   "desc": "KAP Minerals and Cymat Technologies have agreed to advance a potential joint venture (JV) focused on producing and commercialising scandium-aluminium master alloy in Canada. The post KAP Minerals, Cymat to advance scandi",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/kap-cymat-scandium-aluminium-alloy-jv/"
+    }
+   ],
+   "first_seen": "2026-10-30T06:19:09+00:00"
+  },
+  {
+   "id": "dde37be6c48063ad",
+   "when": "2026-10-29",
+   "d": "2026-10-29",
+   "metals": [
+    "Li"
+   ],
+   "title": "Rio Tinto celebrates opening of $1.4 billion lithium projects in Argentina",
+   "desc": "President of Argentina Javier Milei and Catamarca Governor Raúl Jalil joined Rio Tinto Chief Executive Simon Trott this week to celebrate a major milestone for Argentina’s lithium industry, marking the official opening o",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "im-mining",
+   "links": [
+    {
+     "label": "im-mining 原文",
+     "url": "https://im-mining.com/2026/10/29/rio-tinto-celebrates-opening-of-1-4-billion-lithium-projects-in-argentina/"
+    }
+   ],
+   "first_seen": "2026-10-30T06:19:09+00:00"
+  },
+  {
+   "id": "8c3e4b1e6b043fd2",
+   "when": "2026-10-29",
+   "d": "2026-10-29",
+   "metals": [
+    "Sn"
+   ],
+   "title": "Solidcore approves Syrymbet construction",
+   "desc": "Kazakh gold producer Solidcore Resources (AIX: CORE) has approved construction of the 6 ktpa Syrymbet tin mine in northern Kazakhstan, with production expected to begin in H2 2029. The company, which acquired a 55% stake",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "ita",
+   "links": [
+    {
+     "label": "ita 原文",
+     "url": "https://www.internationaltin.org/solidcore-approves-syrymbet-construction/?utm_source=rss&utm_medium=rss&utm_campaign=solidcore-approves-syrymbet-construction"
+    }
+   ],
+   "first_seen": "2026-10-30T06:19:09+00:00"
+  },
   {
    "id": "15aae1408d412d5f",
    "when": "2026-10-28",
@@ -1493,6 +1578,6 @@
  ],
  "zh_coverage": {
   "translated": 55,
-  "total": 62
+  "total": 66
  }
 }
