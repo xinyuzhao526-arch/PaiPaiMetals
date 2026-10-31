@@ -1,22 +1,22 @@
 {
- "generated_at": "2026-10-30T06:19:09+00:00",
+ "generated_at": "2026-10-31T06:10:27+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 3,
+   "matched_metal": 2,
    "dropped_screen": 1,
-   "new": 1
+   "new": 0
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 6,
+   "matched_metal": 7,
    "dropped_screen": 6,
-   "new": 0
+   "new": 1
   },
   {
    "source": "australianmining",
@@ -24,7 +24,7 @@
    "items": 5,
    "matched_metal": 2,
    "dropped_screen": 1,
-   "new": 1
+   "new": 0
   },
   {
    "source": "im-mining",
@@ -32,14 +32,14 @@
    "items": 12,
    "matched_metal": 1,
    "dropped_screen": 0,
-   "new": 1
+   "new": 0
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 13,
-   "dropped_screen": 12,
+   "matched_metal": 12,
+   "dropped_screen": 11,
    "new": 0
   },
   {
@@ -48,13 +48,34 @@
    "items": 10,
    "matched_metal": 9,
    "dropped_screen": 5,
-   "new": 1
+   "new": 0
   }
  ],
- "count": 66,
+ "count": 67,
  "pending": 0,
- "auto": 65,
+ "auto": 66,
  "events": [
+  {
+   "id": "f2eb7efaded28616",
+   "when": "2026-10-30",
+   "d": "2026-10-30",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Rio begins Oyu Tolgoi copper restart after rockfall",
+   "desc": "Rio Tinto (ASX, LSE, NYSE: RIO) said it’s progressively restarting underground operations at Mongolia’s Oyu Tolgoi mine a day after a seismic event triggered a rockfall, stopping production at a... The post Rio begins Oy",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/rio-begins-oyu-tolgoi-copper-restart-after-rockfall/1003896401/"
+    }
+   ],
+   "first_seen": "2026-10-31T06:10:27+00:00"
+  },
   {
    "id": "764ce39d633f46ee",
    "when": "2026-10-30",
@@ -1578,6 +1599,6 @@
  ],
  "zh_coverage": {
   "translated": 55,
-  "total": 66
+  "total": 67
  }
 }
