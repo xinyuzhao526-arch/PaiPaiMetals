@@ -1,46 +1,46 @@
 {
- "generated_at": "2026-11-04T06:55:14+00:00",
+ "generated_at": "2026-11-05T07:14:51+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 3,
-   "dropped_screen": 2,
+   "matched_metal": 4,
+   "dropped_screen": 4,
    "new": 0
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 3,
-   "dropped_screen": 3,
-   "new": 0
+   "matched_metal": 4,
+   "dropped_screen": 2,
+   "new": 2
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 2,
-   "dropped_screen": 2,
+   "matched_metal": 0,
+   "dropped_screen": 0,
    "new": 0
   },
   {
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 3,
-   "dropped_screen": 1,
-   "new": 2
+   "matched_metal": 4,
+   "dropped_screen": 3,
+   "new": 1
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
    "matched_metal": 12,
-   "dropped_screen": 11,
-   "new": 1
+   "dropped_screen": 10,
+   "new": 0
   },
   {
    "source": "ita",
@@ -51,10 +51,73 @@
    "new": 0
   }
  ],
- "count": 71,
+ "count": 74,
  "pending": 0,
- "auto": 70,
+ "auto": 73,
  "events": [
+  {
+   "id": "5507a33f5ceff399",
+   "when": "2026-11-05",
+   "d": "2026-11-05",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Fluor to act as EPCM contractor for new grinding line expansion at Sierra Gorda",
+   "desc": "Fluor Corporation says it has received full notice to proceed under its engineering, procurement and construction management (EPCM) contract with Sierra Gorda Sociedad Contractual Minera (SGSCM) for the Fourth Grinding L",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "im-mining",
+   "links": [
+    {
+     "label": "im-mining 原文",
+     "url": "https://im-mining.com/2026/11/05/fluor-to-act-as-epcm-contractor-for-new-grinding-line-expansion-at-sierra-gorda/"
+    }
+   ],
+   "first_seen": "2026-11-05T07:14:51+00:00"
+  },
+  {
+   "id": "c2557aefe55a27c6",
+   "when": "2026-11-04",
+   "d": "2026-11-04",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Freeport approves $4.5B Bagdad copper expansion",
+   "desc": "Freeport-McMoRan (NYSE: FCX) has approved a $4.5-billion (C$6.3 billion) expansion of its Bagdad mine in Arizona that would more than double copper output, bolstering domestic... The post Freeport approves $4.5B Bagdad c",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/freeport-approves-4-5b-bagdad-copper-expansion/1003897395/"
+    }
+   ],
+   "first_seen": "2026-11-05T07:14:51+00:00"
+  },
+  {
+   "id": "b02266fe44983e46",
+   "when": "2026-11-04",
+   "d": "2026-11-04",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Friedland’s Ivanhoe slashes copper outlook again",
+   "desc": "Robert Friedland’s Ivanhoe Mines (TSX: IVN; US-OTC: IVPAF) has cut next year’s copper production outlook at Kamoa-Kakula by 19% as recovery work at the flood-hit... The post Friedland’s Ivanhoe slashes copper outlook aga",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/friedlands-ivanhoe-slashes-copper-outlook-again/1003897389/"
+    }
+   ],
+   "first_seen": "2026-11-05T07:14:51+00:00"
+  },
   {
    "id": "e20f310e4138f381",
    "when": "2026-11-03",
@@ -1683,6 +1746,6 @@
  ],
  "zh_coverage": {
   "translated": 55,
-  "total": 71
+  "total": 74
  }
 }
