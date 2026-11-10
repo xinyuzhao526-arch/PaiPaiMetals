@@ -87,6 +87,7 @@ def main():
     ap.add_argument('--ack', default='', help='仅把条目从队列移除，不改数据')
     ap.add_argument('--list', action='store_true')
     ap.add_argument('--dry-run', action='store_true')
+    ap.add_argument('--force', action='store_true', help='允许写入期间不可比（comparable=false）的条目')
     args = ap.parse_args()
 
     pend = load(PENDING, {'schema': 1, 'items': [], 'count': 0})
@@ -120,6 +121,9 @@ def main():
 
     applied = []
     for it in sel:
+        if it.get('comparable') is False and not args.force:
+            print('  ! 期间不可比，已跳过：%s %s（确认要改数请加 --force）' % (it['id'], it.get('target') or ''))
+            continue
         if args.dry_run:
             print('[dry-run] 将写入 %s %s %s' % (it['id'], it['kind'], it.get('target')))
             continue
