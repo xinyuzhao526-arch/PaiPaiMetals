@@ -123,6 +123,42 @@ def aliases(name):
     return out
 
 
+def period_class(text):
+    """粗分期间口径，只用于判断「两个数字能不能直接替换」，不做任何换算。
+
+    分类：quarter 季度 / half 半年 / ytd 年初至今 / estimate 估算·指引 /
+          annual 全年实际 / month 月度 / point 具体日期 / unknown
+    估算与 YTD 刻意不与全年实际同归一类：它们能看进展，但不能直接覆盖实际值。
+    """
+    t = (text or '').lower().strip()
+    if not t:
+        return 'unknown'
+    if re.search(r'q[1-4]\b|quarter|季度|three months|3 months', t):
+        return 'quarter'
+    if re.search(r'h1|h2|half[- ]year|半年|six months|9m|nine months|前九个月|前三季', t):
+        return 'half'
+    if re.search(r'ytd|year[- ]to[- ]date|年初至今|累计', t):
+        return 'ytd'
+    if re.search(r'estimat|forecast|guidance|预计|预估|指引|指导', t):
+        return 'estimate'
+    # 2025e / 2025f / 2025e USGS / 2025f ITA / 2025–26e
+    if re.match(r'^(19|20)\d{2}\s*[–—~]\s*\d{2,4}\s*[ef]?$', t):
+        return 'estimate' if t.rstrip().endswith(('e', 'f')) else 'annual'
+    if re.match(r'^(19|20)\d{2}\s*[ef]\b', t):
+        return 'estimate'
+    if re.fullmatch(r'(19|20)\d{2}-\d{2}', t):
+        return 'month'
+    if re.fullmatch(r'(19|20)\d{2}-\d{2}-\d{2}', t):
+        return 'point'
+    if re.search(r'(fy|cy)\s*\d{2,4}\s*[ef]\b', t):
+        return 'estimate'
+    if re.search(r'fy\s*\d|cy\s*\d|full[- ]year|全年|年度|annual|year ended', t):
+        return 'annual'
+    if re.match(r'^(19|20)\d{2}(\s|[+＋]|$)', t):
+        return 'annual'
+    return 'unknown'
+
+
 def parse_figure(text):
     """从新闻标题/摘要里摘出产量数字，统一折算成 kt；换算不了的原样返回"""
     for m in RE_NUM.finditer(text or ''):
@@ -135,12 +171,12 @@ def parse_figure(text):
         if unit in ('blb', 'mlb'):          # 十亿磅 / 百万磅 → 万吨(kt) 含铜量口径不成立，只做量级提示
             continue
         if unit == 'kt':
-            return v, 'kt', m.group(0)
+            return v, 'kt', m.group(0), m.start()
         if unit in ('mt',):
-            return v * 1000, 'kt', m.group(0)
+            return v * 1000, 'kt', m.group(0), m.start()
         if unit in ('tonnes', 'tons'):
-            return v / 1000.0, 'kt', m.group(0)
-    return None, None, None
+            return v / 1000.0, 'kt', m.group(0), m.start()
+    return None, None, None, -1
 
 
 def main():
@@ -230,18 +266,46 @@ def main():
             continue
         text = '%s %s' % (ev.get('title') or '', ev.get('desc') or '')
         low = text.lower()
-        val, unit, raw = parse_figure(text)
-        if val is None:
+        val, unit, raw, pos = parse_figure(text)
+        if val is None or val < 1:
+            continue
+        # 必须是产量/发运语境，否则「40 tonnes of ...」这类句子会被误当产量
+        PROD_WORDS = ('production', 'output', 'produced', 'shipment', 'shipped',
+                      '产量', '产出', '发运', '装运', '采出', '生产')
+        # 看数字附近的语境：产能/扩建/年化 是另一回事，不能当成实际产量
+        CAP_WORDS = ('capacity', 'capacity of', 'expansion', 'per annum', 'annualised',
+                     'annualized', 'nameplate', 'target', '产能', '扩建', '年产能', '规划')
+        win = low[max(0, pos - 90): pos + 90]
+        if not any(w in win for w in PROD_WORDS):
+            continue
+        if any(w in win for w in CAP_WORDS):
             continue
         hits = []
         for a in set(re.findall(r'[a-z0-9一-龥\-]{4,}', low)):
             for metal, sec, row in name_index.get(a, []):
                 hits.append((metal, sec, row))
+        # 优先比对产量追踪行（有 actualAsOf，能判期间），其次才是榜单行
+        hits.sort(key=lambda h: 0 if h[1] == 'TRACK' else 1)
+        _seen_event = set()
         for metal, sec, row in hits[:3]:
+            if (ev.get('id'), metal) in _seen_event:
+                continue
+            _seen_event.add((ev.get('id'), metal))
+            if re.search(r'扩建|产能|指引|capacity|expansion|guidance', row.get('name') or '', re.I):
+                continue
             key = (ev.get('id'), metal, row.get('name'))
             if key in seen:
                 continue
             seen.add(key)
+            row_period = period_class(str(row.get('actualAsOf') or ''))
+            news_period = period_class(text + ' ' + str(ev.get('title_zh') or ''))
+            # 只有「两边期间都能识别且一致」才算可直接替换；识别不出就按不可比处理
+            comparable = (row_period == news_period
+                          and row_period in ('annual', 'quarter', 'half'))
+            if comparable:
+                flag = '【期间一致：%s】' % row_period
+            else:
+                flag = '【期间不可比：新闻 %s vs 行内 %s】' % (news_period, row_period)
             items.append({
                 'id': 'news-%s' % hashlib.sha1(('%s|%s|%s' % (ev.get('id'), metal, row.get('name'))).encode()).hexdigest()[:10],
                 'kind': 'news_number',
@@ -256,8 +320,11 @@ def main():
                 'period': str(ev.get('d') or ''),
                 'source': ev.get('src') or 'media',
                 'url': ((ev.get('links') or [{}])[0] or {}).get('url'),
-                'reason': '新闻披露 %s（%s 口径，期间以原文为准），与「%s」对得上；确认期间与口径后决定是否改数' % (
-                    raw, unit, row.get('name')),
+                'comparable': comparable,
+                'reason': '%s 新闻披露 %s（%s 口径），与「%s」对得上；%s' % (
+                    flag, raw, unit, row.get('name'),
+                    '期间一致，核对单位与基准后可按 --ids 写入' if comparable
+                    else '不能直接替换，只作进展参考；确需按新闻改数请加 --force'),
             })
 
     # ── 三、重大供给事件：把强信号新闻整理成时间轴草稿 ───────────────────
@@ -279,9 +346,16 @@ def main():
             continue
         metals = ev.get('metals') or []
         body = '%s %s' % (ev.get('title') or '', ev.get('desc') or '')
-        val, unit, raw = parse_figure(body)
+        val, unit, raw, _pos = parse_figure(body)
         # 只要「有明确数字」或「强事件词」的条目，避免把常规行业稿塞进时间轴
         if val is None and not any(w in body.lower() for w in STRONG_WORDS):
+            continue
+        # 价格评论不是供给事件：标题谈价/涨跌，且没有硬停产类事实，就不进时间轴
+        title = (ev.get('title') or '') + ' ' + (ev.get('title_zh') or '')
+        PRICE = ('铜价', '铝价', '镍价', '锡价', '锌价', '铅价', '锂价', '铁矿石价格',
+                 '价格', 'price', '涨', '跌', '上行', '下挫')
+        HARD = ('停产', '复产', '不可抗力', '事故', '关闭', '暂停', '禁令', '配额', '许可', '国有化')
+        if any(w in title.lower() for w in PRICE) and not any(w in title for w in HARD):
             continue
         items.append({
             'id': eid,
