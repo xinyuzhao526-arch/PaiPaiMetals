@@ -691,6 +691,61 @@ var METAL_DATA = {"Cu":{"CHANGES":[{"id":"grasberg-2025","when":"2025-09 起","t
    每次改动研究内容（新增点数、修订吨位、换来源）务必同步 bump 这里的日期。 */
 const DATA_BASELINE = '2026-09-24';
 
+/* ── 定期更新层 ──────────────────────────────────────────────
+   data/research_overlay.json：人工确认后的修订，渲染时叠加到 METAL_DATA 之上；
+   data/research_pending.json：自动扫描出的待核对条目，仅用于计数提示。
+   两者都不改写内置快照，各板块自己记 as_of。 */
+let BASELINE_LABEL = DATA_BASELINE;
+let RESEARCH_OVERLAY = null;
+let RESEARCH_PENDING = null;
+let QUIET_RENDER = false;
+
+function overlayApply(row, it){
+  if(!row) return;
+  if(it.set) Object.assign(row, it.set);
+  if(it.append){
+    Object.keys(it.append).forEach(function(k){
+      const v=String(it.append[k]);
+      if(String(row[k]||'').indexOf(v)>=0) return;
+      row[k] = row[k] ? (row[k]+'｜'+v) : v;
+    });
+  }
+}
+function applyResearchOverlay(m){
+  const P = RESEARCH_OVERLAY && RESEARCH_OVERLAY.patch && RESEARCH_OVERLAY.patch[m];
+  if(!P) return;
+  (P.RANK||[]).forEach(it=>overlayApply(RANK.find(r=>r.name===it.name), it));
+  (P.TRACK||[]).forEach(it=>overlayApply(TRACK.find(r=>r.name===it.name), it));
+  (P.SOURCES||[]).forEach(it=>overlayApply(SOURCES.find(r=>r.field===it.field), it));
+  (P.CHANGES||[]).forEach(it=>{
+    if(it.row){
+      const i=CHANGES.findIndex(r=>r.id===it.row.id);
+      if(i>=0) Object.assign(CHANGES[i], it.row); else CHANGES.push(it.row);
+    }else{
+      overlayApply(CHANGES.find(r=>r.id===it.id), it);
+    }
+  });
+}
+function researchAsOf(){
+  const sec=(RESEARCH_OVERLAY&&RESEARCH_OVERLAY.sections)||{};
+  let d=DATA_BASELINE;
+  Object.keys(sec).forEach(k=>{ const v=sec[k]&&sec[k].as_of; if(v&&v>d) d=v; });
+  return d;
+}
+async function loadResearchOverlay(){
+  try{
+    const r=await fetch('data/research_overlay.json',{cache:'no-store'});
+    if(r.ok){ const j=await r.json(); if(j&&j.patch) RESEARCH_OVERLAY=j; }
+  }catch(e){ /* 本地打开时读不到，保留内置快照 */ }
+  try{
+    const r=await fetch('data/research_pending.json',{cache:'no-store'});
+    if(r.ok){ RESEARCH_PENDING=await r.json(); }
+  }catch(e){}
+  BASELINE_LABEL=researchAsOf();
+  QUIET_RENDER=true;
+  try{ loadMetal(currentMetal,false); }finally{ QUIET_RENDER=false; }
+}
+
 /* ===== 口径分层注记层（人工核对）=====
    TRACK 原表把四种层级混在同一张表里：单点资产 / 企业合计 / 国家·地区 / 全球总量，
    另有库存·平衡·政策·贸易等非产量口径。本表只补三项标注，不改动任何原始数值：
@@ -982,8 +1037,8 @@ function applyTheme(m){
   set('bench1-lbl', th.bench1_lbl);
   set('bench1-val', th.bench1_val);
   set('bench1-sub', th.bench1_sub);
-  set('meta-pills', `<span class="pill">${th.pills}</span><span class="pill">样本点 <strong id="mine-count">—</strong></span><span class="pill" id="baseline-pill" title="榜单 / 产量追踪 / 来源总表 / 事件为人工核验快照，不自动更新；库存与供给事件池为自动刷新">研究数据基线 <strong>${DATA_BASELINE}</strong></span><span class="pill">底图 <strong>Esri</strong></span>`, true);
-  set('rail-note', `品种：Cu/Fe/Al/Li/Ni/Pb·Zn/Sn<br>底图：Esri World Street<br>库存自动刷新 · <strong>${th.note||''}</strong><br>研究数据基线：<strong>${DATA_BASELINE}</strong>`, true);
+  set('meta-pills', `<span class="pill">${th.pills}</span><span class="pill">样本点 <strong id="mine-count">—</strong></span><span class="pill" id="baseline-pill" title="榜单 / 产量追踪 / 来源总表 / 事件为人工核验快照；每周自动扫描待核对条目，确认后写入覆盖层并推进时点；库存与供给事件池每交易日自动刷新">研究数据基线 <strong>${BASELINE_LABEL}</strong></span>${RESEARCH_PENDING&&RESEARCH_PENDING.count?`<span class="pill" id="pending-pill" title="自动扫描出的研究与披露待核对条目，处理方式见 scripts/apply_research.py">待核 <strong>${RESEARCH_PENDING.count}</strong></span>`:''}<span class="pill">底图 <strong>Esri</strong></span>`, true);
+  set('rail-note', `品种：Cu/Fe/Al/Li/Ni/Pb·Zn/Sn<br>底图：Esri World Street<br>库存自动刷新 · <strong>${th.note||''}</strong><br>研究数据基线：<strong>${BASELINE_LABEL}</strong>`, true);
   set('foot-left', '矿端公开核验台 · 统一页 · '+(th.note||m));
   document.title = th.title || (METAL_LABEL[m]||m);
 }
@@ -1654,6 +1709,7 @@ function loadMetal(m, pushUrl=true){
   currentMetal=m;
   const d=METAL_DATA[m];
   CHANGES=d.CHANGES||[]; INV=d.INV||[]; RANK=d.RANK||[]; TRACK=d.TRACK||[]; SOURCES=d.SOURCES||[];
+  applyResearchOverlay(m);
   applyTheme(m);
   document.querySelectorAll('#metal-switch button[data-metal]').forEach(b=>b.classList.toggle('on', b.dataset.metal===m));
   buildFilters();
@@ -1666,7 +1722,7 @@ function loadMetal(m, pushUrl=true){
     try{ const u=new URL(location.href); u.searchParams.set('metal', m); history.replaceState(null,'',u); }catch(e){}
   }
   closeDrawer();
-  toast('已切换：'+(METAL_LABEL[m]||m)+` · 榜单 ${RANK.length} · 追踪 ${TRACK.length}`);
+  if(!QUIET_RENDER) toast('已切换：'+(METAL_LABEL[m]||m)+` · 榜单 ${RANK.length} · 追踪 ${TRACK.length}`);
 }
 function setBase(key){
   if(!map || !baseLayers[key]) return;
@@ -2029,6 +2085,7 @@ function boot(){
     watchRankCard();
     window.addEventListener('resize', ()=>{ syncEventCard(); syncRankCard(); });
     loadLiveEvents();
+    loadResearchOverlay();
   }catch(err){
     console.error(err);
     const el=document.getElementById('page-lead');
