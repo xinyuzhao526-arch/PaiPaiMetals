@@ -927,7 +927,7 @@ const METAL_LABEL = {Cu:'Cu', Al:'Al', PbZn:'Pb/Zn', Ni:'Ni', Sn:'Sn', Li:'Li', 
 let currentMetal = 'Cu'; try { currentMetal = (new URLSearchParams(location.search||'').get('metal')) || 'Cu'; } catch(e) { currentMetal='Cu'; }
 if (!METAL_DATA[currentMetal]) currentMetal = 'Cu';
 let CHANGES=[], INV=[], RANK=[], TRACK=[], SOURCES=[];
-let POOL=[];  /* data/events.json：自动抓取的供给事件池，默认「待确认」 */
+let POOL=[], POOL_GEN='';  /* data/events.json：自动抓取的供给事件池，默认「待确认」 */
 const EVENT_METAL = {Cu:['Cu'], Al:['Al'], PbZn:['Zn','Pb','PbZn'], Ni:['Ni'], Sn:['Sn'], Li:['Li'], Fe:['Fe']};
 function eventList(metal){
   const keys = EVENT_METAL[metal] || [metal];
@@ -949,6 +949,7 @@ async function loadLiveEvents(){
     const r = await fetch('data/events.json', {cache:'no-store'});
     if(!r.ok) throw new Error('HTTP ' + r.status);
     const j = await r.json();
+    POOL_GEN = j.generated_at || '';
     POOL = (j.events||[]).filter(e=>e && e.id && e.title);
     renderPanels();
   }catch(e){ /* 静默：保留页内基线事件，不影响其余功能 */ }
@@ -956,6 +957,12 @@ async function loadLiveEvents(){
 let region='全部', mode='project', sortKey='actual', mapFilter='all';
 let map, markerLayer, markersByN={}, mapReady=false, baseLayers={}, currentBase=null;
 
+function fmtGen(iso){
+  if(!iso) return '';
+  const d=new Date(iso); if(isNaN(d.getTime())) return '';
+  const b=new Date(d.getTime()+8*3600*1000), p=n=>String(n).padStart(2,'0');
+  return b.getUTCFullYear()+'-'+p(b.getUTCMonth()+1)+'-'+p(b.getUTCDate())+' '+p(b.getUTCHours())+':'+p(b.getUTCMinutes());
+}
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function chip(st){
   return st==='ok' ? '<span class="chip ok">已核验</span>'
@@ -1274,6 +1281,7 @@ function renderPanels(){
     if(pend) extra.push('待确认 '+pend+' 条（黄底）');
     if(nzh) extra.push('英文原文已编译中文摘要 '+nzh+' 条'+(nz0?'（'+nz0+' 条待译）':''));
     if(m) m.innerHTML = '按事件时点倒序（年度/财年取期末，区间取末段）· 共 <strong>'+evs.length+'</strong> 条，滚动查看更早'
+      + (POOL_GEN?' · 新闻池更新于 <strong>'+fmtGen(POOL_GEN)+'</strong>（北京时间）':' · 新闻池未加载，显示页内基线')
       + (extra.length?'<br><span style="color:#5b6472">'+extra.join(' · ')+' · 口径以链接原文为准</span>':'');
     const wrap=ch.closest('.ev-wrap');
     if(wrap){
