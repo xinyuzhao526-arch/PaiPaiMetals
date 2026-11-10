@@ -1,8 +1,8 @@
 {
  "schema": 1,
- "generated_at": "2026-11-10T06:08:32",
+ "generated_at": "2026-11-10T06:12:43",
  "window_days": 45,
- "count": 31,
+ "count": 19,
  "report": {
   "track_rows": 154,
   "stale": {
@@ -182,22 +182,6 @@
    "reason": "Fe 有 2/15 行产量口径超过 270 天未更新，最早到 2025-06-30；需按最新季报/年报核定后改数"
   },
   {
-   "id": "news-fe7ee0519e",
-   "kind": "news_number",
-   "metal": "Li",
-   "section": "RANK",
-   "target": "Pilgangoora（PLS）",
-   "field": "kt",
-   "current": 879.5,
-   "suggested": 267.6,
-   "unit": "kt",
-   "raw": "267,600 tonnes",
-   "period": "2026-10-28",
-   "source": "australianmining",
-   "url": "https://www.australianmining.com.au/pls-delivers-record-pilgangoora-lithium-production/",
-   "reason": "新闻披露 267,600 tonnes（kt 口径，期间以原文为准），与「Pilgangoora（PLS）」对得上；确认期间与口径后决定是否改数"
-  },
-  {
    "id": "news-08898daaca",
    "kind": "news_number",
    "metal": "Li",
@@ -211,119 +195,8 @@
    "period": "2026-10-28",
    "source": "australianmining",
    "url": "https://www.australianmining.com.au/pls-delivers-record-pilgangoora-lithium-production/",
-   "reason": "新闻披露 267,600 tonnes（kt 口径，期间以原文为准），与「Pilgangoora SC」对得上；确认期间与口径后决定是否改数"
-  },
-  {
-   "id": "news-b84f355f2d",
-   "kind": "news_number",
-   "metal": "Fe",
-   "section": "RANK",
-   "target": "Fortescue 发运（含 Iron Bridge）",
-   "field": "kt",
-   "current": 198.4,
-   "suggested": 0.04,
-   "unit": "kt",
-   "raw": "40 tonnes",
-   "period": "2026-10-19",
-   "source": "mining-technology",
-   "url": "https://www.mining-technology.com/news/fortescue-copper-cleaned-arsenic-removal/",
-   "reason": "新闻披露 40 tonnes（kt 口径，期间以原文为准），与「Fortescue 发运（含 Iron Bridge）」对得上；确认期间与口径后决定是否改数"
-  },
-  {
-   "id": "news-f33d5c3607",
-   "kind": "news_number",
-   "metal": "Fe",
-   "section": "TRACK",
-   "target": "Fortescue 发运",
-   "field": "actual",
-   "current": 198.4,
-   "suggested": 0.04,
-   "unit": "kt",
-   "raw": "40 tonnes",
-   "period": "2026-10-19",
-   "source": "mining-technology",
-   "url": "https://www.mining-technology.com/news/fortescue-copper-cleaned-arsenic-removal/",
-   "reason": "新闻披露 40 tonnes（kt 口径，期间以原文为准），与「Fortescue 发运」对得上；确认期间与口径后决定是否改数"
-  },
-  {
-   "id": "news-14bdee97cc",
-   "kind": "news_number",
-   "metal": "Fe",
-   "section": "RANK",
-   "target": "Fortescue 发运（含 Iron Bridge）",
-   "field": "kt",
-   "current": 198.4,
-   "suggested": 0.04,
-   "unit": "kt",
-   "raw": "40 tonnes",
-   "period": "2026-10-19",
-   "source": "im-mining",
-   "url": "https://im-mining.com/2026/10/19/fortescues-world-first-arsenic-removal-tech-unlocks-new-copper-processing-potential/",
-   "reason": "新闻披露 40 tonnes（kt 口径，期间以原文为准），与「Fortescue 发运（含 Iron Bridge）」对得上；确认期间与口径后决定是否改数"
-  },
-  {
-   "id": "news-9eef6182df",
-   "kind": "news_number",
-   "metal": "Fe",
-   "section": "TRACK",
-   "target": "Fortescue 发运",
-   "field": "actual",
-   "current": 198.4,
-   "suggested": 0.04,
-   "unit": "kt",
-   "raw": "40 tonnes",
-   "period": "2026-10-19",
-   "source": "im-mining",
-   "url": "https://im-mining.com/2026/10/19/fortescues-world-first-arsenic-removal-tech-unlocks-new-copper-processing-potential/",
-   "reason": "新闻披露 40 tonnes（kt 口径，期间以原文为准），与「Fortescue 发运」对得上；确认期间与口径后决定是否改数"
-  },
-  {
-   "id": "news-1a7b90f8bf",
-   "kind": "news_number",
-   "metal": "Li",
-   "section": "RANK",
-   "target": "P2000 扩建（PLS）",
-   "field": "kt",
-   "current": 2000,
-   "suggested": 2000.0,
-   "unit": "kt",
-   "raw": "2 Mt",
-   "period": "2026-10-16",
-   "source": "im-mining",
-   "url": "https://im-mining.com/2026/10/16/pls-greenlights-p2000-project-as-it-aims-for-2-mt-y-of-spodumene-production-capacity/",
-   "reason": "新闻披露 2 Mt（kt 口径，期间以原文为准），与「P2000 扩建（PLS）」对得上；确认期间与口径后决定是否改数"
-  },
-  {
-   "id": "news-e744aa5153",
-   "kind": "news_number",
-   "metal": "Li",
-   "section": "RANK",
-   "target": "Pilgangoora（PLS）",
-   "field": "kt",
-   "current": 879.5,
-   "suggested": 2000.0,
-   "unit": "kt",
-   "raw": "2 Mt",
-   "period": "2026-10-16",
-   "source": "im-mining",
-   "url": "https://im-mining.com/2026/10/16/pls-greenlights-p2000-project-as-it-aims-for-2-mt-y-of-spodumene-production-capacity/",
-   "reason": "新闻披露 2 Mt（kt 口径，期间以原文为准），与「Pilgangoora（PLS）」对得上；确认期间与口径后决定是否改数"
-  },
-  {
-   "id": "news-81bcb195c8",
-   "kind": "news_number",
-   "metal": "Li",
-   "section": "TRACK",
-   "target": "Pilgangoora SC",
-   "field": "actual",
-   "current": 879.5,
-   "suggested": 2000.0,
-   "unit": "kt",
-   "raw": "2 Mt",
-   "period": "2026-10-16",
-   "source": "im-mining",
-   "url": "https://im-mining.com/2026/10/16/pls-greenlights-p2000-project-as-it-aims-for-2-mt-y-of-spodumene-production-capacity/",
-   "reason": "新闻披露 2 Mt（kt 口径，期间以原文为准），与「Pilgangoora SC」对得上；确认期间与口径后决定是否改数"
+   "comparable": false,
+   "reason": "【期间不可比：新闻 quarter vs 行内 annual】 新闻披露 267,600 tonnes（kt 口径），与「Pilgangoora SC」对得上；不能直接替换，只作进展参考；确需按新闻改数请加 --force"
   },
   {
    "id": "chg-47d12a43d7",
@@ -494,34 +367,6 @@
    "reason": "强信号供给事件，建议人工确认后并入重大供给事件时间轴"
   },
   {
-   "id": "chg-8e15ad2b78",
-   "kind": "changes_draft",
-   "metal": "Cu",
-   "section": "CHANGES",
-   "target": "美国通胀冲击叠加智利罢工风险缓和，铜价三连跌",
-   "suggested": null,
-   "period": "2026-10-15",
-   "source": "mining.com",
-   "url": "https://www.mining.com/copper-price-falls-for-third-day-as-us-inflation-shock-easing-chile-strike-risk-spur-selloff/",
-   "row": {
-    "id": "auto-8e15ad2b78",
-    "when": "2026-10",
-    "title": "美国通胀冲击叠加智利罢工风险缓和，铜价三连跌",
-    "desc": "美国通胀数据超预期与智利罢工风险降温同时出现，触发获利了结，铜价连续第三日下跌。口径：属价格与情绪面波动，不改变供需平衡判断。",
-    "tag": "供给扰动",
-    "status": "pend",
-    "detail": "媒体口径（mining.com），数值未并入榜单/追踪，确认后补 detail",
-    "links": [
-     {
-      "label": "mining.com 原文",
-      "url": "https://www.mining.com/copper-price-falls-for-third-day-as-us-inflation-shock-easing-chile-strike-risk-spur-selloff/"
-     }
-    ],
-    "d": "2026-10-15"
-   },
-   "reason": "强信号供给事件，建议人工确认后并入重大供给事件时间轴"
-  },
-  {
    "id": "chg-dadff91fd1",
    "kind": "changes_draft",
    "metal": "Cu",
@@ -543,34 +388,6 @@
      {
       "label": "northernminer 原文",
       "url": "https://www.northernminer.com/news/bhp-averts-strike-at-worlds-biggest-copper-mine-2/1003895736/"
-     }
-    ],
-    "d": "2026-10-14"
-   },
-   "reason": "强信号供给事件，建议人工确认后并入重大供给事件时间轴"
-  },
-  {
-   "id": "chg-f1f885a659",
-   "kind": "changes_draft",
-   "metal": "Cu",
-   "section": "CHANGES",
-   "target": "机构上调 2026 年铜价预测，关税「崩塌」情形仍未排除",
-   "suggested": null,
-   "period": "2026-10-14",
-   "source": "mining.com",
-   "url": "https://www.mining.com/copper-price-forecasts-lifted-for-2026-but-tariff-collapse-still-on-the-table/",
-   "row": {
-    "id": "auto-f1f885a659",
-    "when": "2026-10",
-    "title": "机构上调 2026 年铜价预测，关税「崩塌」情形仍未排除",
-    "desc": "机构上调 2026 年铜价预测；麦格理的「崩塌」情形需华盛顿明确排除关税，被列为概率最低，更可能的情形是 1 月 1 日后维持悬置，150 万吨美国铜继续滞留当地。口径：属预测与情景假设。",
-    "tag": "供给扰动",
-    "status": "pend",
-    "detail": "媒体口径（mining.com），数值未并入榜单/追踪，确认后补 detail",
-    "links": [
-     {
-      "label": "mining.com 原文",
-      "url": "https://www.mining.com/copper-price-forecasts-lifted-for-2026-but-tariff-collapse-still-on-the-table/"
      }
     ],
     "d": "2026-10-14"
@@ -602,34 +419,6 @@
      }
     ],
     "d": "2026-10-12"
-   },
-   "reason": "强信号供给事件，建议人工确认后并入重大供给事件时间轴"
-  },
-  {
-   "id": "chg-189a068882",
-   "kind": "changes_draft",
-   "metal": "Cu",
-   "section": "CHANGES",
-   "target": "智利罢工威胁产量，铜价上行",
-   "suggested": null,
-   "period": "2026-10-08",
-   "source": "northernminer",
-   "url": "https://www.northernminer.com/news/copper-price-gains-as-chile-strike-threatens-output/1003895558/",
-   "row": {
-    "id": "auto-189a068882",
-    "when": "2026-10",
-    "title": "智利罢工威胁产量，铜价上行",
-    "desc": "Antofagasta 旗下 Centinela 逾 700 名工人罢工，引发产出中断担忧，铜价周四走高。口径：属价格反应，实际减产幅度未定。",
-    "tag": "供给扰动",
-    "status": "pend",
-    "detail": "媒体口径（northernminer），数值未并入榜单/追踪，确认后补 detail",
-    "links": [
-     {
-      "label": "northernminer 原文",
-      "url": "https://www.northernminer.com/news/copper-price-gains-as-chile-strike-threatens-output/1003895558/"
-     }
-    ],
-    "d": "2026-10-08"
    },
    "reason": "强信号供给事件，建议人工确认后并入重大供给事件时间轴"
   },
@@ -714,34 +503,6 @@
      }
     ],
     "d": "2026-10-01"
-   },
-   "reason": "强信号供给事件，建议人工确认后并入重大供给事件时间轴"
-  },
-  {
-   "id": "chg-6c0d0a0ded",
-   "kind": "changes_draft",
-   "metal": "Cu",
-   "section": "CHANGES",
-   "target": "智利罢工风险升温，铜价守住 14,400 美元上方",
-   "suggested": null,
-   "period": "2026-09-29",
-   "source": "mining.com",
-   "url": "https://www.mining.com/copper-holds-above-14400-as-chile-strike-risk-grows/",
-   "row": {
-    "id": "auto-6c0d0a0ded",
-    "when": "2026-09",
-    "title": "智利罢工风险升温，铜价守住 14,400 美元上方",
-    "desc": "Antofagasta 旗下 Centinela 的薪资方案被拒，供给担忧加剧，铜价有望连续第三个月上涨。口径：价格为报道口径，未注明交易所与合约月份。",
-    "tag": "供给扰动",
-    "status": "pend",
-    "detail": "媒体口径（mining.com），数值未并入榜单/追踪，确认后补 detail",
-    "links": [
-     {
-      "label": "mining.com 原文",
-      "url": "https://www.mining.com/copper-holds-above-14400-as-chile-strike-risk-grows/"
-     }
-    ],
-    "d": "2026-09-29"
    },
    "reason": "强信号供给事件，建议人工确认后并入重大供给事件时间轴"
   }
