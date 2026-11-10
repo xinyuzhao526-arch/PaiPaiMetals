@@ -23,7 +23,7 @@ name: Update stocks & supply events
 # 合规：仅抓取公开页面与公开 RSS；不抓取任何会员制 / 付费内容。
 on:
   schedule:
-    - cron: '30 0 * * 2-6'
+    - cron: '30 0 * * *'   # 每天 00:30 UTC = 08:30 北京时间（含周一）
   workflow_dispatch:
 
 permissions:
