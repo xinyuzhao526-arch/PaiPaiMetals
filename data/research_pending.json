@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generated_at": "2026-11-10T05:43:23",
+ "generated_at": "2026-11-10T06:08:32",
  "window_days": 45,
  "count": 31,
  "report": {
@@ -278,6 +278,22 @@
    "reason": "新闻披露 40 tonnes（kt 口径，期间以原文为准），与「Fortescue 发运」对得上；确认期间与口径后决定是否改数"
   },
   {
+   "id": "news-1a7b90f8bf",
+   "kind": "news_number",
+   "metal": "Li",
+   "section": "RANK",
+   "target": "P2000 扩建（PLS）",
+   "field": "kt",
+   "current": 2000,
+   "suggested": 2000.0,
+   "unit": "kt",
+   "raw": "2 Mt",
+   "period": "2026-10-16",
+   "source": "im-mining",
+   "url": "https://im-mining.com/2026/10/16/pls-greenlights-p2000-project-as-it-aims-for-2-mt-y-of-spodumene-production-capacity/",
+   "reason": "新闻披露 2 Mt（kt 口径，期间以原文为准），与「P2000 扩建（PLS）」对得上；确认期间与口径后决定是否改数"
+  },
+  {
    "id": "news-e744aa5153",
    "kind": "news_number",
    "metal": "Li",
@@ -308,22 +324,6 @@
    "source": "im-mining",
    "url": "https://im-mining.com/2026/10/16/pls-greenlights-p2000-project-as-it-aims-for-2-mt-y-of-spodumene-production-capacity/",
    "reason": "新闻披露 2 Mt（kt 口径，期间以原文为准），与「Pilgangoora SC」对得上；确认期间与口径后决定是否改数"
-  },
-  {
-   "id": "news-1a7b90f8bf",
-   "kind": "news_number",
-   "metal": "Li",
-   "section": "RANK",
-   "target": "P2000 扩建（PLS）",
-   "field": "kt",
-   "current": 2000,
-   "suggested": 2000.0,
-   "unit": "kt",
-   "raw": "2 Mt",
-   "period": "2026-10-16",
-   "source": "im-mining",
-   "url": "https://im-mining.com/2026/10/16/pls-greenlights-p2000-project-as-it-aims-for-2-mt-y-of-spodumene-production-capacity/",
-   "reason": "新闻披露 2 Mt（kt 口径，期间以原文为准），与「P2000 扩建（PLS）」对得上；确认期间与口径后决定是否改数"
   },
   {
    "id": "chg-47d12a43d7",
