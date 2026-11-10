@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generated_at": "2026-11-10T06:12:43",
+ "generated_at": "2026-11-10T06:13:16",
  "window_days": 45,
  "count": 19,
  "report": {
@@ -196,6 +196,9 @@
    "source": "australianmining",
    "url": "https://www.australianmining.com.au/pls-delivers-record-pilgangoora-lithium-production/",
    "comparable": false,
+   "period_row": "annual",
+   "period_news": "quarter",
+   "period_mismatch": true,
    "reason": "【期间不可比：新闻 quarter vs 行内 annual】 新闻披露 267,600 tonnes（kt 口径），与「Pilgangoora SC」对得上；不能直接替换，只作进展参考；确需按新闻改数请加 --force"
   },
   {
