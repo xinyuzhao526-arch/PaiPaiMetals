@@ -321,6 +321,9 @@ def main():
                 'source': ev.get('src') or 'media',
                 'url': ((ev.get('links') or [{}])[0] or {}).get('url'),
                 'comparable': comparable,
+                'period_row': row_period,
+                'period_news': news_period,
+                'period_mismatch': not comparable,
                 'reason': '%s 新闻披露 %s（%s 口径），与「%s」对得上；%s' % (
                     flag, raw, unit, row.get('name'),
                     '期间一致，核对单位与基准后可按 --ids 写入' if comparable
