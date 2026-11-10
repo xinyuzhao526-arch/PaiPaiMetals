@@ -1,0 +1,12 @@
+{
+ "schema": 1,
+ "generated_at": "2026-11-10",
+ "note": "人工确认后的研究数据修订（RANK / TRACK / SOURCES / CHANGES）。页面渲染时叠加到 index.html 的 METAL_DATA 之上，各板块 as_of 为该板块最后一次确认更新的日期；未确认前页面仍按内置快照显示。",
+ "sections": {
+  "RANK": {"as_of": null},
+  "TRACK": {"as_of": null},
+  "SOURCES": {"as_of": null},
+  "CHANGES": {"as_of": null}
+ },
+ "patch": {}
+}
