@@ -23,6 +23,12 @@ import os
 import re
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    import ground_check as gc
+except Exception:  # 落地检查缺失时降级为不检查，不阻断主流程
+    gc = None
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX = os.path.join(ROOT, 'index.html')
 EVENTS = os.path.join(ROOT, 'data', 'events.json')
@@ -184,6 +190,7 @@ def main():
     ap.add_argument('--days', type=int, default=45, help='新闻回看天数')
     ap.add_argument('--out', default=os.path.join(ROOT, 'data', 'research_pending.json'))
     ap.add_argument('--stale-days', type=int, default=270, help='产量口径超过多少天视为过期')
+    ap.add_argument('--no-ground', action='store_true', help='跳过引用落地检查（不抓原文）')
     args = ap.parse_args()
 
     dismissed = set()
@@ -193,6 +200,23 @@ def main():
             dismissed = set(json.load(open(dpath, encoding='utf-8')).get('ids', []))
         except Exception:
             dismissed = set()
+
+    # 已经并入覆盖层的事件不再重复入队
+    applied_urls, applied_titles = set(), set()
+    opath = os.path.join(ROOT, 'data', 'research_overlay.json')
+    if os.path.exists(opath):
+        try:
+            ov = json.load(open(opath, encoding='utf-8'))
+            for m, secs in (ov.get('patch') or {}).items():
+                for it in (secs.get('CHANGES') or []):
+                    row = it.get('row') or {}
+                    if row.get('title'):
+                        applied_titles.add(row['title'])
+                    for l in (row.get('links') or []):
+                        if l.get('url'):
+                            applied_urls.add(l['url'])
+        except Exception:
+            pass
 
     data = load_metal_data()
     events = []
@@ -347,6 +371,11 @@ def main():
         eid = 'chg-' + hashlib.sha1(('%s|%s' % (ev.get('id'), ev.get('title'))).encode()).hexdigest()[:10]
         if any(i['id'] == eid for i in items):
             continue
+        _url = ((ev.get('links') or [{}])[0] or {}).get('url') or ''
+        if _url and _url in applied_urls:
+            continue
+        if (ev.get('title_zh') or ev.get('title')) in applied_titles:
+            continue
         metals = ev.get('metals') or []
         body = '%s %s' % (ev.get('title') or '', ev.get('desc') or '')
         val, unit, raw, _pos = parse_figure(body)
@@ -389,6 +418,21 @@ def main():
     for it in items:
         uniq.setdefault(it['id'], it)
     items = [it for it in uniq.values() if it['id'] not in dismissed]
+
+    # ── 四、引用落地检查：草稿说的数字/动作/主体能否在原文找到 ──────────
+    if gc is not None and not args.no_ground:
+        for it in items:
+            if it['kind'] != 'changes_draft':
+                continue
+            row = it.get('row') or {}
+            art = gc.fetch_article(it.get('url') or '')
+            g, miss, det = gc.check(row.get('title', ''), row.get('desc', ''), art)
+            it['grounded'] = g
+            it['ground_missing'] = miss
+            it['ground_notes'] = det.get('notes', [])
+        n_bad = sum(1 for i in items if i.get('grounded') is False)
+        if n_bad:
+            print('落地检查：%d 条草稿与原文对不上，需人工确认（--force 才能写入）' % n_bad)
 
     payload = {
         'schema': 1,
