@@ -3,10 +3,207 @@
  "generated_at": "2026-11-10",
  "note": "人工确认后的研究数据修订（RANK / TRACK / SOURCES / CHANGES）。页面渲染时叠加到 index.html 的 METAL_DATA 之上，各板块 as_of 为该板块最后一次确认更新的日期；未确认前页面仍按内置快照显示。",
  "sections": {
-  "RANK": {"as_of": null},
-  "TRACK": {"as_of": null},
-  "SOURCES": {"as_of": null},
-  "CHANGES": {"as_of": null}
+  "RANK": {
+   "as_of": null
+  },
+  "TRACK": {
+   "as_of": null
+  },
+  "SOURCES": {
+   "as_of": null
+  },
+  "CHANGES": {
+   "as_of": "2026-11-10"
+  }
  },
- "patch": {}
+ "patch": {
+  "Cu": {
+   "CHANGES": [
+    {
+     "row": {
+      "id": "auto-47d12a43d7",
+      "when": "2026-11",
+      "title": "Codelco 高报铜产量 4.21 万吨，Andina 尾矿泄漏停产",
+      "desc": "Codelco 披露铜产量高报合计 4.21 万吨（2024 年 2.4 万吨、上一年净 1.81 万吨），原因含未达成品标准即计入产量、同一批铜跨分部重复记录；同日 Andina 选厂因尾矿沟堵塞外泄停产，约 1–5 立方米尾矿流入 Blanco 河。",
+      "tag": "供给扰动",
+      "status": "ok",
+      "detail": "库存重复计账约 1.52 万吨；潜在存货调整 1.2–1.4 亿美元，数据仍待审计。｜2026-11-10 人工确认并入",
+      "links": [
+       {
+        "label": "northernminer 原文",
+        "url": "https://www.northernminer.com/news/codelco-faces-production-scandal-tailings-probe/1003897486/"
+       }
+      ],
+      "d": "2026-11-06"
+     }
+    },
+    {
+     "row": {
+      "id": "auto-0e5de2532e",
+      "when": "2026-11",
+      "title": "Codelco 因尾矿泄漏关停 Andina 选厂",
+      "desc": "Andina 选厂与尾矿输送在尾矿沟检出堵塞后停止运行，监管机构已介入调查并要求提交技术记录与整改报告。",
+      "tag": "供给扰动",
+      "status": "ok",
+      "detail": "外泄量约 1–5 立方米，早期水质检测未发现显著变化；影响产量未披露。｜2026-11-10 人工确认并入",
+      "links": [
+       {
+        "label": "mining.com 原文",
+        "url": "https://www.mining.com/codelco-halts-andina-mine-as-tailings-spill-threaten-river/"
+       }
+      ],
+      "d": "2026-11-05"
+     }
+    },
+    {
+     "row": {
+      "id": "auto-bd487a0ef6",
+      "when": "2026-10",
+      "title": "El Teniente 的 Andes Norte 扩建因地震风险停工",
+      "desc": "Codelco 8 月起暂停 El Teniente 的 Andes Norte 扩建段，技术评估认定深部地震风险与原先监测结论不同；2,460 名相关人员中 1,817 人（约 74%）已转岗。",
+      "tag": "扩产",
+      "status": "ok",
+      "detail": "属扩建项目停工，非在产产能下降；复产时点未定。｜2026-11-10 人工确认并入",
+      "links": [
+       {
+        "label": "mining.com 原文",
+        "url": "https://www.mining.com/codelco-relocates-74-of-workers-as-andes-norte-remains-halted/"
+       }
+      ],
+      "d": "2026-10-28"
+     }
+    },
+    {
+     "row": {
+      "id": "auto-a017a5866e",
+      "when": "2026-10",
+      "title": "泰克 Highland Valley 铜矿因罢工降负荷运行",
+      "desc": "加拿大最大铜矿 Highland Valley 在工人周六罢工后以降负荷状态运行，工会为 United Steelworkers Local 7619。",
+      "tag": "供给扰动",
+      "status": "ok",
+      "detail": "影响产量未披露。｜2026-11-10 人工确认并入",
+      "links": [
+       {
+        "label": "northernminer 原文",
+        "url": "https://www.northernminer.com/news/strike-curbs-output-at-canadas-largest-copper-mine/1003896047/"
+       }
+      ],
+      "d": "2026-10-26"
+     }
+    },
+    {
+     "row": {
+      "id": "auto-dadff91fd1",
+      "when": "2026-10",
+      "title": "必和必拓与 Escondida 监工工会达成初步协议，避免罢工",
+      "desc": "必和必拓与 Escondida 监工工会达成初步协议，避免全球最大铜矿发生罢工，协议仍待会员线上表决。",
+      "tag": "供给扰动",
+      "status": "ok",
+      "detail": "属风险解除，期间未发生停产，不构成实际供给损失。｜2026-11-10 人工确认并入",
+      "links": [
+       {
+        "label": "northernminer 原文",
+        "url": "https://www.northernminer.com/news/bhp-averts-strike-at-worlds-biggest-copper-mine-2/1003895736/"
+       }
+      ],
+      "d": "2026-10-14"
+     }
+    },
+    {
+     "row": {
+      "id": "auto-37195a7473",
+      "when": "2026-10",
+      "title": "El Teniente 南坑滑坡致 2 死，部分停产",
+      "desc": "El Teniente 南坑露天区发生滑坡，承包方 Aura Ingeniería 3 名作业人员中 2 人死亡、1 人获救；公司归因于智利中部强降雨，已部分暂停作业。",
+      "tag": "供给扰动",
+      "status": "ok",
+      "detail": "停产范围限于南坑相关作业，影响产量未披露。｜2026-11-10 人工确认并入",
+      "links": [
+       {
+        "label": "mining-technology 原文",
+        "url": "https://www.mining-technology.com/news/codelco-partially-halts-el-teniente-mine/"
+       }
+      ],
+      "d": "2026-10-12"
+     }
+    },
+    {
+     "row": {
+      "id": "auto-b0eba66a82",
+      "when": "2026-10",
+      "title": "Antofagasta 旗下 Centinela 罢工，运营受限",
+      "desc": "Centinela 700 余名工人罢工，占直接用工约 22%，此前与劳工局的调解未果；工会称停产将限制运营。",
+      "tag": "供给扰动",
+      "status": "ok",
+      "detail": "为 Centinela 首次罢工；原文的铜价表述已剔除，影响产量未披露。｜2026-11-10 人工确认并入",
+      "links": [
+       {
+        "label": "mining.com 原文",
+        "url": "https://www.mining.com/antofagastas-centinela-strike-adds-copper-supply-risk/"
+       }
+      ],
+      "d": "2026-10-07"
+     }
+    }
+   ]
+  },
+  "Li": {
+   "CHANGES": [
+    {
+     "row": {
+      "id": "auto-90df2718ab",
+      "when": "2026-11",
+      "title": "Sibanye 推迟芬兰 Keliber 锂项目一体化投产",
+      "desc": "Sibanye-Stillwater 对 Keliber 采取分阶段调试，先稳定采矿与选厂，再决定精炼厂投产时点；因锂供给增速快于需求、2026 年过剩扩大，精炼投产可能推迟到 2027 年或更晚。",
+      "tag": "扩产",
+      "status": "ok",
+      "detail": "原本条目的 PGM 减产属铂族金属，不纳入本表；锂端只保留 Keliber 投产节奏。｜2026-11-10 人工确认并入",
+      "links": [
+       {
+        "label": "mining.com 原文",
+        "url": "https://www.mining.com/sibanye-cuts-us-output-forecast-after-five-week-strike/"
+       }
+      ],
+      "d": "2026-11-05"
+     }
+    },
+    {
+     "row": {
+      "id": "auto-dd659c9931",
+      "when": "2026-10",
+      "title": "Pilgangoora 9 月季度精矿产量创纪录",
+      "desc": "PLS 的 Pilgangoora 在 9 月季度产锂辉石精矿 267,600 吨，环比增 25%，主因 Ngungaju 选厂复产。",
+      "tag": "产量",
+      "status": "ok",
+      "detail": "季度精矿实物吨，与年度产量口径不同，勿直接替换年度值。｜2026-11-10 人工确认并入",
+      "links": [
+       {
+        "label": "australianmining 原文",
+        "url": "https://www.australianmining.com.au/pls-delivers-record-pilgangoora-lithium-production/"
+       }
+      ],
+      "d": "2026-10-28"
+     }
+    },
+    {
+     "row": {
+      "id": "auto-e61cf99281",
+      "when": "2026-10",
+      "title": "巴西法院暂停 Sigma 锂矿环境许可，矿区全面停产",
+      "desc": "巴西联邦法院 9 月 4 日应 Quilombola 社区诉讼暂停 Grota do Cirilo 的环境许可与采矿，Sigma 已停止采矿与加工，并禁止州当局发放新许可。",
+      "tag": "政策监管",
+      "status": "ok",
+      "detail": "争点为 Baú 社区事前协商；复产取决于上诉法院裁决，公司未给时间表。｜2026-11-10 人工确认并入",
+      "links": [
+       {
+        "label": "northernminer 原文",
+        "url": "https://www.northernminer.com/news/brazil-court-order-idles-sigma-lithium-mine/1003895373/"
+       }
+      ],
+      "d": "2026-10-01"
+     }
+    }
+   ]
+  }
+ }
 }
