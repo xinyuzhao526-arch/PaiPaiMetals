@@ -1,8 +1,8 @@
 {
  "schema": 1,
- "generated_at": "2026-11-10T06:13:16",
+ "generated_at": "2026-11-10T06:42:05",
  "window_days": 45,
- "count": 8,
+ "count": 9,
  "report": {
   "track_rows": 154,
   "stale": {
@@ -200,7 +200,37 @@
    "period_news": "quarter",
    "period_mismatch": true,
    "reason": "【期间不可比：新闻 quarter vs 行内 annual】 新闻披露 267,600 tonnes（kt 口径），与「Pilgangoora SC」对得上；不能直接替换，只作进展参考；确需按新闻改数请加 --force"
+  },
+  {
+   "id": "chg-c0bec248e5",
+   "kind": "changes_draft",
+   "metal": "Cu",
+   "section": "CHANGES",
+   "target": "Codelco 董事长：需更多合作方以止住铜产量下滑",
+   "suggested": null,
+   "period": "2026-11-09",
+   "source": "northernminer",
+   "url": "https://www.northernminer.com/news/codelco-needs-partners-to-halt-copper-decline-chair/1003897573/",
+   "row": {
+    "id": "auto-c0bec248e5",
+    "when": "2026-11",
+    "title": "Codelco 董事长：需更多合作方以止住铜产量下滑",
+    "desc": "Codelco 董事长 Bernardo Fontaine 对圣地亚哥电台表示，公司需要与私营矿企开展更多合作，才能扭转铜产量下滑。",
+    "tag": "供给扰动",
+    "status": "pend",
+    "detail": "媒体口径（northernminer），数值未并入榜单/追踪，确认后补 detail",
+    "links": [
+     {
+      "label": "northernminer 原文",
+      "url": "https://www.northernminer.com/news/codelco-needs-partners-to-halt-copper-decline-chair/1003897573/"
+     }
+    ],
+    "d": "2026-11-09"
+   },
+   "reason": "强信号供给事件，建议人工确认后并入重大供给事件时间轴",
+   "grounded": true,
+   "ground_missing": [],
+   "ground_notes": []
   }
- ],
- "updated_at": "2026-11-10T06:34:36"
+ ]
 }
