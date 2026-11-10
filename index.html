@@ -1037,7 +1037,7 @@ function applyTheme(m){
   set('bench1-lbl', th.bench1_lbl);
   set('bench1-val', th.bench1_val);
   set('bench1-sub', th.bench1_sub);
-  set('meta-pills', `<span class="pill">${th.pills}</span><span class="pill">样本点 <strong id="mine-count">—</strong></span><span class="pill" id="baseline-pill" title="榜单 / 产量追踪 / 来源总表 / 事件为人工核验快照；每周自动扫描待核对条目，确认后写入覆盖层并推进时点；库存与供给事件池每交易日自动刷新">研究数据基线 <strong>${BASELINE_LABEL}</strong></span>${RESEARCH_PENDING&&RESEARCH_PENDING.count?`<span class="pill" id="pending-pill" title="自动扫描出的研究与披露待核对条目，处理方式见 scripts/apply_research.py">待核 <strong>${RESEARCH_PENDING.count}</strong></span>`:''}<span class="pill">底图 <strong>Esri</strong></span>`, true);
+  set('meta-pills', `<span class="pill">${th.pills}</span><span class="pill">样本点 <strong id="mine-count">—</strong></span><span class="pill" id="baseline-pill" title="榜单 / 产量追踪 / 来源总表 / 事件为人工核验快照；每周自动扫描待核对条目，确认后写入覆盖层并推进时点；库存与供给事件池每交易日自动刷新">研究数据基线 <strong>${BASELINE_LABEL}</strong></span>${RESEARCH_PENDING&&RESEARCH_PENDING.count?`<a class="pill" id="pending-pill" href="data/research_pending.json" target="_blank" rel="noopener" style="text-decoration:none" title="每周自动扫描出的研究与披露待核对条目，点开看明细；确认后用 scripts/apply_research.py 写入">待核 <strong>${RESEARCH_PENDING.count}</strong></a>`:''}<span class="pill">底图 <strong>Esri</strong></span>`, true);
   set('rail-note', `品种：Cu/Fe/Al/Li/Ni/Pb·Zn/Sn<br>底图：Esri World Street<br>库存自动刷新 · <strong>${th.note||''}</strong><br>研究数据基线：<strong>${BASELINE_LABEL}</strong>`, true);
   set('foot-left', '矿端公开核验台 · 统一页 · '+(th.note||m));
   document.title = th.title || (METAL_LABEL[m]||m);
