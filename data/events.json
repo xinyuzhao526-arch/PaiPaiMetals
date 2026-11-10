@@ -1,13 +1,13 @@
 {
- "generated_at": "2026-11-07T06:28:15+00:00",
+ "generated_at": "2026-11-10T06:21:30+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 4,
-   "dropped_screen": 2,
+   "matched_metal": 1,
+   "dropped_screen": 1,
    "new": 0
   },
   {
@@ -23,38 +23,131 @@
    "ok": true,
    "items": 5,
    "matched_metal": 2,
-   "dropped_screen": 1,
-   "new": 0
+   "dropped_screen": 0,
+   "new": 2
   },
   {
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 3,
+   "matched_metal": 2,
    "dropped_screen": 1,
-   "new": 1
+   "new": 0
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 11,
-   "dropped_screen": 8,
-   "new": 0
+   "matched_metal": 15,
+   "dropped_screen": 12,
+   "new": 1
   },
   {
    "source": "ita",
    "ok": true,
    "items": 10,
-   "matched_metal": 10,
+   "matched_metal": 9,
    "dropped_screen": 7,
    "new": 0
   }
  ],
- "count": 83,
+ "count": 87,
  "pending": 0,
- "auto": 82,
+ "auto": 86,
  "events": [
+  {
+   "id": "56a262b19095ec95",
+   "when": "2026-11-10",
+   "d": "2026-11-10",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Evolution seals $213m Carnaby acquisition",
+   "desc": "Image: Jason Bennee/stock.adobe.com Evolution Mining has completed its $213 million acquisition of Carnaby Resources, securing the Greater Duchess copper-gold project in north-west Queensland as it looks to expand produc",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/evolution-seals-213m-carnaby-acquisition/"
+    }
+   ],
+   "first_seen": "2026-11-10T06:21:30+00:00",
+   "title_zh": "Evolution 以 2.13 亿美元完成 Carnaby 收购",
+   "summary_zh": "Evolution Mining 完成对 Carnaby Resources 的 2.13 亿美元收购，取得昆士兰西北部 Greater Duchess 铜金项目，用于扩大产量。"
+  },
+  {
+   "id": "6923bd78d26a9e37",
+   "when": "2026-11-09",
+   "d": "2026-11-09",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Codelco needs partners to halt copper decline: chair",
+   "desc": "Chile’s state-owned Codelco needs more partnerships with private miners to halt its copper production decline, chairman Bernardo Fontaine told Santiago radio station Duna on Monday.... The post Codelco needs partners to ",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/codelco-needs-partners-to-halt-copper-decline-chair/1003897573/"
+    }
+   ],
+   "first_seen": "2026-11-10T06:21:30+00:00",
+   "title_zh": "Codelco 董事长：需更多合作方以止住铜产量下滑",
+   "summary_zh": "Codelco 董事长 Bernardo Fontaine 对圣地亚哥电台表示，公司需要与私营矿企开展更多合作，才能扭转铜产量下滑。"
+  },
+  {
+   "id": "aabd563febeb9e1b",
+   "when": "2026-11-09",
+   "d": "2026-11-09",
+   "metals": [
+    "Al"
+   ],
+   "title": "Metro Mining finds its rhythm at Bauxite Hills after September setbacks",
+   "desc": "Image: Roman Vasilenia/stock.adobe.com A faster shipping turnaround and improved mining performance have helped Metro Mining regain momentum at its Bauxite Hills operation in Far North Queensland, following production di",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/metro-mining-finds-its-rhythm-at-bauxite-hills-after-september-setbacks/"
+    }
+   ],
+   "first_seen": "2026-11-10T06:21:30+00:00",
+   "title_zh": "Metro Mining：Bauxite Hills 9 月受挫后恢复节奏",
+   "summary_zh": "更快的装船周转与采矿表现改善，帮助 Metro Mining 在产量受扰后恢复 Bauxite Hills 的运营节奏。"
+  },
+  {
+   "id": "9289fc8c6cd5aa56",
+   "when": "2026-11-09",
+   "d": "2026-11-09",
+   "metals": [
+    "Li",
+    "Ni"
+   ],
+   "title": "Eramet targets debt reset with lithium, nickel sales",
+   "desc": "Investors have expressed interest in a minority stake in Centenario-Ratones and a substantial part of Eramet’s 38.7% interest in Weda Bay Nickel.",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/eramet-targets-debt-reset-with-lithium-nickel-sales/"
+    }
+   ],
+   "first_seen": "2026-11-10T06:21:30+00:00",
+   "title_zh": "Eramet 拟出售锂、镍权益以重整债务",
+   "summary_zh": "投资者对 Centenario-Ratones 的少数股权，以及 Eramet 所持 Weda Bay Nickel 38.7% 权益中的相当部分表达了兴趣。"
+  },
   {
    "id": "d25f52dea2220524",
    "when": "2026-11-06",
@@ -1935,7 +2028,7 @@
   }
  ],
  "zh_coverage": {
-  "translated": 55,
-  "total": 83
+  "translated": 59,
+  "total": 87
  }
 }
