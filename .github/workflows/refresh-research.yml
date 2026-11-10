@@ -1,0 +1,75 @@
+name: Refresh research data (RANK / TRACK / SOURCES / CHANGES)
+
+# 研究数据定期扫描（每周一 08:45 北京时间；Actions 页可手动触发）
+#
+# 为什么不是全自动改数：
+#   这四类数据是逐条核过口径的快照 —— 季报是财年还是日历年、产量是精矿还是金属量、
+#   单点资产还是企业合计，机器判不准。写错一个数字比晚更新一周代价大得多。
+#   所以这里做的是：每周把「该更新的地方」扫出来写成队列 data/research_pending.json，
+#   页面上显示「待核 N」；人工确认后用 scripts/apply_research.py 一条命令
+#   写入 data/research_overlay.json，页面自动叠加并推进该板块的 as_of。
+#
+# 扫描口径：
+#   1) TRACK 过期体检 —— actualAsOf 折算日期超过 --stale-days（默认 270 天）的行
+#   2) 新闻里的产量数字 —— 与 RANK/TRACK 主体名对得上，给出「现值 vs 新闻值」供核对
+#   3) 重大供给事件草稿 —— 强信号（停产/复产/罢工/配额/关税…）或带明确数字的条目
+#
+# 确认动作（本地或 Codespaces 执行，改完 commit）：
+#   python3 scripts/apply_research.py --list
+#   python3 scripts/apply_research.py --ids <id1>,<id2>
+#   python3 scripts/apply_research.py --ack <id>       # 确认无需处理
+#
+# 合规：只读仓库内已抓取的公开新闻与内置快照，不访问任何会员制/付费内容。
+on:
+  schedule:
+    - cron: '45 0 * * 1'      # 每周一 00:45 UTC = 08:45 北京时间
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: research-refresh
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Scan stale rows / disclosure numbers / supply-event drafts
+        run: python3 scripts/research_refresh.py --days 45
+
+      - name: Job summary
+        run: |
+          python3 - <<'PY' >> $GITHUB_STEP_SUMMARY
+          import json
+          d=json.load(open('data/research_pending.json'))
+          print('### 研究数据周扫：待核对 %d 条' % d['count'])
+          for k,v in sorted(d['report']['stale'].items()):
+              print('- %s：%d/%d 行产量口径过期，最早 %s' % (k, v['n'], v['of'], v['oldest']))
+          kinds={}
+          for it in d['items']:
+              kinds[it['kind']]=kinds.get(it['kind'],0)+1
+          print('\n' + ' · '.join('%s %d' % (k,v) for k,v in kinds.items()))
+          print('\n确认方式：`python3 scripts/apply_research.py --list` → 按 id 写入覆盖层。')
+          PY
+
+      - name: Commit pending queue if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/research_pending.json
+          if git diff --staged --quiet; then
+            echo "队列无变化，跳过提交"
+          else
+            git commit -m "chore(research): 每周扫描待核对条目 $(date -u +%F)"
+            git push
+          fi
