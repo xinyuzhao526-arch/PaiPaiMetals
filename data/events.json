@@ -1,60 +1,102 @@
 {
- "generated_at": "2026-11-10T06:21:30+00:00",
+ "generated_at": "2026-11-11T06:55:18+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 1,
+   "matched_metal": 3,
    "dropped_screen": 1,
-   "new": 0
+   "new": 2
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
    "matched_metal": 6,
-   "dropped_screen": 4,
-   "new": 1
+   "dropped_screen": 6,
+   "new": 0
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 2,
+   "matched_metal": 0,
    "dropped_screen": 0,
-   "new": 2
+   "new": 0
   },
   {
    "source": "im-mining",
    "ok": true,
    "items": 12,
-   "matched_metal": 2,
-   "dropped_screen": 1,
+   "matched_metal": 3,
+   "dropped_screen": 3,
    "new": 0
   },
   {
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 15,
-   "dropped_screen": 12,
-   "new": 1
+   "matched_metal": 11,
+   "dropped_screen": 10,
+   "new": 0
   },
   {
    "source": "ita",
    "ok": true,
    "items": 10,
-   "matched_metal": 9,
-   "dropped_screen": 7,
+   "matched_metal": 8,
+   "dropped_screen": 6,
    "new": 0
   }
  ],
- "count": 87,
+ "count": 89,
  "pending": 0,
- "auto": 86,
+ "auto": 88,
  "events": [
+  {
+   "id": "cb009bab62e7291b",
+   "when": "2026-11-10",
+   "d": "2026-11-10",
+   "metals": [
+    "Fe"
+   ],
+   "title": "Arrow secures option to acquire Pannawonica iron ore project",
+   "desc": "Arrow Minerals has signed a binding agreement to secure an option to acquire the Pannawonica Iron Ore Project from Red Hill Minerals. The post Arrow secures option to acquire Pannawonica iron ore project appeared first o",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/arrow-to-acquire-pannawonica-iron-ore/"
+    }
+   ],
+   "first_seen": "2026-11-11T06:55:18+00:00"
+  },
+  {
+   "id": "ab855b77063f3cf7",
+   "when": "2026-11-10",
+   "d": "2026-11-10",
+   "metals": [
+    "Sn"
+   ],
+   "title": "Alphamin signs tin supply deal with Nathan Trotter",
+   "desc": "Alphamin Resources has entered an agreement to provide a portion of its tin concentrate production from the Bisie mine in the Democratic Republic of Congo (DRC) to Nathan Trotter in the US. The post Alphamin signs tin su",
+   "tag": "长协/包销",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/alphamin-tin-supply-nathan-trotter/"
+    }
+   ],
+   "first_seen": "2026-11-11T06:55:18+00:00"
+  },
   {
    "id": "56a262b19095ec95",
    "when": "2026-11-10",
@@ -2029,6 +2071,6 @@
  ],
  "zh_coverage": {
   "translated": 59,
-  "total": 87
+  "total": 89
  }
 }
