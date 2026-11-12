@@ -1,21 +1,21 @@
 {
- "generated_at": "2026-11-11T06:55:18+00:00",
+ "generated_at": "2026-11-12T07:31:46+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 3,
-   "dropped_screen": 1,
-   "new": 2
+   "matched_metal": 5,
+   "dropped_screen": 3,
+   "new": 0
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 6,
-   "dropped_screen": 6,
+   "matched_metal": 4,
+   "dropped_screen": 4,
    "new": 0
   },
   {
@@ -38,9 +38,9 @@
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 11,
-   "dropped_screen": 10,
-   "new": 0
+   "matched_metal": 16,
+   "dropped_screen": 14,
+   "new": 1
   },
   {
    "source": "ita",
@@ -51,10 +51,31 @@
    "new": 0
   }
  ],
- "count": 89,
+ "count": 90,
  "pending": 0,
- "auto": 88,
+ "auto": 89,
  "events": [
+  {
+   "id": "e36a6ce3db5d24f3",
+   "when": "2026-11-11",
+   "d": "2026-11-11",
+   "metals": [
+    "Ni"
+   ],
+   "title": "EverMetal acquires UK critical metals recycler Advanced Alloys",
+   "desc": "The purchase adds nickel, cobalt and specialty metals processing capabilities to a growing recycling network serving global industries.",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/evermetal-acquires-uk-critical-metals-recycler-advanced-alloys/"
+    }
+   ],
+   "first_seen": "2026-11-12T07:31:46+00:00"
+  },
   {
    "id": "cb009bab62e7291b",
    "when": "2026-11-10",
@@ -2071,6 +2092,6 @@
  ],
  "zh_coverage": {
   "translated": 59,
-  "total": 89
+  "total": 90
  }
 }
