@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-15T06:57:11+00:00",
+ "generated_at": "2026-11-16T07:02:18+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
@@ -22,14 +22,17 @@
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 1,
-   "dropped_screen": 0,
-   "new": 0
+   "matched_metal": 4,
+   "dropped_screen": 1,
+   "new": 3
   },
   {
    "source": "im-mining",
-   "ok": false,
-   "error": "HTTP Error 415: Unsupported Media Type"
+   "ok": true,
+   "items": 12,
+   "matched_metal": 1,
+   "dropped_screen": 1,
+   "new": 0
   },
   {
    "source": "mining.com",
@@ -41,14 +44,80 @@
   },
   {
    "source": "ita",
-   "ok": false,
-   "error": "HTTP Error 415: Unsupported Media Type"
+   "ok": true,
+   "items": 10,
+   "matched_metal": 8,
+   "dropped_screen": 5,
+   "new": 0
   }
  ],
- "count": 94,
+ "count": 97,
  "pending": 0,
- "auto": 93,
+ "auto": 96,
  "events": [
+  {
+   "id": "1b7dde8c268924af",
+   "when": "2026-11-16",
+   "d": "2026-11-16",
+   "metals": [
+    "Al"
+   ],
+   "title": "Rio Tinto breaks ground on Weipa’s next chapter",
+   "desc": "Image: Timon/stock.adobe.com Rio Tinto has marked the start of construction activity at its $2.6 billion Kangwinan bauxite project in Queensland, paving the way for a major expansion of its Weipa operations. The mileston",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/rio-tinto-breaks-ground-on-weipas-next-chapter/"
+    }
+   ],
+   "first_seen": "2026-11-16T07:02:18+00:00"
+  },
+  {
+   "id": "2b466f8a20cd0da0",
+   "when": "2026-11-16",
+   "d": "2026-11-16",
+   "metals": [
+    "Ni"
+   ],
+   "title": "IGO to become Gorilla Gold’s largest shareholder in Cosmos deal",
+   "desc": "Image: Marina Kryuchina/shutterstock.com IGO has agreed to sell its Cosmos nickel project in Western Australia to Gorilla Gold Mines in exchange for a 19.9 per cent shareholding, positioning it to become the gold explore",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/igo-to-become-gorilla-golds-largest-shareholder-in-cosmos-deal/"
+    }
+   ],
+   "first_seen": "2026-11-16T07:02:18+00:00"
+  },
+  {
+   "id": "ddafc6e2e30d1c3a",
+   "when": "2026-11-15",
+   "d": "2026-11-15",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Austral gets green light for Hammer Metals takeover",
+   "desc": "Image: Sebastian/stock.adobe.com Austral Resources has secured Federal Court approval for its proposed acquisition of Hammer Metals, clearing another major hurdle in its plans to expand its copper operations in north-wes",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/austral-gets-green-light-for-hammer-metals-takeover/"
+    }
+   ],
+   "first_seen": "2026-11-16T07:02:18+00:00"
+  },
   {
    "id": "5b6c0d89beb0e7b8",
    "when": "2026-11-13",
@@ -2170,6 +2239,6 @@
  ],
  "zh_coverage": {
   "translated": 59,
-  "total": 94
+  "total": 97
  }
 }
