@@ -1,8 +1,8 @@
 {
  "schema": 1,
- "generated_at": "2026-11-10T06:42:05",
+ "generated_at": "2026-11-16T07:20:27",
  "window_days": 45,
- "count": 9,
+ "count": 10,
  "report": {
   "track_rows": 154,
   "stale": {
@@ -200,6 +200,37 @@
    "period_news": "quarter",
    "period_mismatch": true,
    "reason": "【期间不可比：新闻 quarter vs 行内 annual】 新闻披露 267,600 tonnes（kt 口径），与「Pilgangoora SC」对得上；不能直接替换，只作进展参考；确需按新闻改数请加 --force"
+  },
+  {
+   "id": "chg-0137e363f6",
+   "kind": "changes_draft",
+   "metal": "Cu",
+   "section": "CHANGES",
+   "target": "Capstone cuts copper outlook as restart slips",
+   "suggested": "5,000 tonnes",
+   "period": "2026-11-13",
+   "source": "northernminer",
+   "url": "https://www.northernminer.com/news/capstone-cuts-copper-outlook-as-restart-slips/1003897784/",
+   "row": {
+    "id": "auto-0137e363f6",
+    "when": "2026-11",
+    "title": "Capstone cuts copper outlook as restart slips",
+    "desc": "Capstone Copper (TSX: CS; ASX: CSC) has lowered the bottom of its annual copper production forecast by 5,000 tonnes after delaying the full restart of... The po",
+    "tag": "供给扰动",
+    "status": "pend",
+    "detail": "媒体口径（northernminer），数值未并入榜单/追踪，确认后补 detail",
+    "links": [
+     {
+      "label": "northernminer 原文",
+      "url": "https://www.northernminer.com/news/capstone-cuts-copper-outlook-as-restart-slips/1003897784/"
+     }
+    ],
+    "d": "2026-11-13"
+   },
+   "reason": "强信号供给事件，建议人工确认后并入重大供给事件时间轴",
+   "grounded": true,
+   "ground_missing": [],
+   "ground_notes": []
   },
   {
    "id": "chg-c0bec248e5",
