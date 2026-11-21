@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T07:37:59+00:00",
+ "generated_at": "2026-11-21T07:34:08+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
@@ -14,9 +14,9 @@
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 5,
-   "dropped_screen": 5,
-   "new": 0
+   "matched_metal": 4,
+   "dropped_screen": 3,
+   "new": 1
   },
   {
    "source": "australianmining",
@@ -38,9 +38,9 @@
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 15,
-   "dropped_screen": 11,
-   "new": 0
+   "matched_metal": 14,
+   "dropped_screen": 10,
+   "new": 1
   },
   {
    "source": "ita",
@@ -51,10 +51,52 @@
    "new": 0
   }
  ],
- "count": 109,
+ "count": 111,
  "pending": 0,
- "auto": 108,
+ "auto": 110,
  "events": [
+  {
+   "id": "5b5aa6a900150220",
+   "when": "2026-11-20",
+   "d": "2026-11-20",
+   "metals": [
+    "Cu"
+   ],
+   "title": "US copper booked for China as tariff bet unwinds",
+   "desc": "Traders have booked an estimated 30,000 to 100,000 tonnes of refined copper to ship from the West Coast of the United States to China, reversing... The post US copper booked for China as tariff bet unwinds appeared first",
+   "tag": "政策/监管",
+   "status": "auto",
+   "src_level": "media",
+   "src": "northernminer",
+   "links": [
+    {
+     "label": "northernminer 原文",
+     "url": "https://www.northernminer.com/news/us-copper-booked-for-china-as-tariff-bet-unwinds/1003898084/"
+    }
+   ],
+   "first_seen": "2026-11-21T07:34:08+00:00"
+  },
+  {
+   "id": "eea0ba59ceb58c62",
+   "when": "2026-11-20",
+   "d": "2026-11-20",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Copper price sinks into bear market, erasing 2026 gains in worst week of the year",
+   "desc": "AI’s pull on copper was “a bit over-egged”, says Benchmark, and the metal piled up in the US on tariff bets is now being shipped to China, where traders are paying $500 premiums.",
+   "tag": "政策/监管",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/copper-price-sinks-into-bear-market-erasing-2026-gains-in-worst-week-of-the-year/"
+    }
+   ],
+   "first_seen": "2026-11-21T07:34:08+00:00"
+  },
   {
    "id": "f713fc4e8c42cff9",
    "when": "2026-11-18",
@@ -2493,6 +2535,6 @@
  ],
  "zh_coverage": {
   "translated": 59,
-  "total": 109
+  "total": 111
  }
 }
