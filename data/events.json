@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-21T07:34:08+00:00",
+ "generated_at": "2026-11-22T07:15:46+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
@@ -16,7 +16,7 @@
    "items": 20,
    "matched_metal": 4,
    "dropped_screen": 3,
-   "new": 1
+   "new": 0
   },
   {
    "source": "australianmining",
@@ -40,7 +40,7 @@
    "items": 36,
    "matched_metal": 14,
    "dropped_screen": 10,
-   "new": 1
+   "new": 0
   },
   {
    "source": "ita",
