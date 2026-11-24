@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-23T07:59:07+00:00",
+ "generated_at": "2026-11-24T10:14:31+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
@@ -7,24 +7,24 @@
    "ok": true,
    "items": 10,
    "matched_metal": 3,
-   "dropped_screen": 1,
-   "new": 0
+   "dropped_screen": 2,
+   "new": 1
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 4,
-   "dropped_screen": 3,
+   "matched_metal": 5,
+   "dropped_screen": 4,
    "new": 0
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 2,
+   "matched_metal": 3,
    "dropped_screen": 2,
-   "new": 0
+   "new": 1
   },
   {
    "source": "im-mining",
@@ -38,9 +38,9 @@
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 14,
-   "dropped_screen": 10,
-   "new": 0
+   "matched_metal": 15,
+   "dropped_screen": 12,
+   "new": 1
   },
   {
    "source": "ita",
@@ -51,10 +51,73 @@
    "new": 0
   }
  ],
- "count": 111,
+ "count": 114,
  "pending": 0,
- "auto": 110,
+ "auto": 113,
  "events": [
+  {
+   "id": "44c0e7b2d138f363",
+   "when": "2026-11-24",
+   "d": "2026-11-24",
+   "metals": [
+    "Cu"
+   ],
+   "title": "BHP maps out major Copper SA expansion strategy",
+   "desc": "The proposed expansion will involve a series of integrated projects across Olympic Dam, Carrapateena and Prominent Hill. Image: BHP BHP is planning to invest between $21–$27 billion to double copper production in South A",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/bhp-maps-out-major-copper-sa-expansion-strategy/"
+    }
+   ],
+   "first_seen": "2026-11-24T10:14:31+00:00"
+  },
+  {
+   "id": "400351e2293609da",
+   "when": "2026-11-23",
+   "d": "2026-11-23",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Copper One agrees to acquire Quatum project in Canada",
+   "desc": "Copper One Resources has signed an option agreement to acquire a 100% stake in the Quatum Copper Project, located northeast of Campbell River, British Columbia, Canada. The post Copper One agrees to acquire Quatum projec",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/copper-one-to-acquire-quatum-project/"
+    }
+   ],
+   "first_seen": "2026-11-24T10:14:31+00:00"
+  },
+  {
+   "id": "82bb2804d713190a",
+   "when": "2026-11-23",
+   "d": "2026-11-23",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Canadian Copper sees expansion opportunites in New Brunswick",
+   "desc": "Broad copper intervals found west of Murray Brook in New Brunswick may expand ore processing plans at Caribou mill.",
+   "tag": "扩产",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/canadian-copper-sees-expansion-opportunites-in-new-brunswick/"
+    }
+   ],
+   "first_seen": "2026-11-24T10:14:31+00:00"
+  },
   {
    "id": "5b5aa6a900150220",
    "when": "2026-11-20",
@@ -2535,6 +2598,6 @@
  ],
  "zh_coverage": {
   "translated": 59,
-  "total": 111
+  "total": 114
  }
 }
