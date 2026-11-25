@@ -1,13 +1,13 @@
 {
- "generated_at": "2026-11-24T10:14:31+00:00",
+ "generated_at": "2026-11-25T08:57:59+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 3,
-   "dropped_screen": 2,
+   "matched_metal": 2,
+   "dropped_screen": 1,
    "new": 1
   },
   {
@@ -15,15 +15,15 @@
    "ok": true,
    "items": 20,
    "matched_metal": 5,
-   "dropped_screen": 4,
+   "dropped_screen": 5,
    "new": 0
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 3,
-   "dropped_screen": 2,
+   "matched_metal": 2,
+   "dropped_screen": 1,
    "new": 1
   },
   {
@@ -38,8 +38,8 @@
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 15,
-   "dropped_screen": 12,
+   "matched_metal": 17,
+   "dropped_screen": 13,
    "new": 1
   },
   {
@@ -51,10 +51,73 @@
    "new": 0
   }
  ],
- "count": 114,
+ "count": 117,
  "pending": 0,
- "auto": 113,
+ "auto": 116,
  "events": [
+  {
+   "id": "40e1510cbe5d9bb9",
+   "when": "2026-11-24",
+   "d": "2026-11-24",
+   "metals": [
+    "Li"
+   ],
+   "title": "Empower signs lithium offtake deal with Glencore",
+   "desc": "US-based company Empower EIT has signed a binding agreement to supply Glencore with up to 100,000 tonnes (t) of lithium over the next decade. The post Empower signs lithium offtake deal with Glencore appeared first on Mi",
+   "tag": "长协/包销",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/empower-lithium-offtake-deal-glencore/"
+    }
+   ],
+   "first_seen": "2026-11-25T08:57:59+00:00"
+  },
+  {
+   "id": "4918597f166fb829",
+   "when": "2026-11-24",
+   "d": "2026-11-24",
+   "metals": [
+    "Li"
+   ],
+   "title": "Core Lithium’s Finniss restart delivers first spodumene shipment",
+   "desc": "Image: Kalyakan/stock.adobe.com Core Lithium will load its first shipment of spodumene concentrate from the restart of the Finniss lithium operation by the end of today, marking a major milestone in its return to product",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "australianmining",
+   "links": [
+    {
+     "label": "australianmining 原文",
+     "url": "https://www.australianmining.com.au/core-lithiums-finniss-restart-delivers-first-spodumene-shipment/"
+    }
+   ],
+   "first_seen": "2026-11-25T08:57:59+00:00"
+  },
+  {
+   "id": "3d5a175eb3b5ae87",
+   "when": "2026-11-24",
+   "d": "2026-11-24",
+   "metals": [
+    "Fe"
+   ],
+   "title": "Vale to resume operations at Viga iron ore mine",
+   "desc": "Production at the Brazilian mine has been halted since January 2026 due to water overflows.",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/vale-to-resume-operations-at-viga-iron-ore-mine/"
+    }
+   ],
+   "first_seen": "2026-11-25T08:57:59+00:00"
+  },
   {
    "id": "44c0e7b2d138f363",
    "when": "2026-11-24",
@@ -2598,6 +2661,6 @@
  ],
  "zh_coverage": {
   "translated": 59,
-  "total": 114
+  "total": 117
  }
 }
