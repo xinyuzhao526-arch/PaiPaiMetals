@@ -1,30 +1,30 @@
 {
- "generated_at": "2026-11-25T08:57:59+00:00",
+ "generated_at": "2026-11-26T08:44:33+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
    "source": "mining-technology",
    "ok": true,
    "items": 10,
-   "matched_metal": 2,
-   "dropped_screen": 1,
+   "matched_metal": 1,
+   "dropped_screen": 0,
    "new": 1
   },
   {
    "source": "northernminer",
    "ok": true,
    "items": 20,
-   "matched_metal": 5,
-   "dropped_screen": 5,
+   "matched_metal": 4,
+   "dropped_screen": 4,
    "new": 0
   },
   {
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 2,
+   "matched_metal": 1,
    "dropped_screen": 1,
-   "new": 1
+   "new": 0
   },
   {
    "source": "im-mining",
@@ -38,9 +38,9 @@
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 17,
-   "dropped_screen": 13,
-   "new": 1
+   "matched_metal": 16,
+   "dropped_screen": 12,
+   "new": 0
   },
   {
    "source": "ita",
@@ -51,10 +51,31 @@
    "new": 0
   }
  ],
- "count": 117,
+ "count": 118,
  "pending": 0,
- "auto": 116,
+ "auto": 117,
  "events": [
+  {
+   "id": "7e4e2dc0327a8f2b",
+   "when": "2026-11-25",
+   "d": "2026-11-25",
+   "metals": [
+    "Cu"
+   ],
+   "title": "Colibri signs LoI to acquire Sonora copper-molybdenum projects",
+   "desc": "Colibri Resource has signed a non-binding letter of intent (LoI) to buy Mining Americas’ Mexican subsidiary Cobre 4H, the company responsible for advancing the Los Verdes and Potreritos copper-molybdenum interests in Son",
+   "tag": "并购/股权",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining-technology",
+   "links": [
+    {
+     "label": "mining-technology 原文",
+     "url": "https://www.mining-technology.com/news/colibri-acquire-sonora-copper-molybdenum-projects/"
+    }
+   ],
+   "first_seen": "2026-11-26T08:44:33+00:00"
+  },
   {
    "id": "40e1510cbe5d9bb9",
    "when": "2026-11-24",
@@ -2661,6 +2682,6 @@
  ],
  "zh_coverage": {
   "translated": 59,
-  "total": 117
+  "total": 118
  }
 }
