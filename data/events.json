@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-26T08:44:33+00:00",
+ "generated_at": "2026-11-27T08:55:38+00:00",
  "note": "自动抓取的供给事件池。status=auto 为按事件类型白名单自动入库的公开媒体来源条目，无需人工确认；status=ok 为已回溯一手来源或经人工核定的条目。",
  "sources": [
   {
@@ -8,7 +8,7 @@
    "items": 10,
    "matched_metal": 1,
    "dropped_screen": 0,
-   "new": 1
+   "new": 0
   },
   {
    "source": "northernminer",
@@ -22,8 +22,8 @@
    "source": "australianmining",
    "ok": true,
    "items": 5,
-   "matched_metal": 1,
-   "dropped_screen": 1,
+   "matched_metal": 0,
+   "dropped_screen": 0,
    "new": 0
   },
   {
@@ -38,9 +38,9 @@
    "source": "mining.com",
    "ok": true,
    "items": 36,
-   "matched_metal": 16,
-   "dropped_screen": 12,
-   "new": 0
+   "matched_metal": 14,
+   "dropped_screen": 11,
+   "new": 1
   },
   {
    "source": "ita",
@@ -51,10 +51,31 @@
    "new": 0
   }
  ],
- "count": 118,
+ "count": 119,
  "pending": 0,
- "auto": 117,
+ "auto": 118,
  "events": [
+  {
+   "id": "e0762be6f512135d",
+   "when": "2026-11-26",
+   "d": "2026-11-26",
+   "metals": [
+    "PbZn"
+   ],
+   "title": "Nyrstar to halt production at Dutch zinc smelter",
+   "desc": "The halt is in response to significant increases in the site’s energy costs, the company said.",
+   "tag": "供给扰动",
+   "status": "auto",
+   "src_level": "media",
+   "src": "mining.com",
+   "links": [
+    {
+     "label": "mining.com 原文",
+     "url": "https://www.mining.com/nyrstar-to-halt-production-at-dutch-zinc-smelter/"
+    }
+   ],
+   "first_seen": "2026-11-27T08:55:38+00:00"
+  },
   {
    "id": "7e4e2dc0327a8f2b",
    "when": "2026-11-25",
@@ -2682,6 +2703,6 @@
  ],
  "zh_coverage": {
   "translated": 59,
-  "total": 118
+  "total": 119
  }
 }
